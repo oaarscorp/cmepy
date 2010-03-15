@@ -1,0 +1,154 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>domain &mdash; CmePy v0.3 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.3',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="CmePy v0.3 documentation" href="../index.html" />
+    <link rel="up" title="api documentation" href="../api.html" />
+    <link rel="next" title="fsp" href="fsp.html" />
+    <link rel="prev" title="cme_matrix" href="cme_matrix.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="fsp.html" title="fsp"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="cme_matrix.html" title="cme_matrix"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">CmePy v0.3 documentation</a> &raquo;</li>
+          <li><a href="../api.html" accesskey="U">api documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-cmepy.domain">
+<h1><tt class="xref docutils literal"><span class="pre">domain</span></tt><a class="headerlink" href="#module-cmepy.domain" title="Permalink to this headline">¶</a></h1>
+<p>Utility functions for generating arrays of states in domains</p>
+<dl class="function">
+<dt id="cmepy.domain.from_iter">
+<tt class="descclassname">cmepy.domain.</tt><tt class="descname">from_iter</tt><big>(</big><em>state_iter</em><big>)</big><a class="headerlink" href="#cmepy.domain.from_iter" title="Permalink to this definition">¶</a></dt>
+<dd><p>from_iter(state_iter) -&gt; array</p>
+<p>Returns array of all states from the state iterator &#8216;state_iter&#8217;.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cmepy.domain.from_mapping">
+<tt class="descclassname">cmepy.domain.</tt><tt class="descname">from_mapping</tt><big>(</big><em>state_mapping</em><big>)</big><a class="headerlink" href="#cmepy.domain.from_mapping" title="Permalink to this definition">¶</a></dt>
+<dd><p>from_iter(state_mapping) -&gt; state_array, value_array</p>
+<p>&#8216;state_mapping&#8217; is assumed to be a mapping keyed by states.</p>
+<p>Returns pair of arrays (&#8216;state_array&#8217;, &#8216;value_array&#8217;),
+where the i-th state in &#8216;state_array&#8217; is the key
+associated with the i-th element in &#8216;value_array&#8217;.</p>
+<p>This function is intended to ease the construction
+of state arrays with corresponding value arrays from
+a state mapping. If a value array is not required,
+simply use from_iter on the state mapping instead.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cmepy.domain.from_rect">
+<tt class="descclassname">cmepy.domain.</tt><tt class="descname">from_rect</tt><big>(</big><em>shape</em>, <em>slices=None</em>, <em>origin=None</em><big>)</big><a class="headerlink" href="#cmepy.domain.from_rect" title="Permalink to this definition">¶</a></dt>
+<dd><p>from_rect(shape [, slices [, origin]]) -&gt; array</p>
+<p>Returns array of states in rectangular domain of shape &#8216;shape&#8217;.</p>
+<p>Works similarly to cmepy.util.indices_ext, except all dimensions
+of the array following the first have been flattened.</p>
+<p>See cmepy.util.indices_ext for a discussion of the optional arguments.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cmepy.domain.to_iter">
+<tt class="descclassname">cmepy.domain.</tt><tt class="descname">to_iter</tt><big>(</big><em>state_array</em><big>)</big><a class="headerlink" href="#cmepy.domain.to_iter" title="Permalink to this definition">¶</a></dt>
+<dd><p>to_iter(state_array) -&gt; iter</p>
+<p>Returns iterator over all states in the state array &#8216;state_array&#8217;.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="cme_matrix.html"
+                                  title="previous chapter"><tt class="docutils literal docutils literal docutils literal"><span class="pre">cme_matrix</span></tt></a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="fsp.html"
+                                  title="next chapter"><tt class="docutils literal"><span class="pre">fsp</span></tt></a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/api_modules/domain.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="fsp.html" title="fsp"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="cme_matrix.html" title="cme_matrix"
+             >previous</a> |</li>
+        <li><a href="../index.html">CmePy v0.3 documentation</a> &raquo;</li>
+          <li><a href="../api.html" >api documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, Markus Hegland &amp; Reuben Fletcher-Costin.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+    </div>
+  </body>
+</html>

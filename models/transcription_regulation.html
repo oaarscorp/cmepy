@@ -1,0 +1,354 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>transcription_regulation : time dependent transcription regulation &mdash; CmePy v0.3 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.3',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="CmePy v0.3 documentation" href="../index.html" />
+    <link rel="up" title="Models included in cmepy.models" href="../models.html" />
+    <link rel="next" title="api documentation" href="../api.html" />
+    <link rel="prev" title="pap_pili : pap-pili epigenetic switch" href="pap_pili.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="../api.html" title="api documentation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pap_pili.html" title="pap_pili : pap-pili epigenetic switch"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">CmePy v0.3 documentation</a> &raquo;</li>
+          <li><a href="../models.html" accesskey="U">Models included in <tt class="docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">cmepy.models</span></tt></a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="transcription-regulation-time-dependent-transcription-regulation">
+<h1><tt class="xref docutils literal"><span class="pre">transcription_regulation</span></tt> : time dependent transcription regulation<a class="headerlink" href="#transcription-regulation-time-dependent-transcription-regulation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>The module <tt class="xref docutils literal"><span class="pre">cmepy.models.transcription_regulation</span></tt> defines a model
+of the transcription regulation system. This transcription regulation system
+was formulated by
+Goutsias <a class="reference" href="#gou05">[GOU05]</a>, and consists of 10 reactions:</p>
+<div class="math">
+<p><img src="../_images/math/be492c3547d5a7811dc3b64014f33db5afe80e46.png" alt="\textrm{RNA} &amp;\xrightarrow{} \textrm{RNA} + \textrm{M} \; , \\
+\textrm{M} &amp; \xrightarrow{} \star \; , \\
+\textrm{DNA-D} &amp;\xrightarrow{} \textrm{RNA} + \textrm{DNA-D} \; , \\
+\textrm{RNA} &amp; \xrightarrow{} \star \; , \\
+\textrm{DNA} + \textrm{D} &amp;\xrightarrow{} \textrm{DNA-D} \; , \\
+\textrm{DNA-D} &amp;\xrightarrow{} \textrm{DNA} + \textrm{D} \; , \\
+\textrm{DNA-D} + \textrm{D} &amp;\xrightarrow{} \textrm{DNA-2D} \; , \\
+\textrm{DNA-2D} &amp;\xrightarrow{} \textrm{DNA-D} + \textrm{D} \; , \\
+\textrm{M} + \textrm{M} &amp;\xrightarrow{} \textrm{D} \; , \\
+\textrm{D} &amp;\xrightarrow{} \textrm{M} + \textrm{M}\; . \\" /></p>
+</div><p>Initially, the system has 2 copies of DNA, 2 copies of M, and 6 copies of D.</p>
+<p>The propensity functions of these reactions are all elementary. See the source
+code below or Goutsias <a class="reference" href="#gou05">[GOU05]</a> for the rate coefficients. However, the
+three reactions</p>
+<div class="math">
+<p><img src="../_images/math/0a31c2f9a80674b66d1862d25459afd95c926593.png" alt="\textrm{DNA} + \textrm{D} &amp;\xrightarrow{} \textrm{DNA-D} \; , \\
+\textrm{DNA-D} + \textrm{D} &amp;\xrightarrow{} \textrm{DNA-2D} \; , \\
+\textrm{M} + \textrm{M} &amp;\xrightarrow{} \textrm{D} \; , \\" /></p>
+</div><p>that is, those reactions in the system involving the combination of two
+different molecules, have their propensities scaled by a
+time dependent factor <img class="math" src="../_images/math/ce9ef398c076d5d504bdd2f342775cd7ea04166e.png" alt="\phi(t)"/>, where</p>
+<div class="math">
+<p><img src="../_images/math/6fe2e2d243bfc5184e7248b0c3e8054e0465a169.png" alt="\phi(t) = e^{ - (t/T) \cdot \log{} 2 } \; ." /></p>
+</div><p>Here, the constant <img class="math" src="../_images/math/2554b6496c3b678897e9b060ef00aa9f0a7d7ece.png" alt="T"/> is set to 35 minutes. See Goutsias <a class="reference" href="#gou05">[GOU05]</a> for
+further details.</p>
+</div>
+<div class="section" id="running-the-model">
+<h2>Running the model<a class="headerlink" href="#running-the-model" title="Permalink to this headline">¶</a></h2>
+<p>To solve this model in CmePy and plot some results, simply open the Python
+interpreter and type:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cmepy.models</span> <span class="kn">import</span> <span class="n">transcription_regulation</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">transcription_regulation</span><span class="o">.</span><span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The model is solved from <img class="math" src="../_images/math/288e2a39b58d673182c57dc6214b702a448341ea.png" alt="t = 0"/> to <img class="math" src="../_images/math/a499f842e6731f536b1d4ea77a6985eaee49b786.png" alt="t = 60"/>
+using 60 equally-spaced time steps. The model is solved using a truncated state
+space, but the state space truncation error is still less than 1 percent of
+the total probability at the final time <img class="math" src="../_images/math/a499f842e6731f536b1d4ea77a6985eaee49b786.png" alt="t = 60"/>.</p>
+<p>After solving the model, this script will display the the plots shown below.</p>
+</div>
+<div class="section" id="sample-results">
+<h2>Sample results<a class="headerlink" href="#sample-results" title="Permalink to this headline">¶</a></h2>
+<img alt="../_images/transcription_regulation_ev_plot.png" src="../_images/transcription_regulation_ev_plot.png" />
+<img alt="../_images/transcription_regulation_std_dev_plot.png" src="../_images/transcription_regulation_std_dev_plot.png" />
+</div>
+<div class="section" id="source">
+<h2>Source<a class="headerlink" href="#source" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">the transcription regulation example, as formulated by:</span>
+
+<span class="sd">@article{goutsias2005quasiequilibrium,</span>
+<span class="sd">  title={{Quasiequilibrium approximation of fast reaction</span>
+<span class="sd">          kinetics in stochastic biochemical systems}},</span>
+<span class="sd">  author={Goutsias, J.},</span>
+<span class="sd">  journal={The Journal of chemical physics},</span>
+<span class="sd">  volume={122},</span>
+<span class="sd">  pages={184102},</span>
+<span class="sd">  year={2005}</span>
+<span class="sd">}</span>
+
+<span class="sd">a time-independent approximation of this example was also considered by</span>
+
+<span class="sd">@conference{burrage2006krylov,</span>
+<span class="sd">  title={{A Krylov-based finite state projection algorithm for</span>
+<span class="sd">          solving the chemical master equation arising in the</span>
+<span class="sd">          discrete modelling of biological systems}},</span>
+<span class="sd">  author={Burrage, K. and Hegland, M. and Macnamara, S. and Sidje, R.},</span>
+<span class="sd">  booktitle={Proc. of The AA Markov 150th Anniversary Meeting},</span>
+<span class="sd">  pages={21--37},</span>
+<span class="sd">  year={2006}</span>
+<span class="sd">}</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span>
+<span class="kn">import</span> <span class="nn">cmepy.model</span>
+<span class="kn">from</span> <span class="nn">cmepy.util</span> <span class="kn">import</span> <span class="n">non_neg</span>
+
+<span class="k">def</span> <span class="nf">create_time_dependencies</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    returns time dependencies as dictionary of functions keyed</span>
+<span class="sd">    by sets of reaction indices</span>
+<span class="sd">    &quot;&quot;&quot;</span>  
+    
+    <span class="n">avogadro_number</span> <span class="o">=</span> <span class="mf">6.0221415e23</span>
+    <span class="n">cell_v_0</span> <span class="o">=</span> <span class="mf">1.0e-15</span> <span class="c"># litres</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="n">avogadro_number</span><span class="o">*</span><span class="n">cell_v_0</span>
+    <span class="n">cell_t</span> <span class="o">=</span> <span class="mi">35</span><span class="o">*</span><span class="mf">60.0</span> <span class="c"># seconds</span>
+    
+    <span class="k">def</span> <span class="nf">phi</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mf">1.0</span><span class="o">/</span><span class="p">(</span><span class="n">k</span><span class="o">*</span><span class="n">numpy</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mf">2.0</span><span class="p">)</span><span class="o">*</span><span class="n">t</span><span class="o">/</span><span class="n">cell_t</span><span class="p">))</span>
+    
+    <span class="k">return</span> <span class="p">{</span><span class="nb">frozenset</span><span class="p">([</span><span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">8</span><span class="p">])</span> <span class="p">:</span> <span class="n">phi</span><span class="p">}</span>
+
+<span class="k">def</span> <span class="nf">create_model</span><span class="p">(</span><span class="n">dna_count</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">rna_max</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">m_max</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">d_max</span><span class="o">=</span><span class="mi">15</span><span class="p">):</span>
+    
+    <span class="c"># define mappings from state space to species copy counts</span>
+    <span class="n">dna</span> <span class="o">=</span>  <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">dna_d</span> <span class="o">=</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">dna_2d</span> <span class="o">=</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="n">dna_count</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">rna</span> <span class="o">=</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+    
+    <span class="c"># define reaction propensity constants</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="mf">4.3e-2</span><span class="p">,</span>
+        <span class="mf">7.0e-4</span><span class="p">,</span>
+        <span class="mf">7.8e-2</span><span class="p">,</span>
+        <span class="mf">3.9e-3</span><span class="p">,</span>
+        <span class="mf">1.2e7</span><span class="p">,</span>
+        <span class="mf">4.791e-1</span><span class="p">,</span>
+        <span class="mf">1.2e5</span><span class="p">,</span>
+        <span class="mf">8.765e-12</span><span class="p">,</span>
+        <span class="mf">1.0e8</span><span class="p">,</span>
+        <span class="mf">0.5</span><span class="p">,</span>
+    <span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">cmepy</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="s">&#39;Goutsias transcription regulation&#39;</span><span class="p">,</span>
+        <span class="n">species</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s">&#39;DNA&#39;</span><span class="p">,</span>
+            <span class="s">&#39;DNA-D&#39;</span><span class="p">,</span>
+            <span class="s">&#39;DNA-2D&#39;</span><span class="p">,</span>
+            <span class="s">&#39;RNA&#39;</span><span class="p">,</span>
+            <span class="s">&#39;M&#39;</span><span class="p">,</span>
+            <span class="s">&#39;D&#39;</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="n">species_counts</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">dna</span><span class="p">,</span>
+            <span class="n">dna_d</span><span class="p">,</span>
+            <span class="n">dna_2d</span><span class="p">,</span>
+            <span class="n">rna</span><span class="p">,</span>
+            <span class="n">m</span><span class="p">,</span>
+            <span class="n">d</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="n">reactions</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s">&#39;RNA -&gt; RNA + M&#39;</span><span class="p">,</span>
+            <span class="s">&#39;M -&gt; *&#39;</span><span class="p">,</span>
+            <span class="s">&#39;DNA-D -&gt; RNA + DNA-D&#39;</span><span class="p">,</span>
+            <span class="s">&#39;RNA -&gt; *&#39;</span><span class="p">,</span>
+            <span class="s">&#39;DNA + D -&gt; DNA-D&#39;</span><span class="p">,</span>
+            <span class="s">&#39;DNA-D -&gt; DNA + D&#39;</span><span class="p">,</span>
+            <span class="s">&#39;DNA-D + D -&gt; DNA-2D&#39;</span><span class="p">,</span>
+            <span class="s">&#39;DNA-2D -&gt; DNA-D + D&#39;</span><span class="p">,</span>
+            <span class="s">&#39;M + M -&gt; D&#39;</span><span class="p">,</span>
+            <span class="s">&#39;D -&gt; M + M&#39;</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="n">propensities</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="n">k</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">rna</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">),</span>
+            <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="n">k</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">m</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">),</span>
+            <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="n">k</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">dna_d</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">),</span>
+            <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="n">k</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">*</span> <span class="n">rna</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">),</span> 
+            <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="n">k</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">*</span> <span class="n">dna</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="n">d</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">),</span> 
+            <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="n">k</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">*</span> <span class="n">dna_d</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">),</span> 
+            <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="n">k</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">*</span> <span class="n">dna_d</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="n">d</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">),</span> 
+            <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="n">k</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span> <span class="o">*</span> <span class="n">dna_2d</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">),</span> 
+            <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="n">k</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span> <span class="o">*</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">m</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="n">non_neg</span><span class="p">(</span><span class="n">m</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> 
+            <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="n">k</span><span class="p">[</span><span class="mi">9</span><span class="p">]</span> <span class="o">*</span> <span class="n">d</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">),</span>
+        <span class="p">),</span>
+        <span class="n">transitions</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+            <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+            <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+            <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+            <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span>
+            <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+            <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span>
+            <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+            <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+            <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span>
+        <span class="p">),</span>
+        <span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">dna_count</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="p">)</span><span class="o">*</span><span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">rna_max</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">m_max</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">d_max</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span>
+        <span class="n">initial_state</span> <span class="o">=</span> <span class="p">(</span><span class="n">dna_count</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+    <span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    solves transcription regulation model and plot results</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="kn">import</span> <span class="nn">cmepy.solver</span>
+    <span class="kn">import</span> <span class="nn">cmepy.recorder</span>
+    
+    <span class="n">m</span> <span class="o">=</span> <span class="n">create_model</span><span class="p">()</span>
+    
+    <span class="n">solver</span> <span class="o">=</span> <span class="n">cmepy</span><span class="o">.</span><span class="n">solver</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+        <span class="n">m</span><span class="p">,</span>
+        <span class="n">sink</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span>
+        <span class="n">time_dependencies</span> <span class="o">=</span> <span class="n">create_time_dependencies</span><span class="p">()</span>
+    <span class="p">)</span>
+    
+    <span class="n">recorder</span> <span class="o">=</span> <span class="n">cmepy</span><span class="o">.</span><span class="n">recorder</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+        <span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">species</span><span class="p">,</span>
+         <span class="n">m</span><span class="o">.</span><span class="n">species_counts</span><span class="p">)</span>
+    <span class="p">)</span>
+    
+    <span class="n">t_final</span> <span class="o">=</span> <span class="mf">60.0</span> 
+    <span class="n">time_steps</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">t_final</span><span class="p">,</span> <span class="mi">61</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">time_steps</span><span class="p">:</span>
+        <span class="n">solver</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+        <span class="n">p</span><span class="p">,</span> <span class="n">p_sink</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">y</span>
+        <span class="k">print</span> <span class="s">&#39;t = </span><span class="si">%g</span><span class="s">; p_sink = </span><span class="si">%g</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">p_sink</span><span class="p">)</span>
+        <span class="n">recorder</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
+    
+    <span class="n">cmepy</span><span class="o">.</span><span class="n">recorder</span><span class="o">.</span><span class="n">display_plots</span><span class="p">(</span>
+        <span class="n">recorder</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">References</p>
+<table class="docutils citation" frame="void" id="gou05" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a name="gou05">[GOU05]</a></td><td><em>(<a class="fn-backref" href="#id1">1</a>, <a class="fn-backref" href="#id2">2</a>, <a class="fn-backref" href="#id3">3</a>)</em> <a class="reference" href="http://scholar.google.com/scholar?q=Goutsias+quasiequilibrium+approximation+of+fast+reaction+kinetics+in+stochastic+biochemical+systems">Goutsias, J.,
+Quasiequilibrium approximation of fast reaction
+kinetics in stochastic biochemical systems,
+Journal of Chemical Physics (2005),
+Vol 122.</a></td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="../index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference" href="#"><tt class="docutils literal"><span class="pre">transcription_regulation</span></tt> : time dependent transcription regulation</a><ul>
+<li><a class="reference" href="#overview">Overview</a></li>
+<li><a class="reference" href="#running-the-model">Running the model</a></li>
+<li><a class="reference" href="#sample-results">Sample results</a></li>
+<li><a class="reference" href="#source">Source</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="pap_pili.html"
+                                  title="previous chapter"><tt class="docutils literal docutils literal docutils literal"><span class="pre">pap_pili</span></tt> : pap-pili epigenetic switch</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="../api.html"
+                                  title="next chapter">api documentation</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/models/transcription_regulation.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../api.html" title="api documentation"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pap_pili.html" title="pap_pili : pap-pili epigenetic switch"
+             >previous</a> |</li>
+        <li><a href="../index.html">CmePy v0.3 documentation</a> &raquo;</li>
+          <li><a href="../models.html" >Models included in <tt class="docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">cmepy.models</span></tt></a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, Markus Hegland &amp; Reuben Fletcher-Costin.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+    </div>
+  </body>
+</html>

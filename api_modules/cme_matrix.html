@@ -1,0 +1,178 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>cme_matrix &mdash; CmePy v0.3 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.3',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="CmePy v0.3 documentation" href="../index.html" />
+    <link rel="up" title="api documentation" href="../api.html" />
+    <link rel="next" title="domain" href="domain.html" />
+    <link rel="prev" title="api documentation" href="../api.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="domain.html" title="domain"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../api.html" title="api documentation"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">CmePy v0.3 documentation</a> &raquo;</li>
+          <li><a href="../api.html" accesskey="U">api documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-cmepy.cme_matrix">
+<h1><tt class="xref docutils literal"><span class="pre">cme_matrix</span></tt><a class="headerlink" href="#module-cmepy.cme_matrix" title="Permalink to this headline">¶</a></h1>
+<p>Builds CME matrix for dp/dt, broken into terms for each reaction.</p>
+<dl class="function">
+<dt id="cmepy.cme_matrix.compute_propensity">
+<tt class="descclassname">cmepy.cme_matrix.</tt><tt class="descname">compute_propensity</tt><big>(</big><em>prop</em>, <em>states</em><big>)</big><a class="headerlink" href="#cmepy.cme_matrix.compute_propensity" title="Permalink to this definition">¶</a></dt>
+<dd>Returns the propensity <tt class="docutils literal"><span class="pre">prop</span></tt> evaluated over <tt class="docutils literal"><span class="pre">states</span></tt>.</dd></dl>
+
+<dl class="function">
+<dt id="cmepy.cme_matrix.create_diff_eqs">
+<tt class="descclassname">cmepy.cme_matrix.</tt><tt class="descname">create_diff_eqs</tt><big>(</big><em>reaction_matrices</em>, <em>phi=None</em><big>)</big><a class="headerlink" href="#cmepy.cme_matrix.create_diff_eqs" title="Permalink to this definition">¶</a></dt>
+<dd><p>create_diff_eqs(reaction_matrices [, phi]) -&gt; diff_eqs</p>
+<p>where diff_eqs(t, p) -&gt; dp_dt</p>
+<dl class="docutils">
+<dt>reaction_matrices <span class="classifier-delimiter">:</span> <span class="classifier">sequence of terms of dp/dt matrix corresponding to</span></dt>
+<dd>the reactions.</dd>
+<dt>phi <span class="classifier-delimiter">:</span> <span class="classifier">mapping of time dependent coefficient functions keyed by subsets of</span></dt>
+<dd>reaction indices. By default, no time dependent coefficient functions
+are specified, so the returned diff_eqs function is time independent.</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="cmepy.cme_matrix.gen_reaction_matrices">
+<tt class="descclassname">cmepy.cme_matrix.</tt><tt class="descname">gen_reaction_matrices</tt><big>(</big><em>model</em>, <em>domain_enum</em>, <em>sink</em>, <em>validity_test</em><big>)</big><a class="headerlink" href="#cmepy.cme_matrix.gen_reaction_matrices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns generator yielding the sparse matrices for each reaction term.</p>
+<p>Generator yielding the sparse matrices for the dp/dt term of each reaction,
+matching the ordering implied by the ordering of the reaction propensity
+functions and transtions in the model.</p>
+<p>Arguments:</p>
+<blockquote>
+<ul>
+<li><p class="first"><tt class="docutils literal"><span class="pre">domain_enum</span></tt> : <tt class="xref docutils literal"><span class="pre">StateEnum</span></tt> instance enumerating the states
+in the domain</p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">sink</span></tt> : boolean flag indicating if the reaction matrices should add
+a &#8216;sink&#8217; state used to accumulate probability that flows outside
+of the domain. If sink is set to <tt class="xref docutils literal"><span class="pre">True</span></tt>, the index of the sink state
+is chosen to be <tt class="docutils literal"><span class="pre">domain_enum.size</span></tt></p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">validity_test</span></tt> : a function of the form</p>
+<blockquote>
+<p>validity_test(state_array) -&gt; bool_array</p>
+</blockquote>
+<p>Returns a boolean array of flags corresponding to those states in
+<tt class="docutils literal"><span class="pre">state_array</span></tt> that are valid.</p>
+<p>See: non_neg_states(state_array)</p>
+</li>
+</ul>
+</blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="cmepy.cme_matrix.non_neg_states">
+<tt class="descclassname">cmepy.cme_matrix.</tt><tt class="descname">non_neg_states</tt><big>(</big><em>state_array</em><big>)</big><a class="headerlink" href="#cmepy.cme_matrix.non_neg_states" title="Permalink to this definition">¶</a></dt>
+<dd><p>non_neg_states(state_array) -&gt; bool_array</p>
+<p>Returns a boolean array of flags corresponding to those states in
+state_array that have no negative coordinate.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cmepy.cme_matrix.optimise_csr_matrix">
+<tt class="descclassname">cmepy.cme_matrix.</tt><tt class="descname">optimise_csr_matrix</tt><big>(</big><em>csr_matrix</em><big>)</big><a class="headerlink" href="#cmepy.cme_matrix.optimise_csr_matrix" title="Permalink to this definition">¶</a></dt>
+<dd>Performs <strong>in place</strong> operations to optimise csr matrix data. Returns None.</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="../api.html"
+                                  title="previous chapter">api documentation</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="domain.html"
+                                  title="next chapter"><tt class="docutils literal"><span class="pre">domain</span></tt></a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/api_modules/cme_matrix.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="domain.html" title="domain"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../api.html" title="api documentation"
+             >previous</a> |</li>
+        <li><a href="../index.html">CmePy v0.3 documentation</a> &raquo;</li>
+          <li><a href="../api.html" >api documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, Markus Hegland &amp; Reuben Fletcher-Costin.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+    </div>
+  </body>
+</html>

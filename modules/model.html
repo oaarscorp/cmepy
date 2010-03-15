@@ -1,0 +1,330 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>cmepy.model &mdash; CmePy v0.3 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.3',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="CmePy v0.3 documentation" href="../index.html" />
+    <link rel="up" title="Important cmepy modules" href="../modules.html" />
+    <link rel="next" title="cmepy.recorder" href="recorder.html" />
+    <link rel="prev" title="Important cmepy modules" href="../modules.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="recorder.html" title="cmepy.recorder"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../modules.html" title="Important cmepy modules"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">CmePy v0.3 documentation</a> &raquo;</li>
+          <li><a href="../modules.html" accesskey="U">Important <tt class="docutils literal docutils literal docutils literal docutils literal"><span class="pre">cmepy</span></tt> modules</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="cmepy-model">
+<span id="module-model"></span><h1><a title="" class="reference" href="../api_modules/model.html#module-cmepy.model"><tt class="xref docutils literal"><span class="pre">cmepy.model</span></tt></a><a class="headerlink" href="#cmepy-model" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>CmePy represents systems of reactions as data structures called <em>models</em>. At a
+basic level, a model describes the reactions in the system, in terms of
+the reaction <em>propensities</em>, as functions of the system state,
+and the <em>transitions</em> between states caused by the reactions.</p>
+<p>A model implicitly depends upon the coordinate system used for the state space.
+Typical choices of state space coordinate systems are the occurance counts of
+reactions in the system, or the copy counts of species. In principle, it does
+not matter how the state space is defined, as long as the reaction
+propensities can be computed as functions of the state. However, choosing a
+coordinate system that leads to a higher-dimensional state space may
+result in a model that is computationally difficult, or impossible, to solve.</p>
+<p>Models often store optional parameters describing the <em>shape</em> of the state
+space, and the coordinates of the <em>initial state</em>. The shape of a model is used
+to define a rectangular region of states that are considered by
+the solver when computing the solution to the Chemical Master Equation, while
+the initial state specifies an initial (deterministic) system configuration.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>CmePy also supports a limited form of time-dependence for propensity
+functions. See <a class="reference" href="../recipes/time_dependent_propensity_functions.html#time-dependent-propensity-functions"><em>Time-dependent propensity functions</em></a>.</p>
+<p>Non-rectangular state spaces may also be defined, see
+<a class="reference" href="../recipes/sparse_state_spaces.html#sparse-state-spaces"><em>Sparse state spaces</em></a>.</p>
+<p class="last">Stochastic initial system configurations may be specified by explicitly
+passing an initial probability distribution as the <tt class="docutils literal"><span class="pre">p_0</span></tt> keyword argument
+to the <a title="cmepy.solver.create" class="reference" href="../api_modules/solver.html#cmepy.solver.create"><tt class="xref docutils literal"><span class="pre">cmepy.solver.create()</span></tt></a> function, when creating a solver. See
+<a class="reference" href="solver.html#module-solver"><em>cmepy.solver</em></a>.</p>
+</div>
+</div>
+<div class="section" id="creating-a-model">
+<h2>Creating a model<a class="headerlink" href="#creating-a-model" title="Permalink to this headline">¶</a></h2>
+<p>Model objects are created by calling the function <a title="cmepy.model.create" class="reference" href="../api_modules/model.html#cmepy.model.create"><tt class="xref docutils literal"><span class="pre">cmepy.model.create()</span></tt></a>.
+Model parameters are be passed as keyword arguments to this function.
+The general format for defining a model <tt class="docutils literal"><span class="pre">m</span></tt> is:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">cmepy</span> <span class="kn">import</span> <span class="n">model</span>
+<span class="n">m</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="n">propensities</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="c"># define propensity functions here</span>
+    <span class="p">),</span>
+    <span class="n">transitions</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="c"># define reaction transitions here</span>
+    <span class="p">),</span>
+    <span class="c"># define any optional model parameters here</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Model objects are instances of the <a title="cmepy.model.Model" class="reference" href="../api_modules/model.html#cmepy.model.Model"><tt class="xref docutils literal"><span class="pre">cmepy.model.Model</span></tt></a> class, which
+is a subclass of Python dictionary type (the <tt class="xref docutils literal"><span class="pre">dict</span></tt> class).
+The <a title="cmepy.model.Model" class="reference" href="../api_modules/model.html#cmepy.model.Model"><tt class="xref docutils literal"><span class="pre">cmepy.model.Model</span></tt></a> adds two methods to the usual methods provided
+by Python&#8217;s <tt class="xref docutils literal"><span class="pre">dict</span></tt> class. These are:</p>
+<blockquote>
+<ul class="simple">
+<li>a <tt class="docutils literal"><span class="pre">validate()</span></tt> method, which checks the structure of the model and raises
+an exception if something is obviously wrong with the supplied parameters.
+This method is automatically called when the model is initialised.</li>
+<li>an overloaded <tt class="docutils literal"><span class="pre">__getattribute__()</span></tt> method, which allows parameters stored
+in the model to be accessed as attributes. For example, the <tt class="docutils literal"><span class="pre">propensities</span></tt>
+parameter of a model <tt class="docutils literal"><span class="pre">m</span></tt> may be accessed in the usual dictionary lookup
+fashion as <tt class="docutils literal"><span class="pre">m['propensities']</span></tt>, or as an attribute, via <tt class="docutils literal"><span class="pre">m.propensities</span></tt>.</li>
+</ul>
+</blockquote>
+</div>
+<div class="section" id="required-model-parameters">
+<h2>Required model parameters<a class="headerlink" href="#required-model-parameters" title="Permalink to this headline">¶</a></h2>
+<p>Every model must be defined with <tt class="docutils literal"><span class="pre">propensities</span></tt> and <tt class="docutils literal"><span class="pre">transitions</span></tt>
+parameters. These parameters are supplied as keyword arguments to the
+<a title="cmepy.model.create" class="reference" href="../api_modules/model.html#cmepy.model.create"><tt class="xref docutils literal"><span class="pre">cmepy.model.create()</span></tt></a> function. These two parameters must be sequences
+(e.g. lists or tuples) of the same length. The <img class="math" src="../_images/math/34857b3ba74ce5cd8607f3ebd23e9015908ada71.png" alt="i"/>-th reaction in the
+system is defined by the pair of <img class="math" src="../_images/math/34857b3ba74ce5cd8607f3ebd23e9015908ada71.png" alt="i"/>-th items from the <tt class="docutils literal"><span class="pre">propensities</span></tt>
+and <tt class="docutils literal"><span class="pre">transitions</span></tt> sequences.
+Explicitly, the probability distribution for the system of reactions is evolved
+by the Chemical Master Equation using the <tt class="docutils literal"><span class="pre">propensities</span></tt> and <tt class="docutils literal"><span class="pre">transitions</span></tt>
+parameters as follows:</p>
+<blockquote>
+At time <img class="math" src="../_images/math/e0d2bf360290fd61d1c1557e763f2622363b3d35.png" alt="t"/>, the <img class="math" src="../_images/math/34857b3ba74ce5cd8607f3ebd23e9015908ada71.png" alt="i"/>-th reaction causes probability to flow out
+of the state <img class="math" src="../_images/math/51e5be406d17a2bf318c3fe89050e718dfbec9c2.png" alt="(x_1, ..., x_d)"/>, and into the state
+<img class="math" src="../_images/math/4ef7569afaf6e5742ba0310007f56c592f5c1f7d.png" alt="(x_1 + y+_1, ..., x_d + y_d)"/>, at a rate equal to
+<img class="math" src="../_images/math/dbd5210a4b74b0e8a741ccbda3701511f517219c.png" alt="f(x_1, ..., x_d) \cdot P(x_1, ..., x_d; t)"/>,</blockquote>
+<dl class="docutils">
+<dt>where</dt>
+<dd><ul class="first last simple">
+<li><img class="math" src="../_images/math/50f849e475189779e26066dfd80f2186ab71484c.png" alt="(y_1, ..., y_d)"/> is the <img class="math" src="../_images/math/34857b3ba74ce5cd8607f3ebd23e9015908ada71.png" alt="i"/>-th item from the
+<tt class="docutils literal"><span class="pre">transitions</span></tt> sequence,</li>
+<li><img class="math" src="../_images/math/bb2c93730dbb48558bb3c4738c956c4e8f816437.png" alt="f"/> is the <img class="math" src="../_images/math/34857b3ba74ce5cd8607f3ebd23e9015908ada71.png" alt="i"/>-th item from the <tt class="docutils literal"><span class="pre">propensities</span></tt> sequence,
+and</li>
+<li><img class="math" src="../_images/math/e6acc5501ddfc23bf022f81c2c08c3def70c29b0.png" alt="P(x_1, ..., x_d; t)"/> is the probability that the system is in the
+state <img class="math" src="../_images/math/51e5be406d17a2bf318c3fe89050e718dfbec9c2.png" alt="(x_1, ..., x_d)"/> at time <img class="math" src="../_images/math/e0d2bf360290fd61d1c1557e763f2622363b3d35.png" alt="t"/>.</li>
+</ul>
+</dd>
+</dl>
+<div class="section" id="defining-reaction-propensity-functions">
+<h3>Defining reaction propensity functions<a class="headerlink" href="#defining-reaction-propensity-functions" title="Permalink to this headline">¶</a></h3>
+<p>The <tt class="docutils literal"><span class="pre">propensities</span></tt> parameter of the model must be a sequence of propensity
+functions. Each propensity function <tt class="docutils literal"><span class="pre">f</span></tt> must return a non-negative
+floating point value, when called as <tt class="docutils literal"><span class="pre">f(x_1,</span> <span class="pre">x_2,</span> <span class="pre">...,</span> <span class="pre">x_d)</span></tt>, where
+the arguments <tt class="docutils literal"><span class="pre">x_1</span></tt>, <tt class="docutils literal"><span class="pre">x_2</span></tt>, ..., <tt class="docutils literal"><span class="pre">x_d</span></tt> are non-negative integers,
+giving the coordinates of a state in the <img class="math" src="../_images/math/96ab646de7704969b91c76a214126b45f2b07b25.png" alt="d"/>-dimensional state space.
+The propensity function <tt class="docutils literal"><span class="pre">f</span></tt> must also be well defined when the state space
+coordinate arguments <tt class="docutils literal"><span class="pre">x_1</span></tt>, <tt class="docutils literal"><span class="pre">x_2</span></tt>, ..., <tt class="docutils literal"><span class="pre">x_d</span></tt> are <tt class="xref docutils literal"><span class="pre">numpy.array</span></tt>
+objects of integers. In this case, the propensity function <tt class="docutils literal"><span class="pre">f</span></tt> must return a
+value that is either a scalar, or a <tt class="xref docutils literal"><span class="pre">numpy.array</span></tt> object with the
+same shape as the arguments <tt class="docutils literal"><span class="pre">x_1</span></tt>, <tt class="docutils literal"><span class="pre">x_2</span></tt>, ..., <tt class="docutils literal"><span class="pre">x_d</span></tt>. In either case,
+the scalar or array object returned by <tt class="docutils literal"><span class="pre">f</span></tt> must consist of non-negative
+floating point values.</p>
+<p>A propensity function is often a single expression involving the input
+state space coordinates. It is simple to write such small, anonymous
+functions using the <tt class="xref docutils literal"><span class="pre">lambda</span></tt> keyword, especially when combined
+with Python&#8217;s argument list-unpacking syntax.</p>
+<p>For example, suppose the chemical reaction <img class="math" src="../_images/math/cb9be045eee78650c987c266b835008ff3316479.png" alt="A + B \xrightarrow{k} C"/>,
+with kinetic parameter <cite>k = 1.5</cite>, has a propensity given by
+<img class="math" src="../_images/math/7e934ad65304502e56e816fc170ea29760af93d2.png" alt="k \cdot [A] \cdot [B]"/>, where <img class="math" src="../_images/math/4919f9c8ee83c68829bb70406c7f4cf6a4fe8dc4.png" alt="[A], [B]"/> are the copy counts
+of the species <cite>A, B</cite>. We may define this function in Python, using
+the keyword <tt class="xref docutils literal"><span class="pre">lambda</span></tt>, as:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">prop</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="p">:</span> <span class="mf">1.5</span> <span class="o">*</span> <span class="n">a</span> <span class="o">*</span> <span class="n">b</span>
+</pre></div>
+</div>
+<p>where the arguments <tt class="docutils literal"><span class="pre">a</span></tt>, <tt class="docutils literal"><span class="pre">b</span></tt> are used to pass the species counts
+<img class="math" src="../_images/math/4919f9c8ee83c68829bb70406c7f4cf6a4fe8dc4.png" alt="[A], [B]"/>. We may re-write the definition of <tt class="docutils literal"><span class="pre">prop</span></tt>, using
+list-unpacking syntax, as:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">prop</span> <span class="o">=</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="mf">1.5</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The use of list-unpacking syntax in the above example is questionable, since
+there are only two arguments. However, it is a useful tool for defining
+propensity functions when the state space contains a large number of
+coordinates.</p>
+</div>
+<div class="section" id="defining-reaction-state-transitions">
+<h3>Defining reaction state transitions<a class="headerlink" href="#defining-reaction-state-transitions" title="Permalink to this headline">¶</a></h3>
+<p>The <tt class="docutils literal"><span class="pre">transitions</span></tt> parameter of the model must be a sequence of <em>state
+transitions</em>. Assume that the chosen state space coordinate system for the
+model has <img class="math" src="../_images/math/96ab646de7704969b91c76a214126b45f2b07b25.png" alt="d"/> dimensions, that is, each propensity function in the
+model&#8217;s <tt class="docutils literal"><span class="pre">propensities</span></tt> parameter is a function of <img class="math" src="../_images/math/96ab646de7704969b91c76a214126b45f2b07b25.png" alt="d"/> arguments.
+Then, each state transition in the sequence <tt class="docutils literal"><span class="pre">transitions</span></tt> must be a length
+<img class="math" src="../_images/math/96ab646de7704969b91c76a214126b45f2b07b25.png" alt="d"/> tuple of integers.</p>
+<p>When the system is in the state specified by the non-negative integer
+coordinates <tt class="docutils literal"><span class="pre">(x_1,</span> <span class="pre">...,</span> <span class="pre">x_d)</span></tt>, an occurance of the <img class="math" src="../_images/math/34857b3ba74ce5cd8607f3ebd23e9015908ada71.png" alt="i"/>-th reaction
+changes the state of the system to
+<tt class="docutils literal"><span class="pre">(x_1</span> <span class="pre">+</span> <span class="pre">y_1,</span> <span class="pre">...,</span> <span class="pre">x_d</span> <span class="pre">+</span> <span class="pre">y_d)</span></tt>, where <tt class="docutils literal"><span class="pre">(y_1,</span> <span class="pre">...,</span> <span class="pre">y_d)</span></tt> is the <img class="math" src="../_images/math/34857b3ba74ce5cd8607f3ebd23e9015908ada71.png" alt="i"/>-th
+element of the model&#8217;s <tt class="docutils literal"><span class="pre">transitions</span></tt> parameter.</p>
+</div>
+</div>
+<div class="section" id="optional-model-parameters">
+<h2>Optional model parameters<a class="headerlink" href="#optional-model-parameters" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="state-space-shape-and-initial-state">
+<h3>State space shape and initial state<a class="headerlink" href="#state-space-shape-and-initial-state" title="Permalink to this headline">¶</a></h3>
+<p>CmePy solves the Chemical Master Equation for a model as a probability
+distribution over the states <img class="math" src="../_images/math/e6e068a723435b6bc658962bc7470ed02dfdb09f.png" alt="(x_1, ..., x_d) \in \Omega"/>, where
+<img class="math" src="../_images/math/9e2b196e9b7e57d1ec99f6534c581ea9759d2170.png" alt="\Omega"/>, the state space, is the finite subset of <img class="math" src="../_images/math/ed33638ec9fca74191b907637460f6a8312d53a8.png" alt="\mathbb{N}^d"/>
+defined by</p>
+<div class="math">
+<p><img src="../_images/math/cfd98e38f88b3d5f8588064cd20777497e7ee5ca.png" alt="\Omega := \left\{ (x_1, ..., x_d) \; : \;
+\textrm{$x_i \in \mathbb{N}, \; 0 \leq x_i &lt; y_i$,
+for $i = 1, ..., d$}
+\right\} \; ," /></p>
+</div><p>where <img class="math" src="../_images/math/271317f8803372aa573bc631f2e6e7db18d5e997.png" alt="(y_1, ..., y_d) \in \mathbb{Z}^d"/> is a length-<img class="math" src="../_images/math/96ab646de7704969b91c76a214126b45f2b07b25.png" alt="d"/> tuple
+of integers. This tuple <img class="math" src="../_images/math/50f849e475189779e26066dfd80f2186ab71484c.png" alt="(y_1, ..., y_d)"/> is the <tt class="docutils literal"><span class="pre">shape</span></tt> parameter of
+the model.</p>
+<p>If the <tt class="docutils literal"><span class="pre">shape</span></tt> parameter of the model is unspecified, the optional keyword
+argument <tt class="docutils literal"><span class="pre">domain_states</span></tt> must be passed to <a title="cmepy.solver.create" class="reference" href="../api_modules/solver.html#cmepy.solver.create"><tt class="xref docutils literal"><span class="pre">cmepy.solver.create()</span></tt></a>
+when creating the solver. See <a class="reference" href="../recipes/sparse_state_spaces.html#sparse-state-spaces"><em>Sparse state spaces</em></a> for more information.</p>
+<p>The initial state of the system of reactions represented by a model <tt class="docutils literal"><span class="pre">m</span></tt>
+is specified by the optional parameter <tt class="docutils literal"><span class="pre">initial_state</span></tt>. If this parameter is
+unspecified, the optional keyword argument <tt class="docutils literal"><span class="pre">p_0</span></tt> must be passed to
+<a title="cmepy.solver.create" class="reference" href="../api_modules/solver.html#cmepy.solver.create"><tt class="xref docutils literal"><span class="pre">cmepy.solver.create()</span></tt></a> when creating the solver.
+Refer to the <a class="reference" href="solver.html#module-solver"><em>cmepy.solver</em></a> documentation for more details.</p>
+</div>
+<div class="section" id="species-names-and-species-counts">
+<h3>Species names and species counts<a class="headerlink" href="#species-names-and-species-counts" title="Permalink to this headline">¶</a></h3>
+<p>Models may include the optional parameters <tt class="docutils literal"><span class="pre">species</span></tt>
+and <tt class="docutils literal"><span class="pre">species_counts</span></tt>. If specified, these parameters should be sequences
+of the same length. The <img class="math" src="../_images/math/34857b3ba74ce5cd8607f3ebd23e9015908ada71.png" alt="i"/>-th element of the <tt class="docutils literal"><span class="pre">species_counts</span></tt>
+sequence must be a function mapping states from the state space to the states
+of the <cite>i</cite>-th species count. The return value of this function must be
+a non-negative integer. The <img class="math" src="../_images/math/34857b3ba74ce5cd8607f3ebd23e9015908ada71.png" alt="i"/>-th element of the <tt class="docutils literal"><span class="pre">species</span></tt> sequence
+defines the name of the <cite>i</cite>-th species.</p>
+<p>Typically, the <tt class="docutils literal"><span class="pre">species</span></tt> and <tt class="docutils literal"><span class="pre">species_counts</span></tt> parameters are used to
+initialise a recorder instance, which may then be used to derive statistics
+for the species counts using solutions obtained from the solver. For more
+information, see the documentation for <a class="reference" href="recorder.html#module-recorder"><em>cmepy.recorder</em></a> and
+<a class="reference" href="solver.html#module-solver"><em>cmepy.solver</em></a>.</p>
+</div>
+<div class="section" id="model-and-reaction-names">
+<h3>Model and reaction names<a class="headerlink" href="#model-and-reaction-names" title="Permalink to this headline">¶</a></h3>
+<p>Models may include an optional <tt class="docutils literal"><span class="pre">name</span></tt> parameter, as a keyword argument to
+the function <a title="cmepy.model.create" class="reference" href="../api_modules/model.html#cmepy.model.create"><tt class="xref docutils literal"><span class="pre">cmepy.model.create()</span></tt></a>. If given, this parameter should be a
+a brief description of the model.</p>
+<p>Models may also include an optional <tt class="docutils literal"><span class="pre">reaction_names</span></tt> parameter as a keyword
+argument to <a title="cmepy.model.create" class="reference" href="../api_modules/model.html#cmepy.model.create"><tt class="xref docutils literal"><span class="pre">cmepy.model.create()</span></tt></a>. If specified, <tt class="docutils literal"><span class="pre">reaction_names</span></tt>
+should be a sequence of the same length as the <tt class="docutils literal"><span class="pre">propensities</span></tt> and
+<tt class="docutils literal"><span class="pre">transitions</span></tt> sequences. The <img class="math" src="../_images/math/34857b3ba74ce5cd8607f3ebd23e9015908ada71.png" alt="i"/>-th element of the <tt class="docutils literal"><span class="pre">reaction_names</span></tt>
+parameter defines the name of the <img class="math" src="../_images/math/34857b3ba74ce5cd8607f3ebd23e9015908ada71.png" alt="i"/>-th reaction.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="../index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference" href="#"><tt class="docutils literal"><span class="pre">cmepy.model</span></tt></a><ul>
+<li><a class="reference" href="#overview">Overview</a></li>
+<li><a class="reference" href="#creating-a-model">Creating a model</a></li>
+<li><a class="reference" href="#required-model-parameters">Required model parameters</a><ul>
+<li><a class="reference" href="#defining-reaction-propensity-functions">Defining reaction propensity functions</a></li>
+<li><a class="reference" href="#defining-reaction-state-transitions">Defining reaction state transitions</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#optional-model-parameters">Optional model parameters</a><ul>
+<li><a class="reference" href="#state-space-shape-and-initial-state">State space shape and initial state</a></li>
+<li><a class="reference" href="#species-names-and-species-counts">Species names and species counts</a></li>
+<li><a class="reference" href="#model-and-reaction-names">Model and reaction names</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="../modules.html"
+                                  title="previous chapter">Important <tt class="docutils literal docutils literal docutils literal"><span class="pre">cmepy</span></tt> modules</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="recorder.html"
+                                  title="next chapter"><tt class="docutils literal"><span class="pre">cmepy.recorder</span></tt></a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/modules/model.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="recorder.html" title="cmepy.recorder"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../modules.html" title="Important cmepy modules"
+             >previous</a> |</li>
+        <li><a href="../index.html">CmePy v0.3 documentation</a> &raquo;</li>
+          <li><a href="../modules.html" >Important <tt class="docutils literal docutils literal docutils literal docutils literal"><span class="pre">cmepy</span></tt> modules</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, Markus Hegland &amp; Reuben Fletcher-Costin.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+    </div>
+  </body>
+</html>

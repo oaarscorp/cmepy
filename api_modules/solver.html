@@ -1,0 +1,182 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>solver &mdash; CmePy v0.3 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.3',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="CmePy v0.3 documentation" href="../index.html" />
+    <link rel="up" title="api documentation" href="../api.html" />
+    <link rel="next" title="state_enum" href="state_enum.html" />
+    <link rel="prev" title="restorable_solver" href="restorable_solver.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="state_enum.html" title="state_enum"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="restorable_solver.html" title="restorable_solver"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">CmePy v0.3 documentation</a> &raquo;</li>
+          <li><a href="../api.html" accesskey="U">api documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-cmepy.solver">
+<h1><tt class="xref docutils literal"><span class="pre">solver</span></tt><a class="headerlink" href="#module-cmepy.solver" title="Permalink to this headline">¶</a></h1>
+<p>Creates solvers for the Chemical Master Equation (CME).</p>
+<dl class="function">
+<dt id="cmepy.solver.create">
+<tt class="descclassname">cmepy.solver.</tt><tt class="descname">create</tt><big>(</big><em>model</em>, <em>sink</em>, <em>p_0=None</em>, <em>t_0=None</em>, <em>sink_0=None</em>, <em>time_dependencies=None</em>, <em>domain_states=None</em><big>)</big><a class="headerlink" href="#cmepy.solver.create" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a solver for the Chemical Master Equation of the given model.</p>
+<p>arguments:</p>
+<blockquote>
+<p>model : the CME model to solve</p>
+<dl class="docutils">
+<dt>sink <span class="classifier-delimiter">:</span> <span class="classifier">If sink is True, the solver will include a &#8216;sink&#8217; state used</span></dt>
+<dd>to accumulate any probability that may flow outside the domain.
+This can be used to measure the error in the solution due to
+truncation of the domain. If sink is False, the solver will not
+include a &#8216;sink&#8217; state, and probability will be artificially
+prevented from flowing outside of the domain.</dd>
+<dt>p_0 <span class="classifier-delimiter">:</span> <span class="classifier">(optional) mapping from states in the domain to probabilities,</span></dt>
+<dd>for the initial probability distribution. If not specified,
+and the initial state of the state space is given by the model,
+defaults to all probability concentrated at the initial state,
+otherwise, a ValueError will be raised.</dd>
+</dl>
+<p>t_0 : (optional) initial time, defaults to 0.0</p>
+<dl class="docutils">
+<dt>sink_0 <span class="classifier-delimiter">:</span> <span class="classifier">(optional) initial sink probability, defaults to 0.0</span></dt>
+<dd>Only a valid argument if sink is set to True.</dd>
+<dt>time_dependencies <span class="classifier-delimiter">:</span> <span class="classifier">(optional) By default, reaction propensities are</span></dt>
+<dd><p class="first">time independent. If specified, time_dependencies must be of the
+form { s_1 : phi_1, ..., s_n : phi_n }, where each (s_j, phi_j)
+item satisifes :</p>
+<blockquote>
+s_j : set of reaction indices
+phi_j : phi_j(t) -&gt; time dependent coefficient</blockquote>
+<p>The propensities of the reactions with indicies contained in s_j
+will all be multiplied by the coefficient phi_j(t), at time t.
+Reactions are indexed according to the ordering of the propensities
+in the model.</p>
+<p class="last">The reaction index sets s_j must be <em>disjoint</em>. It is not necessary
+for the union of the s_j to include all the reaction indices.
+If a reaction&#8217;s index is not contained in any s_j then the reaction
+is treated as time-independent.</p>
+</dd>
+<dt>mapping of time dependent coefficient</dt>
+<dd>functions keyed by subsets of reaction indices, with respect to the
+ordering of reactions determined by the order of the propensity
+functions inside the model. The propensities of the reactions
+with indices included in each subset are multiplied by the time
+dependent coefficient function. By default, no time dependent
+coefficient functions are specified, that is, the CME has
+time-independent propensities.</dd>
+<dt>domain_states <span class="classifier-delimiter">:</span> <span class="classifier">(optional) array of states in the domain.</span></dt>
+<dd>By default, generate the rectangular lattice of states defined by
+the &#8216;shape&#8217; entry of the model. A ValueError is raised if both
+domain_states and &#8216;shape&#8217; are unspecified.</dd>
+</dl>
+</blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="cmepy.solver.create_packing_functions">
+<tt class="descclassname">cmepy.solver.</tt><tt class="descname">create_packing_functions</tt><big>(</big><em>domain_enum</em><big>)</big><a class="headerlink" href="#cmepy.solver.create_packing_functions" title="Permalink to this definition">¶</a></dt>
+<dd><p>create_packing_functions(domain_enum) -&gt; (pack, unpack)</p>
+<p>where</p>
+<blockquote>
+pack((p, p_sink)) -&gt; y
+unpack(y) -&gt; (p, p_sink)</blockquote>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="restorable_solver.html"
+                                  title="previous chapter"><tt class="docutils literal docutils literal docutils literal"><span class="pre">restorable_solver</span></tt></a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="state_enum.html"
+                                  title="next chapter"><tt class="docutils literal"><span class="pre">state_enum</span></tt></a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/api_modules/solver.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="state_enum.html" title="state_enum"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="restorable_solver.html" title="restorable_solver"
+             >previous</a> |</li>
+        <li><a href="../index.html">CmePy v0.3 documentation</a> &raquo;</li>
+          <li><a href="../api.html" >api documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, Markus Hegland &amp; Reuben Fletcher-Costin.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+    </div>
+  </body>
+</html>

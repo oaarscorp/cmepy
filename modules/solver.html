@@ -1,0 +1,239 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>cmepy.solver &mdash; CmePy v0.3 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.3',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="CmePy v0.3 documentation" href="../index.html" />
+    <link rel="up" title="Important cmepy modules" href="../modules.html" />
+    <link rel="next" title="Advanced features" href="../cookbook.html" />
+    <link rel="prev" title="cmepy.recorder" href="recorder.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="../cookbook.html" title="Advanced features"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="recorder.html" title="cmepy.recorder"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">CmePy v0.3 documentation</a> &raquo;</li>
+          <li><a href="../modules.html" accesskey="U">Important <tt class="docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">cmepy</span></tt> modules</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="cmepy-solver">
+<span id="module-solver"></span><h1><a title="" class="reference" href="../api_modules/solver.html#module-cmepy.solver"><tt class="xref docutils literal"><span class="pre">cmepy.solver</span></tt></a><a class="headerlink" href="#cmepy-solver" title="Permalink to this headline">¶</a></h1>
+<p>The <a title="" class="reference" href="../api_modules/solver.html#module-cmepy.solver"><tt class="xref docutils literal"><span class="pre">cmepy.solver</span></tt></a> module computes numerical solutions to the
+Chemical Master Equation (CME).</p>
+<div class="section" id="creating-a-solver">
+<h2>Creating a solver<a class="headerlink" href="#creating-a-solver" title="Permalink to this headline">¶</a></h2>
+<p>Solver instances are obtained by calling the function
+<a title="cmepy.solver.create" class="reference" href="../api_modules/solver.html#cmepy.solver.create"><tt class="xref docutils literal"><span class="pre">cmepy.solver.create()</span></tt></a>. This requires the two arguments <tt class="docutils literal"><span class="pre">model</span></tt>
+and <tt class="docutils literal"><span class="pre">sink</span></tt>:</p>
+<blockquote>
+<ul class="simple">
+<li>The <tt class="docutils literal"><span class="pre">model</span></tt> argument is the model representing the system of reactions
+to solve. To create a model, use <a title="cmepy.model.create" class="reference" href="../api_modules/model.html#cmepy.model.create"><tt class="xref docutils literal"><span class="pre">cmepy.model.create()</span></tt></a>. For more
+information regarding the model format, see <a class="reference" href="model.html#module-model"><em>cmepy.model</em></a>.</li>
+<li>The <tt class="docutils literal"><span class="pre">sink</span></tt> argument is a Boolean flag. If sink is <tt class="xref docutils literal"><span class="pre">True</span></tt>, the solver
+will include a &#8216;sink&#8217; state used to accumulate any probability that may
+flow outside the domain. This can be used to measure the error in the
+solution due to truncation of the domain. If sink is <tt class="xref docutils literal"><span class="pre">False</span></tt>, the solver
+will not include a &#8216;sink&#8217; state, and probability will be artificially
+prevented from flowing outside of the domain.</li>
+</ul>
+</blockquote>
+<p>To specify the initial conditions for the CME, the optional arguments
+<tt class="docutils literal"><span class="pre">p_0</span></tt> and <tt class="docutils literal"><span class="pre">t_0</span></tt> may be passed to <a title="cmepy.solver.create" class="reference" href="../api_modules/solver.html#cmepy.solver.create"><tt class="xref docutils literal"><span class="pre">cmepy.solver.create()</span></tt></a>:</p>
+<blockquote>
+<ul>
+<li><p class="first"><tt class="docutils literal"><span class="pre">p_0</span></tt> : the initial probability distribution. If given, this must be a
+dictionary from the states in the state space (with respect to the state
+space used by the model) to the initial probabilities. By default, when
+<tt class="docutils literal"><span class="pre">p_0</span></tt> is not specified, then the argument <tt class="docutils literal"><span class="pre">model</span></tt> must contain the
+attribute <tt class="docutils literal"><span class="pre">model.initial_state</span></tt>. In this case, the initial probability
+distribution <tt class="docutils literal"><span class="pre">p_0</span></tt> is defined to be all probability concentrated at the
+initial state, that is,</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">p_0</span> <span class="o">=</span> <span class="p">{</span> <span class="n">model</span><span class="o">.</span><span class="n">initial_state</span> <span class="p">:</span> <span class="mf">1.0</span> <span class="p">}</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">t_0</span></tt> : the initial solution time. By default, <tt class="docutils literal"><span class="pre">t_0</span> <span class="pre">=</span> <span class="pre">0.0</span></tt>.</p>
+</li>
+</ul>
+</blockquote>
+<p>Finally, two additional optional key word arguments may be passed. These are
+<tt class="docutils literal"><span class="pre">time_dependencies</span></tt> and <tt class="docutils literal"><span class="pre">domain_states</span></tt>:</p>
+<blockquote>
+<ul>
+<li><p class="first"><tt class="docutils literal"><span class="pre">time_dependencies</span></tt> : time dependency data. If given, this must be a
+dictionary of functions taking a time <tt class="docutils literal"><span class="pre">t</span></tt> and returning a scalar,
+keyed by sets of reaction indices.</p>
+<p>See <a class="reference" href="../recipes/time_dependent_propensity_functions.html#time-dependent-propensity-functions"><em>Time-dependent propensity functions</em></a>.</p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">domain_states</span></tt> : states to include in the domain. If given, this
+must be an array of states.</p>
+<p>See <a class="reference" href="../recipes/sparse_state_spaces.html#sparse-state-spaces"><em>Sparse state spaces</em></a>.</p>
+</li>
+</ul>
+</blockquote>
+</div>
+<div class="section" id="using-a-solver">
+<h2>Using a solver<a class="headerlink" href="#using-a-solver" title="Permalink to this headline">¶</a></h2>
+<p>Suppose we have obtained a solver instance for the model <tt class="docutils literal"><span class="pre">m</span></tt>, using the
+function <a title="cmepy.solver.create" class="reference" href="../api_modules/solver.html#cmepy.solver.create"><tt class="xref docutils literal"><span class="pre">cmepy.solver.create()</span></tt></a>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">cmepy</span> <span class="kn">import</span> <span class="n">model</span><span class="p">,</span> <span class="n">solver</span>
+
+<span class="n">m</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="o">...</span> <span class="c"># model definition goes here</span>
+<span class="p">)</span>
+
+<span class="n">s</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">sink</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The solution of the solver <tt class="docutils literal"><span class="pre">s</span></tt> can be advanced to time <tt class="docutils literal"><span class="pre">t</span></tt> by calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">s</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Typically, the solver is stepped over a range of times inside a for loop.
+For example, to step the solver forward from time 0 to time 10, using 11 evenly
+spaced steps (including time 0), use:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">numpy</span>
+
+<span class="n">time_steps</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="mi">11</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">time_steps</span><span class="p">:</span>
+    <span class="n">s</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The current solution and solution time stored by the solver can be accessed
+using the atttributes <tt class="docutils literal"><span class="pre">s.y</span></tt> and <tt class="docutils literal"><span class="pre">s.t</span></tt> respectively. If the solver <tt class="docutils literal"><span class="pre">s</span></tt>
+was created with the <tt class="docutils literal"><span class="pre">sink</span> <span class="pre">=</span> <span class="pre">True</span></tt> flag set, then <tt class="docutils literal"><span class="pre">s.y</span></tt> will have a value
+of the form:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">p_sink</span><span class="p">)</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">y</span>
+</pre></div>
+</div>
+<p>where <tt class="docutils literal"><span class="pre">p</span></tt> is the approximate solution of the CME and <tt class="docutils literal"><span class="pre">p_sink</span></tt> is the
+probability contained by the sink state.
+Here, <tt class="docutils literal"><span class="pre">p</span></tt> is a probability distribution, which is represented as a dictionary
+of probabilities, keyed by states in the domain, while <tt class="docutils literal"><span class="pre">p_sink</span></tt> is a scalar
+containing the net probability that has &#8216;leaked&#8217; outside the domain into the
+sink state.</p>
+<p>Conversely, if the solver <tt class="docutils literal"><span class="pre">s</span></tt> was created with the <tt class="docutils literal"><span class="pre">sink</span></tt> flag set to
+<tt class="xref docutils literal"><span class="pre">False</span></tt>, then <tt class="docutils literal"><span class="pre">s.y</span></tt> will have a value of the form:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">p</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">y</span>
+</pre></div>
+</div>
+<p>where <tt class="docutils literal"><span class="pre">p</span></tt> is a probability distribution of the same form as described above.</p>
+</div>
+<div class="section" id="complications">
+<h2>Complications<a class="headerlink" href="#complications" title="Permalink to this headline">¶</a></h2>
+<p>For a solver <tt class="docutils literal"><span class="pre">s</span></tt>, the time <tt class="docutils literal"><span class="pre">t</span></tt> passed to <tt class="docutils literal"><span class="pre">s.step(t)</span></tt> must not be less than
+the solver&#8217;s current solution time, <tt class="docutils literal"><span class="pre">s.t</span></tt>, otherwise a <tt class="docutils literal"><span class="pre">ValueError</span></tt> will be
+raised.</p>
+<p>Additionally, in a rather ugly complication, if the time <tt class="docutils literal"><span class="pre">t</span></tt> is &#8216;too large&#8217;,
+the underlying &#8216;VODE&#8217; ODE solver, obtained from <tt class="xref docutils literal"><span class="pre">scipy.integrate.ode()</span></tt>,
+may fail to converge. If this occurs, a <tt class="docutils literal"><span class="pre">RuntimeError</span></tt> will be raised, and
+VODE will display an error message. If such errors occur, try reducing the size
+of the time steps.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="../index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference" href="#"><tt class="docutils literal"><span class="pre">cmepy.solver</span></tt></a><ul>
+<li><a class="reference" href="#creating-a-solver">Creating a solver</a></li>
+<li><a class="reference" href="#using-a-solver">Using a solver</a></li>
+<li><a class="reference" href="#complications">Complications</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="recorder.html"
+                                  title="previous chapter"><tt class="docutils literal docutils literal docutils literal"><span class="pre">cmepy.recorder</span></tt></a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="../cookbook.html"
+                                  title="next chapter">Advanced features</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/modules/solver.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../cookbook.html" title="Advanced features"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="recorder.html" title="cmepy.recorder"
+             >previous</a> |</li>
+        <li><a href="../index.html">CmePy v0.3 documentation</a> &raquo;</li>
+          <li><a href="../modules.html" >Important <tt class="docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">cmepy</span></tt> modules</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, Markus Hegland &amp; Reuben Fletcher-Costin.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,222 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Getting started &mdash; CmePy v0.3 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '#',
+        VERSION:     '0.3',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="CmePy v0.3 documentation" href="index.html" />
+    <link rel="next" title="Example: a single reaction" href="example_simple.html" />
+    <link rel="prev" title="CmePy Documentation" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="example_simple.html" title="Example: a single reaction"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="CmePy Documentation"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">CmePy v0.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="getting-started">
+<h1>Getting started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="dependencies">
+<h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h2>
+<p>CmePy was developed for <a class="reference" href="http://www.python.org/">Python</a> 2.5, and depends upon the following packages:</p>
+<blockquote>
+<ul class="simple">
+<li><a class="reference" href="http://www.scipy.org/">SciPy</a> 0.7</li>
+<li><a class="reference" href="http://numpy.scipy.org/">Numpy</a> 1.2.1</li>
+<li><a class="reference" href="http://matplotlib.sourceforge.net/">Matplotlib</a> (required only to plot example results)</li>
+</ul>
+</blockquote>
+<p>CmePy <em>should</em> be compatible with <a class="reference" href="http://www.python.org/">Python</a> 2.6, provided <a class="reference" href="http://www.scipy.org/">SciPy</a> 0.7 and
+<a class="reference" href="http://numpy.scipy.org/">Numpy</a> 1.3 are used.</p>
+</div>
+<div class="section" id="obtaining-cmepy">
+<h2>Obtaining CmePy<a class="headerlink" href="#obtaining-cmepy" title="Permalink to this headline">¶</a></h2>
+<p>The easiest way to obtain CmePy is to download an archive of
+the master branch from CmePy&#8217;s GitHub repository:</p>
+<p><a class="reference" href="http://github.com/fcostin/cmepy/archives/master">Download CmePy now as a ZIP or TAR archive!</a></p>
+<p>Alternatively, if you have the <a class="reference" href="http://git-scm.com/">Git</a> version control system installed, you may
+prefer to check out a copy of CmePy directly from GitHub, via:</p>
+<div class="highlight-python"><pre>git clone git://github.com/fcostin/cmepy.git</pre>
+</div>
+</div>
+<div class="section" id="testing-and-installation">
+<h2>Testing and installation<a class="headerlink" href="#testing-and-installation" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="testing-cmepy">
+<h3>Testing CmePy<a class="headerlink" href="#testing-cmepy" title="Permalink to this headline">¶</a></h3>
+<p>To test CmePy, simply run the <strong>test_all.py</strong> script:</p>
+<div class="highlight-python"><pre>python test_all.py</pre>
+</div>
+<p>If one or more of the tests fail, check to see if all CmePy&#8217;s
+dependencies are correctly installed.</p>
+</div>
+<div class="section" id="installing-cmepy-globally">
+<h3>Installing CmePy globally<a class="headerlink" href="#installing-cmepy-globally" title="Permalink to this headline">¶</a></h3>
+<p>When the <strong>test_all.py</strong> script completes with all tests passed,
+then CmePy may be installed by running the <strong>setup.py</strong> script as
+follows:</p>
+<div class="highlight-python"><pre>python setup.py install</pre>
+</div>
+<p>On linux, you will most likely need to use <em>sudo</em> to install CmePy globally:</p>
+<div class="highlight-python"><pre>sudo python setup.py install</pre>
+</div>
+<p>If it is not possible or not desirable to install CmePy as a global package,
+there are a couple of ways to install CmePy locally. The first way is perhaps
+quicker to get started, but is a bit ugly, as it relies on messing about
+with environment variables,. The second way is to use the VirtualEnv
+package to create and manage a local, isolated working environment for CmePy.</p>
+</div>
+<div class="section" id="local-installation-via-environment-variables-linux">
+<h3>Local installation via environment variables (linux)<a class="headerlink" href="#local-installation-via-environment-variables-linux" title="Permalink to this headline">¶</a></h3>
+<p>If it is not possible to install CmePy to the Python&#8217;s global
+<tt class="docutils literal"><span class="pre">site_packages</span></tt> directory, CmePy may instead be installed locally to a user&#8217;s
+home directory. The following instructions assume you are using the bash shell.</p>
+<p>First, ensure that the path <tt class="docutils literal"><span class="pre">${HOME}/lib/python</span></tt> exists,
+and that the <tt class="docutils literal"><span class="pre">${PYTHONPATH}</span></tt> environment variable includes
+<tt class="docutils literal"><span class="pre">${HOME}/lib/python</span></tt>. Then, CmePy may be installed locally as follows:</p>
+<div class="highlight-python"><pre>python setup.py install --home=${HOME}</pre>
+</div>
+</div>
+<div class="section" id="local-installation-using-the-virtualenv-package">
+<h3>Local installation using the VirtualEnv package<a class="headerlink" href="#local-installation-using-the-virtualenv-package" title="Permalink to this headline">¶</a></h3>
+<p>The VirtualEnv package is a tool to create isolated Python environments.
+This addresses the far more general problem of managing Python environments
+for multiple projects. VirtualEnv can be combined with Pip, Distribute,
+and VirtualEnvWrapper to create a very nice system for managing
+Python packages.</p>
+<p>To learn more about these useful packages, visit their pages on the Python
+package index:</p>
+<blockquote>
+<ul class="simple">
+<li><a class="reference" href="http://pypi.python.org/pypi/distribute">Distribute</a></li>
+<li><a class="reference" href="http://pypi.python.org/pypi/pip">Pip</a></li>
+<li><a class="reference" href="http://pypi.python.org/pypi/virtualenv">VirtualEnv</a></li>
+<li><a class="reference" href="http://pypi.python.org/pypi/virtualenvwrapper">VirtualEnvWrapper</a></li>
+</ul>
+</blockquote>
+</div>
+</div>
+<div class="section" id="uninstalling-cmepy">
+<h2>Uninstalling CmePy<a class="headerlink" href="#uninstalling-cmepy" title="Permalink to this headline">¶</a></h2>
+<p>I strongly recommend using
+<a class="reference" href="http://pypi.python.org/pypi/pip">pip</a> to install and uninstall
+Python packages. If pip is installed, then CmePy may be uninstalled via:</p>
+<div class="highlight-python"><pre>pip uninstall cmepy</pre>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">pip is unable to uninstall CmePy if CmePy has been installed locally using
+the environment variables method. In this case, CmePy may be uninstalled
+by manually removing CmePy&#8217;s directory from the path <tt class="docutils literal"><span class="pre">${HOME}/lib/python</span></tt>.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference" href="#">Getting started</a><ul>
+<li><a class="reference" href="#dependencies">Dependencies</a></li>
+<li><a class="reference" href="#obtaining-cmepy">Obtaining CmePy</a></li>
+<li><a class="reference" href="#testing-and-installation">Testing and installation</a><ul>
+<li><a class="reference" href="#testing-cmepy">Testing CmePy</a></li>
+<li><a class="reference" href="#installing-cmepy-globally">Installing CmePy globally</a></li>
+<li><a class="reference" href="#local-installation-via-environment-variables-linux">Local installation via environment variables (linux)</a></li>
+<li><a class="reference" href="#local-installation-using-the-virtualenv-package">Local installation using the VirtualEnv package</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#uninstalling-cmepy">Uninstalling CmePy</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="index.html"
+                                  title="previous chapter">CmePy Documentation</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="example_simple.html"
+                                  title="next chapter">Example: a single reaction</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/getting_started.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="example_simple.html" title="Example: a single reaction"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="CmePy Documentation"
+             >previous</a> |</li>
+        <li><a href="index.html">CmePy v0.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, Markus Hegland &amp; Reuben Fletcher-Costin.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+    </div>
+  </body>
+</html>

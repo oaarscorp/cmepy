@@ -1,0 +1,142 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>measurement &mdash; CmePy v0.3 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.3',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="CmePy v0.3 documentation" href="../index.html" />
+    <link rel="up" title="api documentation" href="../api.html" />
+    <link rel="next" title="model" href="model.html" />
+    <link rel="prev" title="lexarrayset" href="lexarrayset.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="model.html" title="model"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="lexarrayset.html" title="lexarrayset"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">CmePy v0.3 documentation</a> &raquo;</li>
+          <li><a href="../api.html" accesskey="U">api documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-cmepy.measurement">
+<h1><tt class="xref docutils literal"><span class="pre">measurement</span></tt><a class="headerlink" href="#module-cmepy.measurement" title="Permalink to this headline">¶</a></h1>
+<p>stores marginal distributions for random variables</p>
+<dl class="class">
+<dt id="cmepy.measurement.Measurement">
+<em class="property">class </em><tt class="descclassname">cmepy.measurement.</tt><tt class="descname">Measurement</tt><big>(</big><em>name=None</em>, <em>transform=None</em><big>)</big><a class="headerlink" href="#cmepy.measurement.Measurement" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stores the marginal distributions for a random variable.</p>
+<p>Measurement instances are created by cmepy.recorder.CmeRecorder objects.</p>
+<p>The random variable is specified by its name and transform when
+instantiating a Measurement object.</p>
+<p>Statistics, computed from the marginal distributions, may be accessed
+as attributes (this access is read only and not cached, it is computed
+each time it is accessed).</p>
+<dl class="method">
+<dt id="cmepy.measurement.Measurement.get_statistic">
+<tt class="descname">get_statistic</tt><big>(</big><em>stat_name</em><big>)</big><a class="headerlink" href="#cmepy.measurement.Measurement.get_statistic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns list of statistic values over time.</p>
+<p>Alternatively, statistics may be obtained directly as attributes
+of the Measurement instance m, that is,</p>
+<p>m.get_statistic(stat_name) &lt;=&gt; m.stat_name</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cmepy.measurement.Measurement.write">
+<tt class="descname">write</tt><big>(</big><em>t</em>, <em>p</em><big>)</big><a class="headerlink" href="#cmepy.measurement.Measurement.write" title="Permalink to this definition">¶</a></dt>
+<dd>Writes the time t and marginal distribution derived from p.</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="lexarrayset.html"
+                                  title="previous chapter"><tt class="docutils literal docutils literal docutils literal"><span class="pre">lexarrayset</span></tt></a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="model.html"
+                                  title="next chapter"><tt class="docutils literal"><span class="pre">model</span></tt></a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/api_modules/measurement.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="model.html" title="model"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="lexarrayset.html" title="lexarrayset"
+             >previous</a> |</li>
+        <li><a href="../index.html">CmePy v0.3 documentation</a> &raquo;</li>
+          <li><a href="../api.html" >api documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, Markus Hegland &amp; Reuben Fletcher-Costin.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+    </div>
+  </body>
+</html>

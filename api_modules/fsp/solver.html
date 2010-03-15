@@ -1,0 +1,184 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>fsp.solver &mdash; CmePy v0.3 documentation</title>
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.3',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="CmePy v0.3 documentation" href="../../index.html" />
+    <link rel="up" title="fsp" href="../fsp.html" />
+    <link rel="next" title="fsp.support_expander" href="support_expander.html" />
+    <link rel="prev" title="fsp.simple_expander" href="simple_expander.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="support_expander.html" title="fsp.support_expander"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="simple_expander.html" title="fsp.simple_expander"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">CmePy v0.3 documentation</a> &raquo;</li>
+          <li><a href="../../api.html" >api documentation</a> &raquo;</li>
+          <li><a href="../fsp.html" accesskey="U"><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">fsp</span></tt></a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-cmepy.fsp.solver">
+<h1><tt class="xref docutils literal"><span class="pre">fsp.solver</span></tt><a class="headerlink" href="#module-cmepy.fsp.solver" title="Permalink to this headline">¶</a></h1>
+<p>An implementation of FSP with compression.</p>
+<dl class="exception">
+<dt id="cmepy.fsp.solver.ExpansionFailureError">
+<em class="property">exception </em><tt class="descclassname">cmepy.fsp.solver.</tt><tt class="descname">ExpansionFailureError</tt><big>(</big><em>msg</em><big>)</big><a class="headerlink" href="#cmepy.fsp.solver.ExpansionFailureError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exception raised if a failure occurs while expanding the domain states.</p>
+<dl class="docutils">
+<dt>Attributes:</dt>
+<dd>msg  &#8211; explanation of the error</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="cmepy.fsp.solver.FspSolver">
+<em class="property">class </em><tt class="descclassname">cmepy.fsp.solver.</tt><tt class="descname">FspSolver</tt><big>(</big><em>restorable_solver</em>, <em>initial_domain</em>, <em>domain_expander</em><big>)</big><a class="headerlink" href="#cmepy.fsp.solver.FspSolver" title="Permalink to this definition">¶</a></dt>
+<dd><p>FspSolver is a CME solver that adaptively expands the domain using FSP.</p>
+<dl class="attribute">
+<dt id="cmepy.fsp.solver.FspSolver.dy_dt">
+<tt class="descname">dy_dt</tt><a class="headerlink" href="#cmepy.fsp.solver.FspSolver.dy_dt" title="Permalink to this definition">¶</a></dt>
+<dd>Read-only property, returning the differential equations dy_dt.</dd></dl>
+
+<dl class="method">
+<dt id="cmepy.fsp.solver.FspSolver.step">
+<tt class="descname">step</tt><big>(</big><em>t</em>, <em>epsilon</em><big>)</big><a class="headerlink" href="#cmepy.fsp.solver.FspSolver.step" title="Permalink to this definition">¶</a></dt>
+<dd>Advance solution to time <tt class="docutils literal"><span class="pre">t</span></tt> at the cost of at most <tt class="docutils literal"><span class="pre">epsilon</span></tt> error.</dd></dl>
+
+<dl class="attribute">
+<dt id="cmepy.fsp.solver.FspSolver.t">
+<tt class="descname">t</tt><a class="headerlink" href="#cmepy.fsp.solver.FspSolver.t" title="Permalink to this definition">¶</a></dt>
+<dd>Read-only property, returning the current solution time t.</dd></dl>
+
+<dl class="attribute">
+<dt id="cmepy.fsp.solver.FspSolver.y">
+<tt class="descname">y</tt><a class="headerlink" href="#cmepy.fsp.solver.FspSolver.y" title="Permalink to this definition">¶</a></dt>
+<dd>Read-only property, returning a <em>copy</em> of the current solution y.</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="cmepy.fsp.solver.create">
+<tt class="descclassname">cmepy.fsp.solver.</tt><tt class="descname">create</tt><big>(</big><em>model</em>, <em>domain_states</em>, <em>domain_expander</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#cmepy.fsp.solver.create" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a FSP based CME solver for given model, domain and domain_expander.</p>
+<p>See the documentation of the <tt class="docutils literal"><span class="pre">cmepy.fsp.FspSolver</span></tt> class for
+more information about the returned solver&#8217;s methods.</p>
+<p>The returned solver will adaptively expand its domain, as necessary,
+in order to keep the domain truncation error below the epsilon
+thresholds specified when the solver <tt class="docutils literal"><span class="pre">step</span></tt> method is called.</p>
+<p>The <tt class="docutils literal"><span class="pre">domain_expander</span></tt> argument is used to implement the domain
+expansion strategy. This argument is used by the FSP implementation as
+follows:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">expanded_domain</span> <span class="o">=</span> <span class="n">domain_expander</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span>
+    <span class="n">domain_states</span> <span class="o">=</span> <span class="n">domain</span><span class="p">,</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="p">,</span>
+    <span class="n">p_sink</span> <span class="o">=</span> <span class="n">p_sink</span><span class="p">,</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">t</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>where <tt class="docutils literal"><span class="pre">domain</span></tt>, <tt class="docutils literal"><span class="pre">p</span></tt>, <tt class="docutils literal"><span class="pre">p_sink</span></tt> and <tt class="docutils literal"><span class="pre">t</span></tt> are the current domain,
+solution, truncation error and time, respectively. Note that these are
+all passed to the <tt class="docutils literal"><span class="pre">domain_expander</span></tt>&#8216;s <tt class="docutils literal"><span class="pre">expand</span></tt> method as keyword
+arguments.</p>
+<p>Any additional keyword arguments passed to this <tt class="docutils literal"><span class="pre">create</span></tt> function are
+treated in the same way as keyword arguments passed to the
+<tt class="docutils literal"><span class="pre">cmepy.solver.create</span></tt> function. Please refer to the documentation for
+the <tt class="docutils literal"><span class="pre">cmepy.solver.create</span></tt> function for additional details.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="simple_expander.html"
+                                  title="previous chapter"><tt class="docutils literal docutils literal docutils literal"><span class="pre">fsp.simple_expander</span></tt></a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="support_expander.html"
+                                  title="next chapter"><tt class="docutils literal"><span class="pre">fsp.support_expander</span></tt></a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../../_sources/api_modules/fsp/solver.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="support_expander.html" title="fsp.support_expander"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="simple_expander.html" title="fsp.simple_expander"
+             >previous</a> |</li>
+        <li><a href="../../index.html">CmePy v0.3 documentation</a> &raquo;</li>
+          <li><a href="../../api.html" >api documentation</a> &raquo;</li>
+          <li><a href="../fsp.html" ><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">fsp</span></tt></a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, Markus Hegland &amp; Reuben Fletcher-Costin.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+    </div>
+  </body>
+</html>

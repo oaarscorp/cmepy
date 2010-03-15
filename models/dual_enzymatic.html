@@ -1,0 +1,307 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dual_enzymatic : coupled enzymatic reactions &mdash; CmePy v0.3 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.3',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="CmePy v0.3 documentation" href="../index.html" />
+    <link rel="up" title="Models included in cmepy.models" href="../models.html" />
+    <link rel="next" title="gou07 : unidirection dimerisation and quadratic autocatalator" href="gou07.html" />
+    <link rel="prev" title="dsmts : a birth-death model" href="dsmts.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="gou07.html" title="gou07 : unidirection dimerisation and quadratic autocatalator"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="dsmts.html" title="dsmts : a birth-death model"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">CmePy v0.3 documentation</a> &raquo;</li>
+          <li><a href="../models.html" accesskey="U">Models included in <tt class="docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">cmepy.models</span></tt></a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="dual-enzymatic-coupled-enzymatic-reactions">
+<h1><tt class="xref docutils literal"><span class="pre">dual_enzymatic</span></tt> : coupled enzymatic reactions<a class="headerlink" href="#dual-enzymatic-coupled-enzymatic-reactions" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>This model describes a system of coupled enzymatic reactions. The reactions
+composing this system are as follows:</p>
+<div class="math">
+<p><img src="../_images/math/324037de0359d9e1cda57654765839b514863cdc.png" alt="S + E_1 &amp; \xrightarrow{k_1} C_1 \; , \\
+C_1 &amp; \xrightarrow{k_2} S + E_1 \; , \\
+C_1 &amp; \xrightarrow{k_3} P + E_1 \; , \\
+
+P + E_2 &amp; \xrightarrow{k_1} C_2 \; , \\
+C_2 &amp; \xrightarrow{k_2} P + E_2 \; , \\
+C_2 &amp; \xrightarrow{k_3} S + E_2 \; ;" /></p>
+</div><p>The rate constants are <img class="math" src="../_images/math/a214ad64d8e8fcc91def66b5fa27fe17ffdd78f2.png" alt="k_1 = 4, k_2 = 5"/> and <img class="math" src="../_images/math/9429f34f9673fea0d74d17dea30b08acf2c0173e.png" alt="k_3 = 1"/>.
+The initial species counts are 50 copies of <img class="math" src="../_images/math/ad28c83c99a8fd0dd2e2e594c9d02ee532765a0a.png" alt="S"/>, 20 copies of <img class="math" src="../_images/math/459b08d5235f417c69f0cc0c2d473a4739abdb1f.png" alt="E_1"/>,
+and 10 copies of <img class="math" src="../_images/math/f263b4685391e1f4f3ba204a355cc203a29a0653.png" alt="E_2"/>. The other species counts are initially zero.</p>
+<p>The first three reactions in the system describe an
+enzymatic reaction transforming the species <img class="math" src="../_images/math/ad28c83c99a8fd0dd2e2e594c9d02ee532765a0a.png" alt="S"/> into the species
+<img class="math" src="../_images/math/4b4cade9ca8a2c8311fafcf040bc5b15ca507f52.png" alt="P"/>. The second three reactions describe another enzymatic reaction
+transforming the species <img class="math" src="../_images/math/4b4cade9ca8a2c8311fafcf040bc5b15ca507f52.png" alt="P"/> back into <img class="math" src="../_images/math/ad28c83c99a8fd0dd2e2e594c9d02ee532765a0a.png" alt="S"/>.</p>
+</div>
+<div class="section" id="running-the-model">
+<h2>Running the model<a class="headerlink" href="#running-the-model" title="Permalink to this headline">¶</a></h2>
+<p>This model is defined by the module <tt class="xref docutils literal"><span class="pre">cmepy.model.dual_enzymatic</span></tt>.
+The source code for this model is listed below.</p>
+<p>To try out this model, open the Python interpreter and enter:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cmepy.models</span> <span class="kn">import</span> <span class="n">dual_enzymatic</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dual_enzymatic</span><span class="o">.</span><span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>This will solve the system up to <img class="math" src="../_images/math/6ba4ef452fa3f3441119f851e0fa3fb94248408d.png" alt="t = 10"/>, then display plots of the
+standard deviation and expected value of the species counts, as seen below.</p>
+</div>
+<div class="section" id="sample-results">
+<h2>Sample results<a class="headerlink" href="#sample-results" title="Permalink to this headline">¶</a></h2>
+<img alt="../_images/dual_enzymatic_ev_plot.png" src="../_images/dual_enzymatic_ev_plot.png" />
+<img alt="../_images/dual_enzymatic_std_dev_plot.png" src="../_images/dual_enzymatic_std_dev_plot.png" />
+</div>
+<div class="section" id="source-code">
+<span id="source-code-dual-enzymatic"></span><h2>Source code<a class="headerlink" href="#source-code" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Example system with two enzymatic reactions.</span>
+
+<span class="sd">System :</span>
+<span class="sd">    S + E1 &lt;--&gt; C1 --&gt; P + E1</span>
+<span class="sd">    P + E2 &lt;--&gt; C2 --&gt; S + E2</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">cmepy</span> <span class="kn">import</span> <span class="n">model</span>
+
+<span class="k">def</span> <span class="nf">default_initial_copies</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns default initial copies of species S, E1, E2 for the model.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s">&#39;S&#39;</span> <span class="p">:</span> <span class="mi">50</span><span class="p">,</span>
+        <span class="s">&#39;E1&#39;</span> <span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
+        <span class="s">&#39;E2&#39;</span> <span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="p">}</span>
+        
+
+<span class="k">def</span> <span class="nf">gen_states</span><span class="p">(</span><span class="n">initial_copies</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns generator yielding all reachable states in state space.</span>
+<span class="sd">    </span>
+<span class="sd">    NB state space format: (c2_copies, c1_copies, s_copies)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">if</span> <span class="n">initial_copies</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">initial_copies</span> <span class="o">=</span> <span class="n">default_initial_copies</span><span class="p">()</span>
+    
+    <span class="n">s_0</span> <span class="o">=</span> <span class="n">initial_copies</span><span class="p">[</span><span class="s">&#39;S&#39;</span><span class="p">]</span>
+    <span class="n">e1_0</span> <span class="o">=</span> <span class="n">initial_copies</span><span class="p">[</span><span class="s">&#39;E1&#39;</span><span class="p">]</span>
+    <span class="n">e2_0</span> <span class="o">=</span> <span class="n">initial_copies</span><span class="p">[</span><span class="s">&#39;E2&#39;</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">s_0</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">c1</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">e1_0</span><span class="p">,</span> <span class="n">s_0</span> <span class="o">-</span> <span class="n">s</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">c2</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">e2_0</span><span class="p">,</span> <span class="n">s_0</span> <span class="o">-</span> <span class="n">s</span> <span class="o">-</span> <span class="n">c1</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span> 
+                <span class="k">yield</span> <span class="p">(</span><span class="n">c2</span><span class="p">,</span> <span class="n">c1</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
+    <span class="k">return</span>
+
+<span class="k">def</span> <span class="nf">create_model</span><span class="p">(</span><span class="n">initial_copies</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns mapping storing model.</span>
+<span class="sd">    </span>
+<span class="sd">    NB state space format: (c2_copies, c1_copies, s_copies)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">if</span> <span class="n">initial_copies</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">initial_copies</span> <span class="o">=</span> <span class="n">default_initial_copies</span><span class="p">()</span>
+    
+    <span class="n">s_copies</span> <span class="o">=</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">c1_copies</span> <span class="o">=</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">c2_copies</span> <span class="o">=</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">p_copies</span> <span class="o">=</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="n">initial_copies</span><span class="p">[</span><span class="s">&#39;S&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">e1_copies</span> <span class="o">=</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="n">initial_copies</span><span class="p">[</span><span class="s">&#39;E1&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">e2_copies</span> <span class="o">=</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="n">initial_copies</span><span class="p">[</span><span class="s">&#39;E2&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    
+    <span class="k">return</span> <span class="n">model</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="s">&#39;dual enzymatic reactions&#39;</span><span class="p">,</span>
+        <span class="n">reactions</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s">&#39;S+E1 -&gt; C1&#39;</span><span class="p">,</span>
+            <span class="s">&#39;C1 -&gt; S+E1&#39;</span><span class="p">,</span>
+            <span class="s">&#39;C1 -&gt; P+E1&#39;</span><span class="p">,</span>
+            <span class="s">&#39;P+E2 -&gt; C2&#39;</span><span class="p">,</span>
+            <span class="s">&#39;C2 -&gt; P+E2&#39;</span><span class="p">,</span>
+            <span class="s">&#39;C2 -&gt; S+E2&#39;</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="n">propensities</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="mf">4.0</span><span class="o">*</span><span class="n">s_copies</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">e1_copies</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">),</span>
+            <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="mf">5.0</span><span class="o">*</span><span class="n">c1_copies</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">),</span>
+            <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="mf">1.0</span><span class="o">*</span><span class="n">c1_copies</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">),</span>
+            <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="mf">4.0</span><span class="o">*</span><span class="n">p_copies</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">e2_copies</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">),</span>
+            <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="mf">5.0</span><span class="o">*</span><span class="n">c2_copies</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">),</span>
+            <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="mf">1.0</span><span class="o">*</span><span class="n">c2_copies</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">),</span>
+        <span class="p">),</span>
+        <span class="n">transitions</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span>
+            <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+            <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+            <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+            <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+            <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+        <span class="p">),</span>
+        <span class="n">species</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s">&#39;S&#39;</span><span class="p">,</span>
+            <span class="s">&#39;C1&#39;</span><span class="p">,</span>
+            <span class="s">&#39;C2&#39;</span><span class="p">,</span>
+            <span class="s">&#39;P&#39;</span><span class="p">,</span>
+            <span class="s">&#39;E1&#39;</span><span class="p">,</span>
+            <span class="s">&#39;E2&#39;</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="n">species_counts</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">s_copies</span><span class="p">,</span>
+            <span class="n">c1_copies</span><span class="p">,</span>
+            <span class="n">c2_copies</span><span class="p">,</span>
+            <span class="n">p_copies</span><span class="p">,</span>
+            <span class="n">e1_copies</span><span class="p">,</span>
+            <span class="n">e2_copies</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="n">initial_state</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">initial_copies</span><span class="p">[</span><span class="s">&#39;S&#39;</span><span class="p">])</span>
+    <span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Solve dual enzymatic reaction system</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="kn">import</span> <span class="nn">numpy</span>
+    <span class="kn">import</span> <span class="nn">cmepy.solver</span>
+    <span class="kn">import</span> <span class="nn">cmepy.recorder</span>
+    <span class="kn">import</span> <span class="nn">cmepy.domain</span>
+    
+    <span class="n">model</span> <span class="o">=</span> <span class="n">create_model</span><span class="p">()</span>
+    
+    <span class="n">solver</span> <span class="o">=</span> <span class="n">cmepy</span><span class="o">.</span><span class="n">solver</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="p">,</span>
+        <span class="n">sink</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span>
+        <span class="n">domain_states</span> <span class="o">=</span> <span class="n">cmepy</span><span class="o">.</span><span class="n">domain</span><span class="o">.</span><span class="n">from_iter</span><span class="p">(</span><span class="n">gen_states</span><span class="p">()),</span>
+    <span class="p">)</span>
+    
+    <span class="n">recorder</span> <span class="o">=</span> <span class="n">cmepy</span><span class="o">.</span><span class="n">recorder</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+        <span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">species</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">species_counts</span><span class="p">)</span>
+    <span class="p">)</span>
+    
+    <span class="n">t_final</span> <span class="o">=</span> <span class="mf">10.0</span>
+    <span class="n">steps_per_time</span> <span class="o">=</span> <span class="mi">25</span>
+    <span class="n">time_steps</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">t_final</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">steps_per_time</span><span class="o">*</span><span class="n">t_final</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    
+    <span class="k">print</span> <span class="s">&#39;solving dual enzymatic system to t_final = </span><span class="si">%.2f</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">t_final</span>
+    <span class="k">for</span> <span class="n">step</span><span class="p">,</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">time_steps</span><span class="p">):</span>
+        <span class="k">print</span> <span class="s">&#39;t = </span><span class="si">%.2f</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">t</span>
+        <span class="n">solver</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+        <span class="c"># record results every second, not every step</span>
+        <span class="k">if</span> <span class="n">step</span> <span class="o">%</span> <span class="n">steps_per_time</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&#39;recording solution&#39;</span>
+            <span class="n">p</span><span class="p">,</span> <span class="n">p_sink</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">y</span>
+            <span class="n">recorder</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
+    
+    <span class="n">cmepy</span><span class="o">.</span><span class="n">recorder</span><span class="o">.</span><span class="n">display_plots</span><span class="p">(</span><span class="n">recorder</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="../index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference" href="#"><tt class="docutils literal"><span class="pre">dual_enzymatic</span></tt> : coupled enzymatic reactions</a><ul>
+<li><a class="reference" href="#overview">Overview</a></li>
+<li><a class="reference" href="#running-the-model">Running the model</a></li>
+<li><a class="reference" href="#sample-results">Sample results</a></li>
+<li><a class="reference" href="#source-code">Source code</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="dsmts.html"
+                                  title="previous chapter"><tt class="docutils literal docutils literal docutils literal"><span class="pre">dsmts</span></tt> : a birth-death model</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="gou07.html"
+                                  title="next chapter"><tt class="docutils literal"><span class="pre">gou07</span></tt> : unidirection dimerisation and quadratic autocatalator</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/models/dual_enzymatic.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="gou07.html" title="gou07 : unidirection dimerisation and quadratic autocatalator"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="dsmts.html" title="dsmts : a birth-death model"
+             >previous</a> |</li>
+        <li><a href="../index.html">CmePy v0.3 documentation</a> &raquo;</li>
+          <li><a href="../models.html" >Models included in <tt class="docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">cmepy.models</span></tt></a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, Markus Hegland &amp; Reuben Fletcher-Costin.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+    </div>
+  </body>
+</html>

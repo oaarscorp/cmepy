@@ -1,0 +1,327 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Example: a single reaction &mdash; CmePy v0.3 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '#',
+        VERSION:     '0.3',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="CmePy v0.3 documentation" href="index.html" />
+    <link rel="next" title="Example: enzyme kinetics" href="example_mm.html" />
+    <link rel="prev" title="Getting started" href="getting_started.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="example_mm.html" title="Example: enzyme kinetics"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="getting_started.html" title="Getting started"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">CmePy v0.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="example-a-single-reaction">
+<h1>Example: a single reaction<a class="headerlink" href="#example-a-single-reaction" title="Permalink to this headline">¶</a></h1>
+<p>Consider the reaction <img class="math" src="_images/math/8bba5b42f7509e4df78da29deb3b366f00b0c1b0.png" alt="A \xrightarrow{} B"/>, where initially there
+are 20 copies of the species <img class="math" src="_images/math/019e9892786e493964e145e7c5cf7b700314e53b.png" alt="A"/>, and 0 copies of the
+species <img class="math" src="_images/math/ff5fb3d775862e2123b007eb4373ff6cc1a34d4e.png" alt="B"/>.</p>
+<p>We will create a short CmePy script to solve the Chemical Master Equation for
+this reaction. Our script shall produce the following plot, which illustrates
+how the probability distribution over the reaction counts evolves in time:</p>
+<img alt="_images/simple_plot.png" src="_images/simple_plot.png" />
+<p>Observe how the probability begins concentrated at reaction count zero for
+the time <img class="math" src="_images/math/5a607fd61885c014512c949fee18869690330407.png" alt="t=0"/>, quickly diffuses, then begins to accumulate at
+reaction count 20, where all the copies of the species <img class="math" src="_images/math/019e9892786e493964e145e7c5cf7b700314e53b.png" alt="A"/> have been
+exhausted.</p>
+<div class="section" id="defining-the-model">
+<h2>Defining the model<a class="headerlink" href="#defining-the-model" title="Permalink to this headline">¶</a></h2>
+<p>A CmePy script typically contains three main components</p>
+<ol class="arabic simple">
+<li>A <em>model</em>, which defines the system of reactions.</li>
+<li>A <em>solver</em>, which solves the Chemical Master Equation (CME) for the <em>model</em>.</li>
+<li>A <em>recorder</em>, which stores solutions computed by the <em>solver</em>, and provides
+a simple interface for computing and plotting results, such as the expected
+value, standard deviation, or marginal distribution for species counts.</li>
+</ol>
+<p>We begin by defining a model <tt class="docutils literal"><span class="pre">m</span></tt> for this simple system of reactions:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">cmepy</span> <span class="kn">import</span> <span class="n">model</span>
+
+<span class="n">initial_copies</span> <span class="o">=</span> <span class="mi">20</span>
+
+<span class="n">m</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="n">propensities</span> <span class="o">=</span> <span class="p">[</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">initial_copies</span> <span class="o">-</span> <span class="n">x</span><span class="p">],</span>
+    <span class="n">transitions</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,</span> <span class="p">)],</span>
+    <span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">initial_copies</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="p">),</span>
+    <span class="n">initial_state</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>The reactions are specified by the <tt class="docutils literal"><span class="pre">propensities</span></tt> and <tt class="docutils literal"><span class="pre">transitions</span></tt> keyword
+arguments. Since there is only a single reaction <img class="math" src="_images/math/8bba5b42f7509e4df78da29deb3b366f00b0c1b0.png" alt="A \xrightarrow{} B"/>
+in this example, only one propensity function and transition are required.
+The propensity function <tt class="docutils literal"><span class="pre">lambda</span> <span class="pre">x:</span> <span class="pre">initial_copies</span> <span class="pre">-</span> <span class="pre">x</span></tt> returns the propensity
+of the reaction in terms of the reaction count <tt class="docutils literal"><span class="pre">x</span></tt>,
+while the transition <tt class="docutils literal"><span class="pre">(1,</span> <span class="pre">)</span></tt> specifies that the reaction increases the
+reaction count <tt class="docutils literal"><span class="pre">x</span></tt> by 1.</p>
+<p>The argument <tt class="docutils literal"><span class="pre">shape</span></tt> is used to define the range of reaction counts that
+the solver will consider when solving the CME. Since <tt class="docutils literal"><span class="pre">initial_copies</span> <span class="pre">=</span> <span class="pre">20</span></tt>,
+the range of reaction counts considered for <tt class="docutils literal"><span class="pre">shape</span> <span class="pre">=</span> <span class="pre">(initial_copies</span> <span class="pre">+</span> <span class="pre">1,</span> <span class="pre">)</span></tt>
+is <img class="math" src="_images/math/e06e26d2b427fca828e2b860d10b9ca071cd6121.png" alt="0, 1, 2, 3, \ldots, 20"/>.</p>
+<p>Finally, the argument <tt class="docutils literal"><span class="pre">initial_state</span></tt> defines
+that the CME is initialised in the state <tt class="docutils literal"><span class="pre">(0,</span> <span class="pre">)</span></tt>. In other words,
+at the initial time <img class="math" src="_images/math/1c0c6e924d2c06ac98419e4b3ecb11423392126d.png" alt="t_0 = 0"/>, the probability that there have been
+zero occurrences of the reaction <img class="math" src="_images/math/8bba5b42f7509e4df78da29deb3b366f00b0c1b0.png" alt="A \xrightarrow{} B"/> is 1.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You may be wondering why <tt class="docutils literal"><span class="pre">shape</span></tt>, <tt class="docutils literal"><span class="pre">initial_state</span></tt>, and the item
+contained by <tt class="docutils literal"><span class="pre">transitions</span></tt> have tuple values, not scalar values.
+This is because models typically represent systems containing more than
+one reaction.</p>
+</div>
+</div>
+<div class="section" id="solving-the-model">
+<h2>Solving the model<a class="headerlink" href="#solving-the-model" title="Permalink to this headline">¶</a></h2>
+<p>We now create a solver <tt class="docutils literal"><span class="pre">s</span></tt> to solve the CME for the model <tt class="docutils literal"><span class="pre">m</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">numpy</span>
+<span class="kn">from</span> <span class="nn">cmepy</span> <span class="kn">import</span> <span class="n">solver</span>
+
+<span class="n">s</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">m</span><span class="p">,</span>
+    <span class="n">sink</span> <span class="o">=</span> <span class="bp">False</span>
+<span class="p">)</span>
+
+<span class="n">time_steps</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">time_steps</span><span class="p">:</span>
+    <span class="n">s</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This code initialises the solver using <tt class="docutils literal"><span class="pre">solver.create</span></tt> and then advances the
+solution of the chemical master equation from time <img class="math" src="_images/math/5a607fd61885c014512c949fee18869690330407.png" alt="t=0"/> to time
+<img class="math" src="_images/math/35c913cff7776ae19bed793a777bfc7157591527.png" alt="t=3"/> using 5 uniformly spaced steps.</p>
+<p>The attribute <tt class="docutils literal"><span class="pre">s.y</span></tt> stores the current solution of the CME computed by the
+solver. This solution is essentially a dictionary, mapping reaction counts
+to probabilities. For example, <tt class="docutils literal"><span class="pre">s.y[(3,</span> <span class="pre">)]</span></tt> is the probability that
+there have been exactly three occurances of the reaction.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The keyword argument <tt class="docutils literal"><span class="pre">sink</span> <span class="pre">=</span> <span class="pre">False</span></tt> indicates that the state
+space of the model is not truncated, that is, there is no way probability
+may &#8216;leak&#8217; out of the states under consideration of the solver.</p>
+</div>
+</div>
+<div class="section" id="recording-and-plotting-results">
+<h2>Recording and plotting results<a class="headerlink" href="#recording-and-plotting-results" title="Permalink to this headline">¶</a></h2>
+<p>Now we add a recorder <tt class="docutils literal"><span class="pre">r</span></tt> to record the solutions and compute statistics:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">cmepy</span> <span class="kn">import</span> <span class="n">recorder</span>
+
+<span class="n">r</span> <span class="o">=</span> <span class="n">recorder</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="p">((</span><span class="s">&#39;A-&gt;B&#39;</span><span class="p">,</span> <span class="p">),</span> <span class="p">)</span>
+<span class="p">)</span>
+
+<span class="n">time_steps</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">time_steps</span><span class="p">:</span>
+    <span class="n">s</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+    <span class="n">r</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The call to <tt class="docutils literal"><span class="pre">recorder.create</span></tt> initialises a recorder with a single random
+variable named <tt class="docutils literal"><span class="pre">'A-&gt;B'</span></tt>. By default, this random variable is the first
+coordinate of the state space, which in this case is the reaction
+count of the reaction <img class="math" src="_images/math/8bba5b42f7509e4df78da29deb3b366f00b0c1b0.png" alt="A \xrightarrow{} B"/>.</p>
+<p>Solutions are written to the recorder by <tt class="docutils literal"><span class="pre">r.write(t,</span> <span class="pre">s.y)</span></tt>, where <tt class="docutils literal"><span class="pre">t</span></tt> is
+the time of the solution, and <tt class="docutils literal"><span class="pre">s.y</span></tt> is the solution computed by the solver
+<tt class="docutils literal"><span class="pre">s</span></tt>.</p>
+<p>The measurements recorded for the random variable named <tt class="docutils literal"><span class="pre">'A-&gt;B'</span></tt> are
+stored inside <tt class="docutils literal"><span class="pre">r</span></tt> under the key <tt class="docutils literal"><span class="pre">'A-&gt;B'</span></tt>. For example,
+the attribute <tt class="docutils literal"><span class="pre">r['A-&gt;B'].expected_value</span></tt> is a list of the expected values of
+the random variable <tt class="docutils literal"><span class="pre">'A-&gt;B'</span></tt> that have been recorded by <tt class="docutils literal"><span class="pre">r</span></tt>.</p>
+<p>We can now use the recorder <tt class="docutils literal"><span class="pre">r</span></tt> to generate the marginal distributions over
+the reaction counts, for each time step, and then plot these distributions
+using <a class="reference" href="http://matplotlib.sourceforge.net/">Matplotlib</a>&#8216;s <tt class="docutils literal"><span class="pre">pylab</span></tt> module:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">pylab</span>
+
+<span class="n">pylab</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">t</span><span class="p">,</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="s">&#39;A-&gt;B&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">times</span><span class="p">,</span> <span class="n">r</span><span class="p">[</span><span class="s">&#39;A-&gt;B&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">distributions</span><span class="p">):</span>
+    <span class="n">marginal</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">to_dense</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="n">pylab</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">marginal</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s">&#39;t = </span><span class="si">%.1f</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">t</span><span class="p">)</span>
+
+<span class="n">pylab</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Reaction count&#39;</span><span class="p">)</span>
+<span class="n">pylab</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;Probability&#39;</span><span class="p">)</span>
+<span class="n">pylab</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">pylab</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s">&#39;simple_plot.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We access a measurement instance for the random variable <tt class="docutils literal"><span class="pre">'A-&gt;B'</span></tt> via
+<tt class="docutils literal"><span class="pre">r['A-&gt;B']</span></tt>. This measurement instance contains the attributes <tt class="docutils literal"><span class="pre">times</span></tt>
+and <tt class="docutils literal"><span class="pre">distributions</span></tt>, which are the lists of measurement times and marginal
+distributions, respectively.</p>
+<p>Each marginal distribution <tt class="docutils literal"><span class="pre">d</span></tt> is represented as a
+&#8216;sparse&#8217; dictionary structure, which must be converted to a &#8216;dense&#8217; flat array
+for plotting, using the method <tt class="docutils literal"><span class="pre">d.to_dense(shape)</span></tt>. In this case, the shape
+of the array we want is the same shape of the model, <tt class="docutils literal"><span class="pre">m.shape</span></tt>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Python&#8217;s built-in <tt class="docutils literal"><span class="pre">zip(a,</span> <span class="pre">b)</span></tt> function takes two lists <tt class="docutils literal"><span class="pre">a</span></tt> and <tt class="docutils literal"><span class="pre">b</span></tt>,
+and returns the list <tt class="docutils literal"><span class="pre">[(a[0],</span> <span class="pre">b[0]),</span> <span class="pre">(a[1],</span> <span class="pre">b[1]),</span> <span class="pre">...]</span></tt>.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You may like to experiment using <tt class="docutils literal"><span class="pre">pylab.show()</span></tt> instead of
+<tt class="docutils literal"><span class="pre">pylab.savefig('simple_plot.png')</span></tt>.</p>
+</div>
+</div>
+<div class="section" id="bringing-everything-together">
+<h2>Bringing everything together<a class="headerlink" href="#bringing-everything-together" title="Permalink to this headline">¶</a></h2>
+<p>Mixing all the above ingredients together yields the following Python script:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">numpy</span>
+<span class="kn">import</span> <span class="nn">pylab</span>
+<span class="kn">from</span> <span class="nn">cmepy</span> <span class="kn">import</span> <span class="n">model</span><span class="p">,</span> <span class="n">solver</span><span class="p">,</span> <span class="n">recorder</span>
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">initial_copies</span> <span class="o">=</span> <span class="mi">20</span>
+    
+    <span class="n">m</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+        <span class="n">propensities</span> <span class="o">=</span> <span class="p">[</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">initial_copies</span> <span class="o">-</span> <span class="n">x</span><span class="p">],</span>
+        <span class="n">transitions</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,</span> <span class="p">)],</span>
+        <span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">initial_copies</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="p">),</span>
+        <span class="n">initial_state</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="p">)</span>
+    <span class="p">)</span>
+    
+    <span class="n">s</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">m</span><span class="p">,</span>
+        <span class="n">sink</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="p">)</span>
+    
+    <span class="n">r</span> <span class="o">=</span> <span class="n">recorder</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+        <span class="p">((</span><span class="s">&#39;A-&gt;B&#39;</span><span class="p">,</span> <span class="p">),</span> <span class="p">)</span>
+    <span class="p">)</span>
+    
+    <span class="n">time_steps</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">time_steps</span><span class="p">:</span>
+        <span class="n">s</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+        <span class="n">r</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+    
+    <span class="n">pylab</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">t</span><span class="p">,</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="s">&#39;A-&gt;B&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">times</span><span class="p">,</span> <span class="n">r</span><span class="p">[</span><span class="s">&#39;A-&gt;B&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">distributions</span><span class="p">):</span>
+        <span class="n">marginal</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">to_dense</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="n">pylab</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">marginal</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s">&#39;t = </span><span class="si">%.1f</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">t</span><span class="p">)</span>
+    <span class="n">pylab</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Reaction count&#39;</span><span class="p">)</span>
+    <span class="n">pylab</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;Probability&#39;</span><span class="p">)</span>
+    <span class="n">pylab</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+    <span class="n">pylab</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s">&#39;simple_plot.png&#39;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Suppose this script is saved as <tt class="docutils literal"><span class="pre">simple.py</span></tt>. Then we can run the script
+from the command line via:</p>
+<div class="highlight-python"><pre>python simple.py</pre>
+</div>
+<p>This will save a plot of the reaction count distributions to <tt class="docutils literal"><span class="pre">simple_plot.py</span></tt>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If Python complains with the message <tt class="docutils literal"><span class="pre">ImportError:</span> <span class="pre">No</span> <span class="pre">module</span> <span class="pre">named</span> <span class="pre">cmepy</span></tt>,
+check that CmePy has been installed.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference" href="#">Example: a single reaction</a><ul>
+<li><a class="reference" href="#defining-the-model">Defining the model</a></li>
+<li><a class="reference" href="#solving-the-model">Solving the model</a></li>
+<li><a class="reference" href="#recording-and-plotting-results">Recording and plotting results</a></li>
+<li><a class="reference" href="#bringing-everything-together">Bringing everything together</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="getting_started.html"
+                                  title="previous chapter">Getting started</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="example_mm.html"
+                                  title="next chapter">Example: enzyme kinetics</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/example_simple.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="example_mm.html" title="Example: enzyme kinetics"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="getting_started.html" title="Getting started"
+             >previous</a> |</li>
+        <li><a href="index.html">CmePy v0.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, Markus Hegland &amp; Reuben Fletcher-Costin.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+    </div>
+  </body>
+</html>

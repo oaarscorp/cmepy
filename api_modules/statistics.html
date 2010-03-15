@@ -1,0 +1,298 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>statistics &mdash; CmePy v0.3 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.3',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="CmePy v0.3 documentation" href="../index.html" />
+    <link rel="up" title="api documentation" href="../api.html" />
+    <link rel="next" title="tests" href="tests.html" />
+    <link rel="prev" title="state_enum" href="state_enum.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="tests.html" title="tests"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="state_enum.html" title="state_enum"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">CmePy v0.3 documentation</a> &raquo;</li>
+          <li><a href="../api.html" accesskey="U">api documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-cmepy.statistics">
+<h1><tt class="xref docutils literal"><span class="pre">statistics</span></tt><a class="headerlink" href="#module-cmepy.statistics" title="Permalink to this headline">¶</a></h1>
+<p>Statistical utilities for working with CME solver output.</p>
+<dl class="class">
+<dt id="cmepy.statistics.Distribution">
+<em class="property">class </em><tt class="descclassname">cmepy.statistics.</tt><tt class="descname">Distribution</tt><big>(</big><em>p=None</em><big>)</big><a class="headerlink" href="#cmepy.statistics.Distribution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Distributions are mappings that represent probability distributions
+over a discrete state space.</p>
+<dl class="method">
+<dt id="cmepy.statistics.Distribution.compress">
+<tt class="descname">compress</tt><big>(</big><em>epsilon</em><big>)</big><a class="headerlink" href="#cmepy.statistics.Distribution.compress" title="Permalink to this definition">¶</a></dt>
+<dd><p>d.compress(epsilon) -&gt; compressed epsilon-approximation of d</p>
+<p>Returns compressed version of distribution.</p>
+<p>The returned approximation is <em>compressed</em>, in the sense that it is the
+approximation with the smallest support, while the error between d and
+the approximation is within epsilon (L1 norm).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cmepy.statistics.Distribution.covariance">
+<tt class="descname">covariance</tt><big>(</big><big>)</big><a class="headerlink" href="#cmepy.statistics.Distribution.covariance" title="Permalink to this definition">¶</a></dt>
+<dd><p>d.covariance() -&gt; cov</p>
+<p>Returns covariance of the distribution d, provided dimension == 2.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cmepy.statistics.Distribution.dimension">
+<tt class="descname">dimension</tt><a class="headerlink" href="#cmepy.statistics.Distribution.dimension" title="Permalink to this definition">¶</a></dt>
+<dd>inferred dimension of state space of this distribution</dd></dl>
+
+<dl class="method">
+<dt id="cmepy.statistics.Distribution.expectation">
+<tt class="descname">expectation</tt><big>(</big><big>)</big><a class="headerlink" href="#cmepy.statistics.Distribution.expectation" title="Permalink to this definition">¶</a></dt>
+<dd><p>d.expectation() -&gt; mu</p>
+<p>Returns expected state of the distribution d, provided dimension &gt; 0.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cmepy.statistics.Distribution.from_dense">
+<tt class="descname">from_dense</tt><big>(</big><em>p_dense</em>, <em>origin=None</em><big>)</big><a class="headerlink" href="#cmepy.statistics.Distribution.from_dense" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replaces distribution using array p_dense <strong>in place</strong></p>
+<p>Returns self</p>
+<p>The argument <tt class="docutils literal"><span class="pre">p_dense</span></tt> should be a numpy array of probabilities.
+The indices of the array are used to define the corresponding states.
+Multi-dimensional arrays are supported.</p>
+<p>Optional argument <tt class="docutils literal"><span class="pre">origin</span></tt> defines the origin. This is added to
+the indices when defining the states.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cmepy.statistics.Distribution.kl_divergence">
+<tt class="descname">kl_divergence</tt><big>(</big><em>other</em><big>)</big><a class="headerlink" href="#cmepy.statistics.Distribution.kl_divergence" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns KL divergence to the distribution other from this distribution.</p>
+<p>The Kullback-Leibler (KL) divergence of q from p is defined as</p>
+<div class="math">
+<p><img src="../_images/math/0fd41dbeccb967278bf7e65a95780c250d1764b6.png" alt="\textrm{KL-divergence}(p, q) :=
+\sum_{x} p(x) \log{} \frac{p(x)}{q(x)}" /></p>
+</div></dd></dl>
+
+<dl class="method">
+<dt id="cmepy.statistics.Distribution.lp_distance">
+<tt class="descname">lp_distance</tt><big>(</big><em>other</em>, <em>p=1</em><big>)</big><a class="headerlink" href="#cmepy.statistics.Distribution.lp_distance" title="Permalink to this definition">¶</a></dt>
+<dd>Returns Lp distance to the distribution other. Default p = 1.</dd></dl>
+
+<dl class="method">
+<dt id="cmepy.statistics.Distribution.lp_norm">
+<tt class="descname">lp_norm</tt><big>(</big><em>p=1</em><big>)</big><a class="headerlink" href="#cmepy.statistics.Distribution.lp_norm" title="Permalink to this definition">¶</a></dt>
+<dd>Returns Lp norm of distribution. Default p = 1.</dd></dl>
+
+<dl class="method">
+<dt id="cmepy.statistics.Distribution.map">
+<tt class="descname">map</tt><big>(</big><em>f</em>, <em>g=None</em><big>)</big><a class="headerlink" href="#cmepy.statistics.Distribution.map" title="Permalink to this definition">¶</a></dt>
+<dd><p>d.map(f [, g]) -&gt; distribution</p>
+<p>Returns a copy of the distribution d, with each key replaced by its
+image under f. Any duplicate image keys are merged, with the value of
+the merged key equal to the sum of the values.</p>
+<p>If g is supplied, it is used instead of addition to reduce the values of
+duplicate image keys.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cmepy.statistics.Distribution.standard_deviation">
+<tt class="descname">standard_deviation</tt><big>(</big><big>)</big><a class="headerlink" href="#cmepy.statistics.Distribution.standard_deviation" title="Permalink to this definition">¶</a></dt>
+<dd><p>d.standard_deviation() -&gt; sigma</p>
+<p>Returns std deviation of the Distribution d, provided dimension == 1.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cmepy.statistics.Distribution.to_dense">
+<tt class="descname">to_dense</tt><big>(</big><em>shape</em>, <em>origin=None</em><big>)</big><a class="headerlink" href="#cmepy.statistics.Distribution.to_dense" title="Permalink to this definition">¶</a></dt>
+<dd>Returns dense version of distribution for given array shape and origin</dd></dl>
+
+<dl class="method">
+<dt id="cmepy.statistics.Distribution.variance">
+<tt class="descname">variance</tt><big>(</big><big>)</big><a class="headerlink" href="#cmepy.statistics.Distribution.variance" title="Permalink to this definition">¶</a></dt>
+<dd><p>d.variance() -&gt; sigma_squared</p>
+<p>Returns variance of the Distribution d, provided dimension == 1.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="cmepy.statistics.compress">
+<tt class="descclassname">cmepy.statistics.</tt><tt class="descname">compress</tt><big>(</big><em>p</em>, <em>epsilon</em><big>)</big><a class="headerlink" href="#cmepy.statistics.compress" title="Permalink to this definition">¶</a></dt>
+<dd><p>compress(p, epsilon) -&gt; compressed epsilon-approximation of p</p>
+<p>Returns an approximation of the mapping p, treating p as a distribution
+p : states -&gt; probabilities. The returned approximation is <em>compressed</em>,
+in the sense that it is the approximation with the smallest support, while
+the error between p and the approximation is within epsilon (L1 norm).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cmepy.statistics.covariance">
+<tt class="descclassname">cmepy.statistics.</tt><tt class="descname">covariance</tt><big>(</big><em>p</em><big>)</big><a class="headerlink" href="#cmepy.statistics.covariance" title="Permalink to this definition">¶</a></dt>
+<dd><p>covariance(p) -&gt; cov</p>
+<p>Returns the covariance cov, treating the mapping p as a distribution
+p : states -&gt; probabilities.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cmepy.statistics.expectation">
+<tt class="descclassname">cmepy.statistics.</tt><tt class="descname">expectation</tt><big>(</big><em>p</em><big>)</big><a class="headerlink" href="#cmepy.statistics.expectation" title="Permalink to this definition">¶</a></dt>
+<dd><p>expectation(p) -&gt; mu</p>
+<p>Returns the expected value mu, treating the mapping p as a distribution
+p : states -&gt; probabilities.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cmepy.statistics.kl_divergence">
+<tt class="descclassname">cmepy.statistics.</tt><tt class="descname">kl_divergence</tt><big>(</big><em>p</em>, <em>q</em><big>)</big><a class="headerlink" href="#cmepy.statistics.kl_divergence" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns KL-divergence of distribution q from distribution p.</p>
+<p>The Kullback-Leibler (KL) divergence is defined as</p>
+<div class="math">
+<p><img src="../_images/math/0fd41dbeccb967278bf7e65a95780c250d1764b6.png" alt="\textrm{KL-divergence}(p, q) :=
+\sum_{x} p(x) \log{} \frac{p(x)}{q(x)}" /></p>
+</div><p>Warning: this function uses numpy&#8217;s scalar floating point types to
+perform the evaluation. Therefore, the result may be non-finite.
+For example, if the state x has non-zero probability for distribution p,
+but zero probability for distribution q, then the result will be
+non-finite.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cmepy.statistics.lp_distance">
+<tt class="descclassname">cmepy.statistics.</tt><tt class="descname">lp_distance</tt><big>(</big><em>x</em>, <em>y</em>, <em>p=1</em><big>)</big><a class="headerlink" href="#cmepy.statistics.lp_distance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the Lp distance between the distributions x &amp; y. Default p = 1.</p>
+<p>Equivalent to lp_norm(x - y, p)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cmepy.statistics.lp_norm">
+<tt class="descclassname">cmepy.statistics.</tt><tt class="descname">lp_norm</tt><big>(</big><em>d</em>, <em>p=1</em><big>)</big><a class="headerlink" href="#cmepy.statistics.lp_norm" title="Permalink to this definition">¶</a></dt>
+<dd>Returns the Lp norm of the distribution d. Default p = 1.</dd></dl>
+
+<dl class="function">
+<dt id="cmepy.statistics.map_distribution">
+<tt class="descclassname">cmepy.statistics.</tt><tt class="descname">map_distribution</tt><big>(</big><em>f</em>, <em>p</em>, <em>g=None</em><big>)</big><a class="headerlink" href="#cmepy.statistics.map_distribution" title="Permalink to this definition">¶</a></dt>
+<dd><p>map_distribution(f, p [, g]) -&gt; mapping</p>
+<p>Returns a copy of the mapping p, with each key replaced by its
+image under f. Any duplicate image keys are merged, with the value of
+the merged key equal to the sum of the values.</p>
+<p>It is expected that f returns tuples or scalars, and behaves in a
+reasonable way when given vector state array arguments.</p>
+<p>If g is supplied, it is used instead of addition to reduce the values of
+duplicate image keys. If given, g must have a reduce method of the form</p>
+<blockquote>
+g.reduce(probabilities) -&gt; reduced_probability</blockquote>
+<p>for example, setting g to a numpy ufunc would be fine.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cmepy.statistics.map_distribution_simple">
+<tt class="descclassname">cmepy.statistics.</tt><tt class="descname">map_distribution_simple</tt><big>(</big><em>f</em>, <em>p</em>, <em>g=None</em><big>)</big><a class="headerlink" href="#cmepy.statistics.map_distribution_simple" title="Permalink to this definition">¶</a></dt>
+<dd><p>map_distribution_simple(f, p [, g]) -&gt; mapping</p>
+<p>reference implementation of map_distribution that is simple but slow</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cmepy.statistics.variance">
+<tt class="descclassname">cmepy.statistics.</tt><tt class="descname">variance</tt><big>(</big><em>p</em><big>)</big><a class="headerlink" href="#cmepy.statistics.variance" title="Permalink to this definition">¶</a></dt>
+<dd><p>variance(p) -&gt; sigma_squared</p>
+<p>Returns the variance sigma_squared, treating the mapping p as a distribution
+p : states -&gt; probabilities.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="state_enum.html"
+                                  title="previous chapter"><tt class="docutils literal docutils literal docutils literal"><span class="pre">state_enum</span></tt></a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="tests.html"
+                                  title="next chapter"><tt class="docutils literal"><span class="pre">tests</span></tt></a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/api_modules/statistics.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tests.html" title="tests"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="state_enum.html" title="state_enum"
+             >previous</a> |</li>
+        <li><a href="../index.html">CmePy v0.3 documentation</a> &raquo;</li>
+          <li><a href="../api.html" >api documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, Markus Hegland &amp; Reuben Fletcher-Costin.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+    </div>
+  </body>
+</html>

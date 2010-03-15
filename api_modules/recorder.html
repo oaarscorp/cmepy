@@ -1,0 +1,148 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>recorder &mdash; CmePy v0.3 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.3',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="CmePy v0.3 documentation" href="../index.html" />
+    <link rel="up" title="api documentation" href="../api.html" />
+    <link rel="next" title="restorable_solver" href="restorable_solver.html" />
+    <link rel="prev" title="ode_solver" href="ode_solver.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="restorable_solver.html" title="restorable_solver"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="ode_solver.html" title="ode_solver"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">CmePy v0.3 documentation</a> &raquo;</li>
+          <li><a href="../api.html" accesskey="U">api documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-cmepy.recorder">
+<h1><tt class="xref docutils literal"><span class="pre">recorder</span></tt><a class="headerlink" href="#module-cmepy.recorder" title="Permalink to this headline">¶</a></h1>
+<p>CmeRecorder is a utility class for computation of measurements.</p>
+<dl class="class">
+<dt id="cmepy.recorder.CmeRecorder">
+<em class="property">class </em><tt class="descclassname">cmepy.recorder.</tt><tt class="descname">CmeRecorder</tt><big>(</big><em>*targets</em><big>)</big><a class="headerlink" href="#cmepy.recorder.CmeRecorder" title="Permalink to this definition">¶</a></dt>
+<dd><p>CmeRecorder is a utility class to compute common measurements,
+such as marginals, expected values, and standard deviations, from
+a given distribution p.</p>
+<dl class="method">
+<dt id="cmepy.recorder.CmeRecorder.add_target">
+<tt class="descname">add_target</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#cmepy.recorder.CmeRecorder.add_target" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add zero or more targets to the recorder.</p>
+<p>where each target has the form (variables[, transforms])</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cmepy.recorder.CmeRecorder.write">
+<tt class="descname">write</tt><big>(</big><em>t</em>, <em>p</em><big>)</big><a class="headerlink" href="#cmepy.recorder.CmeRecorder.write" title="Permalink to this definition">¶</a></dt>
+<dd>Records measurements of time t and distribution p</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="cmepy.recorder.create">
+<tt class="descclassname">cmepy.recorder.</tt><tt class="descname">create</tt><big>(</big><em>*targets</em><big>)</big><a class="headerlink" href="#cmepy.recorder.create" title="Permalink to this definition">¶</a></dt>
+<dd>Returns a recorder for the random variable groups defined by targets.</dd></dl>
+
+<dl class="function">
+<dt id="cmepy.recorder.display_plots">
+<tt class="descclassname">cmepy.recorder.</tt><tt class="descname">display_plots</tt><big>(</big><em>rec</em>, <em>vars=None</em>, <em>statistics=None</em>, <em>title=None</em><big>)</big><a class="headerlink" href="#cmepy.recorder.display_plots" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot and display statistics from specified recorder measurement batch.</p>
+<p>Requires pylab (eg the matplotlib package) to be installed.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="ode_solver.html"
+                                  title="previous chapter"><tt class="docutils literal docutils literal docutils literal"><span class="pre">ode_solver</span></tt></a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="restorable_solver.html"
+                                  title="next chapter"><tt class="docutils literal"><span class="pre">restorable_solver</span></tt></a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/api_modules/recorder.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="restorable_solver.html" title="restorable_solver"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="ode_solver.html" title="ode_solver"
+             >previous</a> |</li>
+        <li><a href="../index.html">CmePy v0.3 documentation</a> &raquo;</li>
+          <li><a href="../api.html" >api documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, Markus Hegland &amp; Reuben Fletcher-Costin.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+    </div>
+  </body>
+</html>

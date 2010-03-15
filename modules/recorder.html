@@ -1,0 +1,229 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>cmepy.recorder &mdash; CmePy v0.3 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.3',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="CmePy v0.3 documentation" href="../index.html" />
+    <link rel="up" title="Important cmepy modules" href="../modules.html" />
+    <link rel="next" title="cmepy.solver" href="solver.html" />
+    <link rel="prev" title="cmepy.model" href="model.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="solver.html" title="cmepy.solver"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="model.html" title="cmepy.model"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">CmePy v0.3 documentation</a> &raquo;</li>
+          <li><a href="../modules.html" accesskey="U">Important <tt class="docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">cmepy</span></tt> modules</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="cmepy-recorder">
+<span id="module-recorder"></span><h1><a title="" class="reference" href="../api_modules/recorder.html#module-cmepy.recorder"><tt class="xref docutils literal"><span class="pre">cmepy.recorder</span></tt></a><a class="headerlink" href="#cmepy-recorder" title="Permalink to this headline">¶</a></h1>
+<p>The <a title="" class="reference" href="../api_modules/recorder.html#module-cmepy.recorder"><tt class="xref docutils literal"><span class="pre">cmepy.recorder</span></tt></a> computes and stores derived statistics
+from the solutions of the Chemical Master Equation (CME) produced by the
+<a title="" class="reference" href="../api_modules/solver.html#module-cmepy.solver"><tt class="xref docutils literal"><span class="pre">cmepy.solver</span></tt></a> module.</p>
+<div class="section" id="overview-basic-usage">
+<h2>Overview &amp; Basic Usage<a class="headerlink" href="#overview-basic-usage" title="Permalink to this headline">¶</a></h2>
+<p>The general scheme for using a recorder consists of three steps:</p>
+<blockquote>
+<ol class="arabic simple">
+<li>Initialise a recorder <tt class="docutils literal"><span class="pre">r</span></tt> and define the random variables of interest
+using <a title="cmepy.recorder.create" class="reference" href="../api_modules/recorder.html#cmepy.recorder.create"><tt class="xref docutils literal"><span class="pre">cmepy.recorder.create()</span></tt></a>.</li>
+<li>Repeatedly write CME solution data <tt class="docutils literal"><span class="pre">p</span></tt> to the recorder,
+along with the solution time <tt class="docutils literal"><span class="pre">t</span></tt>, via <tt class="docutils literal"><span class="pre">r.write(t,</span> <span class="pre">p)</span></tt>.</li>
+<li>Access derived statistics computed by the recorder.</li>
+</ol>
+</blockquote>
+<p>To initialise a recorder, call <a title="cmepy.recorder.create" class="reference" href="../api_modules/recorder.html#cmepy.recorder.create"><tt class="xref docutils literal"><span class="pre">cmepy.recorder.create()</span></tt></a>, passing one or
+more <em>targets</em> as arguments. Each <em>target</em> describes a group of random
+variables, and has the value <tt class="docutils literal"><span class="pre">(names,</span> <span class="pre">transforms)</span></tt>, a pair of lists.
+The i-th random variable has the name <tt class="docutils literal"><span class="pre">names[i]</span></tt>,
+and the states for this random variable are computed from states in the
+state space via the function <tt class="docutils literal"><span class="pre">transforms[i]</span></tt>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>The <tt class="docutils literal"><span class="pre">transforms</span></tt> argument is in fact <em>optional</em>. If left unspecified,
+the default value of <tt class="docutils literal"><span class="pre">transforms</span></tt> is a sequence of <tt class="docutils literal"><span class="pre">d</span></tt>
+coordinate projections, where <tt class="docutils literal"><span class="pre">d</span> <span class="pre">=</span> <span class="pre">len(names)</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">transforms</span> <span class="o">=</span> <span class="p">(</span><span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">...</span><span class="p">,</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="n">d</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+</pre></div>
+</div>
+<p class="last">These default transform functions describe the random variables of the
+coordinates of the state space.</p>
+</div>
+<p>For example, suppose states in the state space are pairs <tt class="docutils literal"><span class="pre">(a,</span> <span class="pre">b)</span></tt>,
+where <tt class="docutils literal"><span class="pre">a</span></tt> and <tt class="docutils literal"><span class="pre">b</span></tt> are the species counts of the species
+<img class="math" src="../_images/math/019e9892786e493964e145e7c5cf7b700314e53b.png" alt="A"/> and <img class="math" src="../_images/math/ff5fb3d775862e2123b007eb4373ff6cc1a34d4e.png" alt="B"/>. Then we define a recorder <tt class="docutils literal"><span class="pre">r</span></tt> with two random
+variables <tt class="docutils literal"><span class="pre">'A'</span></tt> and <tt class="docutils literal"><span class="pre">'B'</span></tt> for the corresponding species counts as follows:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">r</span> <span class="o">=</span> <span class="n">cmepy</span><span class="o">.</span><span class="n">recorder</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="p">([</span><span class="s">&#39;A&#39;</span><span class="p">,</span> <span class="s">&#39;B&#39;</span><span class="p">],</span> <span class="p">[</span><span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Alternatively, in this case we could omit the second item
+<tt class="docutils literal"><span class="pre">[lambda</span> <span class="pre">*x</span> <span class="pre">:</span> <span class="pre">x[0],</span> <span class="pre">lambda</span> <span class="pre">*x</span> <span class="pre">:</span> <span class="pre">x[1]]</span></tt> of the pair and
+equivaliently make use the default value of <tt class="docutils literal"><span class="pre">transforms</span></tt>,
+as described in the note above.</p>
+<p>Chemical Master Equation (CME) solution data <tt class="docutils literal"><span class="pre">p</span></tt> is written to the recorder
+<tt class="docutils literal"><span class="pre">r</span></tt> by <tt class="docutils literal"><span class="pre">r.write(t,</span> <span class="pre">p)</span></tt>, where <tt class="docutils literal"><span class="pre">t</span></tt> is the solution time.</p>
+<p>To obtain the current solution <tt class="docutils literal"><span class="pre">p</span></tt> from a solver <tt class="docutils literal"><span class="pre">s</span></tt>, use
+<tt class="docutils literal"><span class="pre">p,</span> <span class="pre">p_sink</span> <span class="pre">=</span> <span class="pre">s.y</span></tt>.
+This assumes that the solver was initialised with the <tt class="docutils literal"><span class="pre">sink</span> <span class="pre">=</span> <span class="pre">True</span></tt> flag set.
+Conversely, if <tt class="docutils literal"><span class="pre">sink</span> <span class="pre">=</span> <span class="pre">False</span></tt> is set, the solution <tt class="docutils literal"><span class="pre">p</span></tt> may
+be obtained directly, by <tt class="docutils literal"><span class="pre">p</span> <span class="pre">=</span> <span class="pre">s.y</span></tt>. For more information regarding the CME
+solver and the <tt class="docutils literal"><span class="pre">sink</span></tt> flag, see the documentation for <a title="" class="reference" href="../api_modules/solver.html#module-cmepy.solver"><tt class="xref docutils literal"><span class="pre">cmepy.solver</span></tt></a>.</p>
+<p>Each CME solution <tt class="docutils literal"><span class="pre">p</span></tt> is represented as a Python dictionary, which
+maps states in the state space to the corresponding probabilities.
+This dictionary based scheme naturally lends itself to a sparse format,
+so states with zero probability may be omitted from the dictionary.</p>
+<p>The recorder <tt class="docutils literal"><span class="pre">r</span></tt> creates a measurement instance for each random variable,
+which contains the corresponding marginal distributions and statistics.
+This data is computed using the times and data specified by the
+<tt class="docutils literal"><span class="pre">r.write(t,</span> <span class="pre">p)</span></tt> calls. For example, to access a list of expected values for
+the random variable <tt class="docutils literal"><span class="pre">'A'</span></tt>, use <tt class="docutils literal"><span class="pre">r['A'].expected_value</span></tt>. The i-th
+expected value in the list is computed from the solution <tt class="docutils literal"><span class="pre">p</span></tt> passed to the
+i-th call to the recorder&#8217;s <tt class="docutils literal"><span class="pre">r.write(t,</span> <span class="pre">p)</span></tt> method.</p>
+</div>
+<div class="section" id="measurement-instances">
+<h2>Measurement instances<a class="headerlink" href="#measurement-instances" title="Permalink to this headline">¶</a></h2>
+<p>To access a recorder <tt class="docutils literal"><span class="pre">r</span></tt>&#8216;s measurement instances, use:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">measurement</span> <span class="o">=</span> <span class="n">r</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Here, <tt class="docutils literal"><span class="pre">key</span></tt> must be one of the two following values:</p>
+<ol class="arabic simple">
+<li>the name of a random variable defined when <tt class="docutils literal"><span class="pre">r</span></tt> was created. In this case,
+<tt class="docutils literal"><span class="pre">measurement</span></tt> will contain the data for the marginal distribution of
+the random variable named <tt class="docutils literal"><span class="pre">key</span></tt>.</li>
+<li>a tuple of names of random variables that were defined when <tt class="docutils literal"><span class="pre">r</span></tt> was
+created. In this case, <tt class="docutils literal"><span class="pre">measurement</span></tt> will contain the data
+for the joint distribution of the random variables in <tt class="docutils literal"><span class="pre">key</span></tt>.</li>
+</ol>
+<p>For example, if random variables named <tt class="docutils literal"><span class="pre">'X'</span></tt>, <tt class="docutils literal"><span class="pre">'Y'</span></tt> and <tt class="docutils literal"><span class="pre">'Z'</span></tt> were
+defined when the recorder <tt class="docutils literal"><span class="pre">r</span></tt> was created, then the measurement instance
+for the joint distribution of <tt class="docutils literal"><span class="pre">'Z'</span></tt> and <tt class="docutils literal"><span class="pre">'X'</span></tt> may be accessed by:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">measurement</span> <span class="o">=</span> <span class="n">r</span><span class="p">[(</span><span class="s">&#39;Z&#39;</span><span class="p">,</span> <span class="s">&#39;X&#39;</span><span class="p">)]</span>
+</pre></div>
+</div>
+<p>Each measurement instance contains two main attributes: <tt class="docutils literal"><span class="pre">measurement.times</span></tt>
+and <tt class="docutils literal"><span class="pre">measurement.distributions</span></tt>. The former is a list of the times passed to
+<tt class="docutils literal"><span class="pre">r.write(t,</span> <span class="pre">p)</span></tt>, while the latter is a list of the probability distributions
+for the random variable(s) specified by <tt class="docutils literal"><span class="pre">key</span></tt> at those times.</p>
+<p>Other attributes defined by the measurement instance are lists of statistics
+derived from the distributions:</p>
+<blockquote>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">measurement.expected_value</span></tt> : list of the expected values.</li>
+<li><tt class="docutils literal"><span class="pre">measurement.expectation</span></tt> : synonymous with <tt class="docutils literal"><span class="pre">measurement.expected_value</span></tt>.</li>
+<li><tt class="docutils literal"><span class="pre">measurement.variance</span></tt> : list of the variances. Only defined when
+<tt class="docutils literal"><span class="pre">measurement</span></tt> contains one-dimensional distributions.</li>
+<li><tt class="docutils literal"><span class="pre">measurement.standard_deviation</span></tt> : list of the standard deviations. Only
+defined when <tt class="docutils literal"><span class="pre">measurement</span></tt> contains one-dimensional distributions.</li>
+<li><tt class="docutils literal"><span class="pre">measurement.covariance</span></tt> : list of the covariances. Only defined when
+<tt class="docutils literal"><span class="pre">measurement</span></tt> contains two-dimensional distributions.</li>
+</ul>
+</blockquote>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="../index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference" href="#"><tt class="docutils literal"><span class="pre">cmepy.recorder</span></tt></a><ul>
+<li><a class="reference" href="#overview-basic-usage">Overview &amp; Basic Usage</a></li>
+<li><a class="reference" href="#measurement-instances">Measurement instances</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="model.html"
+                                  title="previous chapter"><tt class="docutils literal docutils literal docutils literal"><span class="pre">cmepy.model</span></tt></a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="solver.html"
+                                  title="next chapter"><tt class="docutils literal docutils literal"><span class="pre">cmepy.solver</span></tt></a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/modules/recorder.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="solver.html" title="cmepy.solver"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="model.html" title="cmepy.model"
+             >previous</a> |</li>
+        <li><a href="../index.html">CmePy v0.3 documentation</a> &raquo;</li>
+          <li><a href="../modules.html" >Important <tt class="docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">cmepy</span></tt> modules</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, Markus Hegland &amp; Reuben Fletcher-Costin.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>lazy_dict &mdash; CmePy v0.3 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.3',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="CmePy v0.3 documentation" href="../index.html" />
+    <link rel="up" title="api documentation" href="../api.html" />
+    <link rel="next" title="lexarrayset" href="lexarrayset.html" />
+    <link rel="prev" title="FSP example 2 : support expansion" href="../fsp_examples/fsp_2.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="lexarrayset.html" title="lexarrayset"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../fsp_examples/fsp_2.html" title="FSP example 2 : support expansion"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">CmePy v0.3 documentation</a> &raquo;</li>
+          <li><a href="../api.html" accesskey="U">api documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-cmepy.lazy_dict">
+<h1><tt class="xref docutils literal"><span class="pre">lazy_dict</span></tt><a class="headerlink" href="#module-cmepy.lazy_dict" title="Permalink to this headline">¶</a></h1>
+<p>Dictionary with lazy evaluation on access, via a supplied update function</p>
+<dl class="class">
+<dt id="cmepy.lazy_dict.LazyDict">
+<em class="property">class </em><tt class="descclassname">cmepy.lazy_dict.</tt><tt class="descname">LazyDict</tt><big>(</big><em>update_value</em>, <em>items=None</em><big>)</big><a class="headerlink" href="#cmepy.lazy_dict.LazyDict" title="Permalink to this definition">¶</a></dt>
+<dd><p>A dictionary type that lazily updates values when they are accessed.</p>
+<p>All the usual dictionary methods work as expected, with automatic lazy
+updates occuring behind the scenes whenever values are read from the
+dictionary.</p>
+<p>The optional <tt class="docutils literal"><span class="pre">items</span></tt> argument, if specified, is a mapping instance used
+to initialise the items in the <a title="cmepy.lazy_dict.LazyDict" class="reference" href="#cmepy.lazy_dict.LazyDict"><tt class="xref docutils literal"><span class="pre">LazyDict</span></tt></a>.</p>
+<p>The <tt class="docutils literal"><span class="pre">update_value</span></tt> argument required by the <a title="cmepy.lazy_dict.LazyDict" class="reference" href="#cmepy.lazy_dict.LazyDict"><tt class="xref docutils literal"><span class="pre">LazyDict</span></tt></a> constructor
+must be a function of the form:</p>
+<blockquote>
+update_value(k, existing_value, member) -&gt; updated_value</blockquote>
+<p>This function is called whenever an item with the key <tt class="docutils literal"><span class="pre">k</span></tt> is read
+from the <a title="cmepy.lazy_dict.LazyDict" class="reference" href="#cmepy.lazy_dict.LazyDict"><tt class="xref docutils literal"><span class="pre">LazyDict</span></tt></a>. The second argument <tt class="docutils literal"><span class="pre">existing_value</span></tt>, is
+the value corresponding to the key <tt class="docutils literal"><span class="pre">k</span></tt> stored in the <a title="cmepy.lazy_dict.LazyDict" class="reference" href="#cmepy.lazy_dict.LazyDict"><tt class="xref docutils literal"><span class="pre">LazyDict</span></tt></a>,
+or <tt class="xref docutils literal"><span class="pre">None</span></tt>, if the key <tt class="docutils literal"><span class="pre">k</span></tt> is not contained in the <a title="cmepy.lazy_dict.LazyDict" class="reference" href="#cmepy.lazy_dict.LazyDict"><tt class="xref docutils literal"><span class="pre">LazyDict</span></tt></a>.
+The third argument <tt class="docutils literal"><span class="pre">member</span></tt> is a boolean value indicating if there is
+an existing value stored under the key <tt class="docutils literal"><span class="pre">k</span></tt>.</p>
+<p>This function is used as follows by the <a title="cmepy.lazy_dict.LazyDict" class="reference" href="#cmepy.lazy_dict.LazyDict"><tt class="xref docutils literal"><span class="pre">LazyDict</span></tt></a>. Suppose that the
+value <tt class="docutils literal"><span class="pre">v</span></tt> has been stored in a <a title="cmepy.lazy_dict.LazyDict" class="reference" href="#cmepy.lazy_dict.LazyDict"><tt class="xref docutils literal"><span class="pre">LazyDict</span></tt></a> object <tt class="docutils literal"><span class="pre">lazy_dict</span></tt>
+under the key <tt class="docutils literal"><span class="pre">k</span></tt>, that is, <tt class="docutils literal"><span class="pre">lazy_dict[k]</span> <span class="pre">=</span> <span class="pre">v</span></tt>. Then subsequently
+accessing this value in the usual manner:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">v_updated</span> <span class="o">=</span> <span class="n">lazy_dict</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>is equivalent to the following two statements:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">lazy_dict</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">update_value</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="p">(</span><span class="n">k</span> <span class="ow">in</span> <span class="n">lazy_dict</span><span class="p">))</span>
+<span class="n">v_updated</span> <span class="o">=</span> <span class="n">update_value</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="p">(</span><span class="n">k</span> <span class="ow">in</span> <span class="n">lazy_dict</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Observe how the value stored in the <a title="cmepy.lazy_dict.LazyDict" class="reference" href="#cmepy.lazy_dict.LazyDict"><tt class="xref docutils literal"><span class="pre">LazyDict</span></tt></a> under the key <tt class="docutils literal"><span class="pre">k</span></tt>
+is first updated, using the provided function,
+with the updated value then being the one returned.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="../fsp_examples/fsp_2.html"
+                                  title="previous chapter">FSP example 2 : support expansion</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="lexarrayset.html"
+                                  title="next chapter"><tt class="docutils literal"><span class="pre">lexarrayset</span></tt></a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/api_modules/lazy_dict.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="lexarrayset.html" title="lexarrayset"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../fsp_examples/fsp_2.html" title="FSP example 2 : support expansion"
+             >previous</a> |</li>
+        <li><a href="../index.html">CmePy v0.3 documentation</a> &raquo;</li>
+          <li><a href="../api.html" >api documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, Markus Hegland &amp; Reuben Fletcher-Costin.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+    </div>
+  </body>
+</html>

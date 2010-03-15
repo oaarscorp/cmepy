@@ -1,0 +1,142 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>util &mdash; CmePy v0.3 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.3',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="CmePy v0.3 documentation" href="../index.html" />
+    <link rel="up" title="api documentation" href="../api.html" />
+    <link rel="prev" title="tests" href="tests.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="tests.html" title="tests"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">CmePy v0.3 documentation</a> &raquo;</li>
+          <li><a href="../api.html" accesskey="U">api documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-cmepy.util">
+<h1><tt class="xref docutils literal"><span class="pre">util</span></tt><a class="headerlink" href="#module-cmepy.util" title="Permalink to this headline">¶</a></h1>
+<p>Various utility routines</p>
+<dl class="function">
+<dt id="cmepy.util.consecutive_pairs">
+<tt class="descclassname">cmepy.util.</tt><tt class="descname">consecutive_pairs</tt><big>(</big><em>p</em><big>)</big><a class="headerlink" href="#cmepy.util.consecutive_pairs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns (p0, p1), (p1, p2), ...</p>
+<p>where p is an iterator</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cmepy.util.indices_ext">
+<tt class="descclassname">cmepy.util.</tt><tt class="descname">indices_ext</tt><big>(</big><em>shape</em>, <em>slices=None</em>, <em>origin=None</em><big>)</big><a class="headerlink" href="#cmepy.util.indices_ext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an array of indices.</p>
+<p>An interface to numpy&#8217;s mgrid routine, supporting simpler slicing notation.</p>
+<p>Arguments:</p>
+<p>shape     : tuple of positive integers giving dimensions of array</p>
+<dl class="docutils">
+<dt>slices <span class="classifier-delimiter">:</span> <span class="classifier">(optional) tuple of (abstract) slices indicating which indices</span></dt>
+<dd>we want from each dimension</dd>
+<dt>origin <span class="classifier-delimiter">:</span> <span class="classifier">(optional) tuple of integers giving origin, used to offset</span></dt>
+<dd>the returned indices</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="cmepy.util.non_neg">
+<tt class="descclassname">cmepy.util.</tt><tt class="descname">non_neg</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#cmepy.util.non_neg" title="Permalink to this definition">¶</a></dt>
+<dd>Returns max(x, 0) [array operation]</dd></dl>
+
+<dl class="function">
+<dt id="cmepy.util.shape_invariant">
+<tt class="descclassname">cmepy.util.</tt><tt class="descname">shape_invariant</tt><big>(</big><em>f</em><big>)</big><a class="headerlink" href="#cmepy.util.shape_invariant" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns wrapped copy of f that ensures output shape matches input shape.</p>
+<p>Details : if the shapes of the first argument and output of the function f 
+do not agree, the output will be expanded via <tt class="docutils literal"><span class="pre">numpy.tile</span></tt> until it is
+the same shape as the first input. Shapes are computed via <tt class="docutils literal"><span class="pre">numpy.shape</span></tt>.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="tests.html"
+                                  title="previous chapter"><tt class="docutils literal docutils literal docutils literal"><span class="pre">tests</span></tt></a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/api_modules/util.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tests.html" title="tests"
+             >previous</a> |</li>
+        <li><a href="../index.html">CmePy v0.3 documentation</a> &raquo;</li>
+          <li><a href="../api.html" >api documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, Markus Hegland &amp; Reuben Fletcher-Costin.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+    </div>
+  </body>
+</html>

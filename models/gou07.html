@@ -1,0 +1,358 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>gou07 : unidirection dimerisation and quadratic autocatalator &mdash; CmePy v0.3 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.3',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="CmePy v0.3 documentation" href="../index.html" />
+    <link rel="up" title="Models included in cmepy.models" href="../models.html" />
+    <link rel="next" title="michaelis_menten : an enzymatic reaction" href="michaelis_menten.html" />
+    <link rel="prev" title="dual_enzymatic : coupled enzymatic reactions" href="dual_enzymatic.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="michaelis_menten.html" title="michaelis_menten : an enzymatic reaction"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="dual_enzymatic.html" title="dual_enzymatic : coupled enzymatic reactions"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">CmePy v0.3 documentation</a> &raquo;</li>
+          <li><a href="../models.html" accesskey="U">Models included in <tt class="docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">cmepy.models</span></tt></a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="gou07-unidirection-dimerisation-and-quadratic-autocatalator">
+<h1><tt class="xref docutils literal"><span class="pre">gou07</span></tt> : unidirection dimerisation and quadratic autocatalator<a class="headerlink" href="#gou07-unidirection-dimerisation-and-quadratic-autocatalator" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>The <tt class="xref docutils literal"><span class="pre">cmepy.models.gou07</span></tt> modules defines two models of systems given as
+examples by Goutsias <a class="reference" href="#gou07">[GOU07]</a> .</p>
+<p>The first model is a unidirectional dimerisation model, which consists of the
+single reaction:</p>
+<div class="math">
+<p><img src="../_images/math/d8c265af8b347fb9ddfe27387c57fa5319eded3a.png" alt="P + Q \xrightarrow{k} PQ" /></p>
+</div><p>The rate coefficient for this reaction is <img class="math" src="../_images/math/41bc89dd653ea653efdb0cd7085c6bff9f485b6b.png" alt="k = 0.001"/>. Initially there
+are 10 copies of both species <img class="math" src="../_images/math/4b4cade9ca8a2c8311fafcf040bc5b15ca507f52.png" alt="P"/> and <img class="math" src="../_images/math/9866e3a998d628ba0941eb4fea0666ac391d149a.png" alt="Q"/>.</p>
+<p>This model can be used in CmePy as follows:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">cmepy.models</span> <span class="kn">import</span> <span class="n">gou07</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">gou07</span><span class="o">.</span><span class="n">create_model_uni_dim</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The second model defined by this module is called the quadratic autocatalator,
+and is a system of six reactions:</p>
+<div class="math">
+<p><img src="../_images/math/a6488e4edc349af691803ab2ec986dcdaa3f3a01.png" alt="S \xrightarrow{k_1} P \\
+D + P \xrightarrow{k_2} D + 2P \\
+P + P \xrightarrow{k_3} P + Q \\
+P + Q \xrightarrow{k_4} 2Q \\
+P \xrightarrow{k_5} \star \\
+Q \xrightarrow{k_6} \star" /></p>
+</div><p>The rate coefficients of these reactions are
+<img class="math" src="../_images/math/2e42eb1fd8d78ff17995e84cdc2a1bdb3eeb8f7c.png" alt="k_1 = 0.002"/>,
+<img class="math" src="../_images/math/34a06aa761c3a22163ca0e84d28af8483536db14.png" alt="k_2 = 0.001"/>,
+<img class="math" src="../_images/math/7e27b7ca95aae12326982af4a97938995b47de04.png" alt="k_3 = 0.005"/>,
+<img class="math" src="../_images/math/bab0109e40325b3c591e1f097045bbe5216d3645.png" alt="k_4 = 0.004"/>,
+<img class="math" src="../_images/math/dc460fc0a3c1c6d06c26f6ad3b7a1c9f0eaefd24.png" alt="k_5 = 0.002"/> and
+<img class="math" src="../_images/math/99e7bf59af92f4050b44ae71710884f925b94a4a.png" alt="k_6 = 0.050"/>,
+while the initial copy counts are 3 copies of the species <img class="math" src="../_images/math/ad28c83c99a8fd0dd2e2e594c9d02ee532765a0a.png" alt="S"/>
+and zero copies of all other species.</p>
+<p>This model can be used in CmePy as follows:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">cmepy.models</span> <span class="kn">import</span> <span class="n">gou07</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">gou07</span><span class="o">.</span><span class="n">create_model_quad_autocat</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Goutsias <a class="reference" href="#gou07">[GOU07]</a> actually assumes that the copy count of the species
+<img class="math" src="../_images/math/ad28c83c99a8fd0dd2e2e594c9d02ee532765a0a.png" alt="S"/> used in the above model is in fact <em>constant</em>, so that the first
+reaction <img class="math" src="../_images/math/553296a7f57113e7a567b798f837b44114f38bac.png" alt="S \xrightarrow{k_1} P"/> proceeds with a fixed propensity.</p>
+<p class="last">This behaviour can be enabled by passing the keyword argument
+<tt class="docutils literal"><span class="pre">fixed_s</span> <span class="pre">=</span> <span class="pre">True</span></tt> when calling the
+<tt class="xref docutils literal"><span class="pre">create_model_quad_autocat()</span></tt> function to create the quadratic
+autocatalator model.</p>
+</div>
+</div>
+<div class="section" id="running-the-model">
+<h2>Running the model<a class="headerlink" href="#running-the-model" title="Permalink to this headline">¶</a></h2>
+<p>The source code for these models is listed below.</p>
+<p>The function <tt class="xref docutils literal"><span class="pre">main()</span></tt> defined in the module <tt class="xref docutils literal"><span class="pre">cmepy.models.gou07</span></tt>
+solves the quadratic autocatalator model.
+To run this function, open the Python interpreter and enter:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cmepy.models</span> <span class="kn">import</span> <span class="n">gou07</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gou07</span><span class="o">.</span><span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>This will solve the system up to <img class="math" src="../_images/math/bb9689ffcc80c3419629eb6b92c8f8419d6a7be9.png" alt="t = 1000"/>, over 100 steps,
+then display plots of the standard deviation and expected value of the
+species counts, as seen below.</p>
+</div>
+<div class="section" id="sample-results">
+<h2>Sample results<a class="headerlink" href="#sample-results" title="Permalink to this headline">¶</a></h2>
+<img alt="../_images/gou07_ev_plot.png" src="../_images/gou07_ev_plot.png" />
+<img alt="../_images/gou07_std_dev_plot.png" src="../_images/gou07_std_dev_plot.png" />
+</div>
+<div class="section" id="source">
+<h2>Source<a class="headerlink" href="#source" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Quadratic autocatalator and unidirection dimerisation models.</span>
+
+<span class="sd">These models are adapted from the examples given by Goutsias, 2007:</span>
+
+<span class="sd">@article{goutsias2007classical,</span>
+<span class="sd">  title={{Classical versus stochastic kinetics modeling</span>
+<span class="sd">  of biochemical reaction systems}},</span>
+<span class="sd">  author={Goutsias, J.},</span>
+<span class="sd">  journal={Biophysical Journal},</span>
+<span class="sd">  volume={92},</span>
+<span class="sd">  number={7},</span>
+<span class="sd">  pages={},</span>
+<span class="sd">  year={2007},</span>
+<span class="sd">  publisher={Elsevier}</span>
+<span class="sd">}</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span>
+<span class="kn">from</span> <span class="nn">cmepy</span> <span class="kn">import</span> <span class="n">model</span>
+<span class="kn">from</span> <span class="nn">cmepy.util</span> <span class="kn">import</span> <span class="n">non_neg</span>
+
+<span class="k">def</span> <span class="nf">create_model_uni_dim</span><span class="p">(</span><span class="n">initial_copies</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">rate</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    returns model for P+Q -&gt; PQ with initial copies of P, Q and rate specified. </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="s">&#39;Unidirectional Dimerisation&#39;</span><span class="p">,</span>
+        <span class="n">propensities</span> <span class="o">=</span> <span class="p">[</span><span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="n">rate</span><span class="o">*</span><span class="p">(</span><span class="n">initial_copies</span><span class="o">-</span><span class="n">x</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">],</span>
+        <span class="n">transitions</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,</span> <span class="p">)],</span>
+        <span class="n">reactions</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;P+Q -&gt; PQ&#39;</span><span class="p">],</span>
+        <span class="n">species</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;P&#39;</span><span class="p">,</span> <span class="s">&#39;Q&#39;</span><span class="p">,</span> <span class="s">&#39;PQ&#39;</span><span class="p">],</span>
+        <span class="n">species_counts</span> <span class="o">=</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="n">initial_copies</span> <span class="o">-</span> <span class="n">x</span><span class="p">,</span> <span class="p">)</span><span class="o">*</span><span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="n">x</span><span class="p">,</span> <span class="p">),</span>
+        <span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">initial_copies</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="p">),</span>
+        <span class="n">initial_state</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="p">)</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">m</span>
+
+<span class="k">def</span> <span class="nf">create_model_quad_autocat</span><span class="p">(</span><span class="n">max_p</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+                              <span class="n">max_q</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+                              <span class="n">fixed_s</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                              <span class="n">s_0</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+                              <span class="n">d_0</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                              <span class="n">vol</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates a species-count based model for the system of reactions:</span>
+<span class="sd">    </span>
+<span class="sd">        S-&gt;P</span>
+<span class="sd">        D+P-&gt;D+P+P</span>
+<span class="sd">        P+P-&gt;P+Q</span>
+<span class="sd">        P+Q-&gt;Q+Q</span>
+<span class="sd">        P-&gt;*</span>
+<span class="sd">        Q-&gt;*</span>
+<span class="sd">    </span>
+<span class="sd">    The copy counts of the species S and D are assumed to be constant,</span>
+<span class="sd">    with s_0 (default 10) copies of S and d_0 (default 2) copies of D.</span>
+<span class="sd">    </span>
+<span class="sd">    If fixed_s is set to False, copy count of species S will no longer be</span>
+<span class="sd">    constant, and will be decreased by the reaction S-&gt;P.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="n">model_name</span> <span class="o">=</span> <span class="s">&#39;Quadratic Autocatalator (</span><span class="si">%s</span><span class="s"> S)&#39;</span>
+    
+    <span class="n">p</span> <span class="o">=</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">q</span> <span class="o">=</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="n">d_0</span>
+    
+    <span class="k">if</span> <span class="n">fixed_s</span><span class="p">:</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="n">s_0</span>
+        <span class="n">model_name</span> <span class="o">%=</span> <span class="s">&#39;fixed&#39;</span>
+        
+        <span class="n">transitions</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+            <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+            <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+            <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+            <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+            <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span>
+        <span class="p">)</span>
+        
+        <span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">max_p</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_q</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">initial_state</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="p">)</span><span class="o">*</span><span class="mi">2</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">model_name</span> <span class="o">%=</span> <span class="s">&#39;variable&#39;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">transitions</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span>
+            <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+            <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+            <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+            <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+            <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+        <span class="p">)</span>
+        
+        <span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">max_p</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_q</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">s_0</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">initial_state</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="p">)</span>
+    
+    <span class="n">m</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">model_name</span><span class="p">,</span>
+        <span class="n">reactions</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s">&#39;S-&gt;P&#39;</span><span class="p">,</span>
+            <span class="s">&#39;D+P-&gt;D+2P&#39;</span><span class="p">,</span>
+            <span class="s">&#39;P+P-&gt;P+Q&#39;</span><span class="p">,</span>
+            <span class="s">&#39;P+Q-&gt;2Q&#39;</span><span class="p">,</span>
+            <span class="s">&#39;P-&gt;*&#39;</span><span class="p">,</span>
+            <span class="s">&#39;Q-&gt;*&#39;</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="n">propensities</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="mf">0.002</span> <span class="o">*</span> <span class="p">(</span><span class="n">vol</span> <span class="o">**</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">s</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">),</span>
+            <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="mf">0.001</span> <span class="o">*</span> <span class="p">(</span><span class="n">vol</span> <span class="o">**</span> <span class="o">-</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">d</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="n">p</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">),</span>
+            <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="mf">0.005</span> <span class="o">*</span> <span class="p">(</span><span class="n">vol</span> <span class="o">**</span> <span class="o">-</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">p</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="n">non_neg</span><span class="p">(</span><span class="n">p</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">,</span>
+            <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="mf">0.004</span> <span class="o">*</span> <span class="p">(</span><span class="n">vol</span> <span class="o">**</span> <span class="o">-</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">p</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="n">q</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">),</span>
+            <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="mf">0.002</span> <span class="o">*</span> <span class="p">(</span><span class="n">vol</span> <span class="o">**</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">p</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">),</span>
+            <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="mf">0.050</span> <span class="o">*</span> <span class="p">(</span><span class="n">vol</span> <span class="o">**</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">q</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">),</span>
+        <span class="p">),</span>
+        <span class="n">transitions</span> <span class="o">=</span> <span class="n">transitions</span><span class="p">,</span>
+        <span class="n">species</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;P&#39;</span><span class="p">,</span> <span class="s">&#39;Q&#39;</span><span class="p">,</span> <span class="s">&#39;S&#39;</span><span class="p">,</span> <span class="s">&#39;D&#39;</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="n">species_counts</span> <span class="o">=</span> <span class="p">(</span> <span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="p">),</span>
+        <span class="n">shape</span> <span class="o">=</span> <span class="n">shape</span><span class="p">,</span>
+        <span class="n">initial_state</span> <span class="o">=</span> <span class="n">initial_state</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">m</span>
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    
+    <span class="kn">import</span> <span class="nn">cmepy.solver</span>
+    <span class="kn">import</span> <span class="nn">cmepy.recorder</span>
+    
+    <span class="n">m</span> <span class="o">=</span> <span class="n">create_model_quad_autocat</span><span class="p">(</span><span class="n">fixed_s</span> <span class="o">=</span> <span class="bp">False</span><span class="p">)</span>
+    
+    <span class="n">solver</span> <span class="o">=</span> <span class="n">cmepy</span><span class="o">.</span><span class="n">solver</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+        <span class="n">m</span><span class="p">,</span>
+        <span class="n">sink</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="p">)</span>
+    <span class="n">recorder</span> <span class="o">=</span> <span class="n">cmepy</span><span class="o">.</span><span class="n">recorder</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+        <span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">species</span><span class="p">,</span>
+         <span class="n">m</span><span class="o">.</span><span class="n">species_counts</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">time_steps</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1000.0</span><span class="p">,</span> <span class="mi">101</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">time_steps</span><span class="p">:</span>
+        <span class="n">solver</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+        <span class="n">p</span><span class="p">,</span> <span class="n">p_sink</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">y</span>
+        <span class="n">recorder</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
+        <span class="k">print</span> <span class="s">&#39;t = </span><span class="si">%g</span><span class="s">; p_sink = </span><span class="si">%g</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">p_sink</span><span class="p">)</span>
+    
+    <span class="n">cmepy</span><span class="o">.</span><span class="n">recorder</span><span class="o">.</span><span class="n">display_plots</span><span class="p">(</span><span class="n">recorder</span><span class="p">,</span> <span class="n">title</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">References</p>
+<table class="docutils citation" frame="void" id="gou07" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a name="gou07">[GOU07]</a></td><td><em>(<a class="fn-backref" href="#id1">1</a>, <a class="fn-backref" href="#id2">2</a>)</em> <a class="reference" href="http://scholar.google.com/scholar&amp;q=goutsias+2007+classical+versus+stochastic+kinetics+modeling+of+biochemical+reaction+systems">Goutsias, J.,
+Classical versus stochastic kinetics modeling of biochemical reaction systems,
+Biophysical Journal (2007),
+Vol 92, pp. 2350&#8211;2365.</a></td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="../index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference" href="#"><tt class="docutils literal"><span class="pre">gou07</span></tt> : unidirection dimerisation and quadratic autocatalator</a><ul>
+<li><a class="reference" href="#overview">Overview</a></li>
+<li><a class="reference" href="#running-the-model">Running the model</a></li>
+<li><a class="reference" href="#sample-results">Sample results</a></li>
+<li><a class="reference" href="#source">Source</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="dual_enzymatic.html"
+                                  title="previous chapter"><tt class="docutils literal docutils literal docutils literal"><span class="pre">dual_enzymatic</span></tt> : coupled enzymatic reactions</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="michaelis_menten.html"
+                                  title="next chapter"><tt class="docutils literal"><span class="pre">michaelis_menten</span></tt> : an enzymatic reaction</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/models/gou07.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="michaelis_menten.html" title="michaelis_menten : an enzymatic reaction"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="dual_enzymatic.html" title="dual_enzymatic : coupled enzymatic reactions"
+             >previous</a> |</li>
+        <li><a href="../index.html">CmePy v0.3 documentation</a> &raquo;</li>
+          <li><a href="../models.html" >Models included in <tt class="docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">cmepy.models</span></tt></a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, Markus Hegland &amp; Reuben Fletcher-Costin.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,186 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Time-dependent propensity functions &mdash; CmePy v0.3 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.3',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="CmePy v0.3 documentation" href="../index.html" />
+    <link rel="up" title="Advanced features" href="../cookbook.html" />
+    <link rel="next" title="Models included in cmepy.models" href="../models.html" />
+    <link rel="prev" title="Sparse state spaces" href="sparse_state_spaces.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="../models.html" title="Models included in cmepy.models"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="sparse_state_spaces.html" title="Sparse state spaces"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">CmePy v0.3 documentation</a> &raquo;</li>
+          <li><a href="../cookbook.html" accesskey="U">Advanced features</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="time-dependent-propensity-functions">
+<span id="id1"></span><h1>Time-dependent propensity functions<a class="headerlink" href="#time-dependent-propensity-functions" title="Permalink to this headline">¶</a></h1>
+<p>CmePy has limited support for time dependent propensity functions, provided
+a separation of variables can be applied. In other words, CmePy can handle a
+time-dependent propensity function
+<img class="math" src="../_images/math/d0067a84c6ed90815a62eaeab2fb3d3bdeacf905.png" alt="\nu(x, t) : \Omega \times [0, T] \rightarrow [0, \infty)"/>
+if there exist functions
+<img class="math" src="../_images/math/5d4048acfcae363370cb62ee22ae67e997f2d67d.png" alt="\psi(x) : \Omega \rightarrow [0, \infty)"/> and
+<img class="math" src="../_images/math/3d5a05be9c037bdddc335e6f303abbe36a20fe80.png" alt="\phi(t) : [0, T] \rightarrow [0, \infty)"/>,
+of the state <img class="math" src="../_images/math/26eeb5258ca5099acf8fe96b2a1049c48c89a5e6.png" alt="x"/> and time <img class="math" src="../_images/math/e0d2bf360290fd61d1c1557e763f2622363b3d35.png" alt="t"/> respectively, such that
+<img class="math" src="../_images/math/f3ae3b30567142e066863ae41b6f1df0c2e93f2f.png" alt="\nu(x, t) = \psi(x) \phi(t)"/> .</p>
+<div class="section" id="example-of-usage">
+<h2>Example of usage<a class="headerlink" href="#example-of-usage" title="Permalink to this headline">¶</a></h2>
+<p>Suppose <tt class="docutils literal"><span class="pre">m</span></tt> is a model definition with at least 3 reactions. The following
+example shows how to scale the propensity functions for the 0-th and 2-nd
+reactions by the time dependent coefficient
+<img class="math" src="../_images/math/24cc6ba8dee8f07b67246534c15e2d2b4689b85d.png" alt="\phi(t) = e^{-0.1 t}"/> :</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">cmepy</span> <span class="kn">import</span> <span class="n">model</span><span class="p">,</span> <span class="n">solver</span>
+
+<span class="n">m</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+<span class="o">...</span> <span class="c"># model definition here</span>
+<span class="p">)</span>
+
+<span class="n">s</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">m</span><span class="p">,</span>
+    <span class="n">sink</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span>
+    <span class="n">time_dependencies</span> <span class="o">=</span> <span class="p">{</span><span class="nb">frozenset</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span> <span class="p">:</span> <span class="k">lambda</span> <span class="n">t</span> <span class="p">:</span> <span class="n">math</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.1</span><span class="o">*</span><span class="n">t</span><span class="p">)}</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="further-details">
+<h2>Further details<a class="headerlink" href="#further-details" title="Permalink to this headline">¶</a></h2>
+<p>The time-dependent factors of the propensity functions can be supplied to
+CmePy via the optional <tt class="docutils literal"><span class="pre">time_dependencies</span></tt> keyword argument when creating
+a solver via the function <a title="cmepy.solver.create" class="reference" href="../api_modules/solver.html#cmepy.solver.create"><tt class="xref docutils literal"><span class="pre">cmepy.solver.create()</span></tt></a>. By default, reaction
+propensities are time independent. If specified, <tt class="docutils literal"><span class="pre">time_dependencies</span></tt>
+must be a mapping of the form:</p>
+<div class="highlight-python"><pre>time_dependencies = { s_1 : phi_1, ..., s_n : phi_n }</pre>
+</div>
+<p>where each <tt class="docutils literal"><span class="pre">(s_j,</span> <span class="pre">phi_j)</span></tt> key-value pair is of the form:</p>
+<blockquote>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">s_j</span></tt> : set of reaction indices, for example <tt class="docutils literal"><span class="pre">frozenset([2,</span> <span class="pre">3])</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">phi_j</span></tt> : a function <tt class="docutils literal"><span class="pre">phi_j(t)</span></tt> taking a time <tt class="docutils literal"><span class="pre">t</span></tt> and returning
+a scalar coefficient.</li>
+</ul>
+</blockquote>
+<p>The propensities of the reactions with indices contained in <tt class="docutils literal"><span class="pre">s_j</span></tt>
+will all be multiplied by the coefficient <tt class="docutils literal"><span class="pre">phi_j(t)</span></tt>, at time <tt class="docutils literal"><span class="pre">t</span></tt>.
+Reactions are indexed according to the ordering of the propensities
+in the model.</p>
+<p>The reaction index sets <tt class="docutils literal"><span class="pre">s_j</span></tt> must be <em>disjoint</em>. It is not necessary
+for the union of the <tt class="docutils literal"><span class="pre">s_j</span></tt> to include all the reaction indices.
+If a reaction&#8217;s index is not contained in any <tt class="docutils literal"><span class="pre">s_j</span></tt> then the reaction
+is treated as time-independent.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Since the sets of reaction indices <tt class="docutils literal"><span class="pre">s_1</span></tt>, ..., <tt class="docutils literal"><span class="pre">s_n</span></tt> are used as keys
+to a mapping, they must be hashable. This means that <tt class="docutils literal"><span class="pre">list</span></tt> or <tt class="docutils literal"><span class="pre">set</span></tt>
+values are excluded. However, <tt class="docutils literal"><span class="pre">frozenset</span></tt> instances can be used, as seen
+above. A <tt class="docutils literal"><span class="pre">frozenset</span></tt> works just like a <tt class="docutils literal"><span class="pre">set</span></tt>, except it is immutable.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="../index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference" href="#">Time-dependent propensity functions</a><ul>
+<li><a class="reference" href="#example-of-usage">Example of usage</a></li>
+<li><a class="reference" href="#further-details">Further details</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="sparse_state_spaces.html"
+                                  title="previous chapter">Sparse state spaces</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="../models.html"
+                                  title="next chapter">Models included in <tt class="docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">cmepy.models</span></tt></a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/recipes/time_dependent_propensity_functions.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../models.html" title="Models included in cmepy.models"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="sparse_state_spaces.html" title="Sparse state spaces"
+             >previous</a> |</li>
+        <li><a href="../index.html">CmePy v0.3 documentation</a> &raquo;</li>
+          <li><a href="../cookbook.html" >Advanced features</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, Markus Hegland &amp; Reuben Fletcher-Costin.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+    </div>
+  </body>
+</html>

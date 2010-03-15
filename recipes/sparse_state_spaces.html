@@ -1,0 +1,292 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Sparse state spaces &mdash; CmePy v0.3 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.3',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="CmePy v0.3 documentation" href="../index.html" />
+    <link rel="up" title="Advanced features" href="../cookbook.html" />
+    <link rel="next" title="Time-dependent propensity functions" href="time_dependent_propensity_functions.html" />
+    <link rel="prev" title="Finite state projection (FSP)" href="finite_state_projection.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="time_dependent_propensity_functions.html" title="Time-dependent propensity functions"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="finite_state_projection.html" title="Finite state projection (FSP)"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">CmePy v0.3 documentation</a> &raquo;</li>
+          <li><a href="../cookbook.html" accesskey="U">Advanced features</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="sparse-state-spaces">
+<span id="id1"></span><h1>Sparse state spaces<a class="headerlink" href="#sparse-state-spaces" title="Permalink to this headline">¶</a></h1>
+<p>The <a title="cmepy.solver.create" class="reference" href="../api_modules/solver.html#cmepy.solver.create"><tt class="xref docutils literal"><span class="pre">cmepy.solver.create()</span></tt></a> function accepts the optional keyword argument
+<tt class="docutils literal"><span class="pre">domain_states</span></tt>.
+By default, if no <tt class="docutils literal"><span class="pre">domain_states</span></tt> argument is given,
+CmePy generates a dense &#8216;rectangular&#8217; state space with dimensions specified by
+<tt class="docutils literal"><span class="pre">m.shape</span></tt>, where <tt class="docutils literal"><span class="pre">m</span></tt> is the value of the <tt class="docutils literal"><span class="pre">model</span></tt> argument passed to
+<a title="cmepy.solver.create" class="reference" href="../api_modules/solver.html#cmepy.solver.create"><tt class="xref docutils literal"><span class="pre">cmepy.solver.create()</span></tt></a>.</p>
+<p>However, often it is far more efficient to specify sparse state spaces.
+The <a title="" class="reference" href="../api_modules/domain.html#module-cmepy.domain"><tt class="xref docutils literal"><span class="pre">cmepy.domain</span></tt></a> module provides a number of utility routines to ease
+the construction of sparse state spaces. The most important one is the
+<tt class="xref docutils literal"><span class="pre">from_iter()</span></tt> function:</p>
+<dl class="function">
+<dt id="cmepy.domain.from_iter">
+<tt class="descclassname">cmepy.domain.</tt><tt class="descname">from_iter</tt><big>(</big><em>state_iter</em><big>)</big><a class="headerlink" href="#cmepy.domain.from_iter" title="Permalink to this definition">¶</a></dt>
+<dd><p>from_iter(state_iter) -&gt; array</p>
+<p>Returns array of all states from the state iterator &#8216;state_iter&#8217;.</p>
+</dd></dl>
+
+<p>Provided we have a suitable <tt class="docutils literal"><span class="pre">state_iter</span></tt>, we can create a solver using the
+sparse state space defined by <tt class="docutils literal"><span class="pre">state_iter</span></tt> as follows:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">cmepy</span> <span class="kn">import</span> <span class="n">domain</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">solver</span>
+
+<span class="n">m</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="o">...</span> <span class="c"># model definition goes here</span>
+<span class="p">)</span>
+
+<span class="n">state_iter</span> <span class="o">=</span> <span class="o">...</span> <span class="c"># create state_iter somehow</span>
+
+<span class="n">s</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">m</span><span class="p">,</span>
+    <span class="n">sink</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span>
+    <span class="n">domain_states</span> <span class="o">=</span> <span class="n">domain</span><span class="o">.</span><span class="n">from_iter</span><span class="p">(</span><span class="n">state_iter</span><span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>But what is a &#8216;state iterator&#8217;? A state iterator is simply any iterable object
+&#8211; such as a list, a set, a dictionary or a generator expression &#8211;
+that contains states. The states provided by the state iterator
+are assumed to be length-<img class="math" src="../_images/math/96ab646de7704969b91c76a214126b45f2b07b25.png" alt="d"/> tuples of integers, for some fixed integer
+<img class="math" src="../_images/math/28552db419b79aaf4d5c836002f2d974ca274a9b.png" alt="d \geq 1"/>.</p>
+<div class="section" id="example-sparse-state-space-for-a-mono-molecular-system">
+<h2>Example: sparse state space for a mono-molecular system<a class="headerlink" href="#example-sparse-state-space-for-a-mono-molecular-system" title="Permalink to this headline">¶</a></h2>
+<p>For a concrete example, consider the following mono-molecular
+system of reactions:</p>
+<div class="math">
+<p><img src="../_images/math/630679fe15d919a9f29c8407ead276baea275851.png" alt="A \xrightarrow{k_1} B \xrightarrow{k_2} C \xrightarrow{k_3} \star \; ," /></p>
+</div><p>where <img class="math" src="../_images/math/48eccc939ff59006bf53115202eee82e339d6668.png" alt="k_1, k_2, k_3"/> are all positive constants,
+and the initial copy counts are <img class="math" src="../_images/math/a429b6350519e82d2477909916a101f0cb7e34e0.png" alt="A_0 = n, B_0 = 0, C_0 = 0"/>, for
+some positive integer <img class="math" src="../_images/math/174fadd07fd54c9afe288e96558c92e0c1da733a.png" alt="n"/>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Here, <img class="math" src="../_images/math/ee26d399ce0cc837dc0f9b8fa2f3e52bb2bbe27e.png" alt="C \xrightarrow{} \star"/> is used to
+denote a &#8216;pure decay&#8217; reaction. This reaction consumes the species <img class="math" src="../_images/math/c3355896da590fc491a10150a50416687626d7cc.png" alt="C"/>
+and produces <em>nothing</em>, which is denoted <img class="math" src="../_images/math/d17950ad2ab63c764778b133f95a03dcf2969d57.png" alt="\star"/>.
+If this seems distasteful, another interpretation is to simply assume that
+the reaction in fact transforms <img class="math" src="../_images/math/c3355896da590fc491a10150a50416687626d7cc.png" alt="C"/> into some product which we ignore.</p>
+</div>
+<p>Let&#8217;s consider a reaction count state space for this model. Let each
+state <img class="math" src="../_images/math/d91a11077b90d59a80f8979b6e181ba8674634e2.png" alt="x = (x_0, x_1, x_2)"/> be a triple of non-negative integers,
+where <img class="math" src="../_images/math/6303624c7c441cd44b9b4bd80972b99e8e9d5ebb.png" alt="x_0, x_1"/> and <img class="math" src="../_images/math/6a7d010bbff66a0c41e43310a51efbaa6bf63396.png" alt="x_2"/> denote the counts of the reactions
+<img class="math" src="../_images/math/8bba5b42f7509e4df78da29deb3b366f00b0c1b0.png" alt="A \xrightarrow{} B"/>, <img class="math" src="../_images/math/802a45d9ef0dcd03000ab1701dce77823b36fb7e.png" alt="B \xrightarrow{} C"/> and
+<img class="math" src="../_images/math/ee26d399ce0cc837dc0f9b8fa2f3e52bb2bbe27e.png" alt="C \xrightarrow{} \star"/> respectively.</p>
+<p>Since the third reaction may only occur following the second reaction, which
+in turn may only occur after the first reaction, which can occur up to
+<img class="math" src="../_images/math/174fadd07fd54c9afe288e96558c92e0c1da733a.png" alt="n"/> times, the state space <img class="math" src="../_images/math/2214bc8f3d2f64f9ef700f0068aca2605a626f89.png" alt="\Omega \subset \mathbb{N}^3"/> is
+defined as:</p>
+<div class="math">
+<p><img src="../_images/math/b1bf4ea8a41e01ebfb9667acd55c05e5328152ae.png" alt="\Omega :=
+\left\{ (x_0, x_1, x_2) \; : \; (x_0, x_1, x_2) \in \mathbb{N}^3
+\;, \; 0 \leq x_2 \leq x_1 \leq x_0 \leq n \right\}" /></p>
+</div><p>We can define a generator in Python to yield precisely
+these states:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">gen_states</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">x_0</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">x_1</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">x_0</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">x_2</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">x_1</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="k">yield</span> <span class="p">(</span><span class="n">x_0</span><span class="p">,</span> <span class="n">x_1</span><span class="p">,</span> <span class="n">x_2</span><span class="p">)</span>
+    <span class="k">return</span>
+</pre></div>
+</div>
+<p>We call the generator with some chosen value for the initial copy
+count <img class="math" src="../_images/math/174fadd07fd54c9afe288e96558c92e0c1da733a.png" alt="n"/> of the species <img class="math" src="../_images/math/019e9892786e493964e145e7c5cf7b700314e53b.png" alt="A"/>, say <img class="math" src="../_images/math/748375ba3345781f252164e4d576fc9225f8cacf.png" alt="n = 25"/>,
+then pass the result as the <tt class="docutils literal"><span class="pre">domain_states</span></tt>
+keyword argument when creating the solver,
+after transformation via the function <tt class="xref docutils literal"><span class="pre">domain.from_iter()</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">s</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">m</span><span class="p">,</span>
+    <span class="n">sink</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span>
+    <span class="n">domain_states</span> <span class="o">=</span> <span class="n">domain</span><span class="o">.</span><span class="n">from_iter</span><span class="p">(</span><span class="n">gen_states</span><span class="p">(</span><span class="mi">25</span><span class="p">))</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="example-sparse-state-space-for-gardner-s-gene-toggle-model">
+<span id="sparse-state-space-gene-toggle-example"></span><h2>Example: sparse state space for Gardner&#8217;s gene toggle model<a class="headerlink" href="#example-sparse-state-space-for-gardner-s-gene-toggle-model" title="Permalink to this headline">¶</a></h2>
+<p>Consider the following system, consisting of the two imaginatively-named
+species <img class="math" src="../_images/math/004115af1f40027ee7fabdd3ce2b9f650d642df5.png" alt="S1"/> and <img class="math" src="../_images/math/7e236ab181e3ea2c3b91aec62bb6fca116415239.png" alt="S2"/> :</p>
+<div class="math">
+<p><img src="../_images/math/9b672e61dec45ff0adba3c32c19873d1b9fcd037.png" alt="\begin{align*}
+\textrm{reaction} &amp;&amp;
+\textrm{transition} &amp;&amp;
+\textrm{propensity} \\
+\textrm{production of $S1$} &amp;&amp;
+\star \xrightarrow{} S1 &amp;&amp;
+\frac{16}{1 + [S2]} \\
+\textrm{production of $S2$} &amp;&amp;
+\star \xrightarrow{} S2 &amp;&amp;
+\frac{16}{1 + [S1]^{2.5}} \\
+\textrm{decay of $S1$} &amp;&amp;
+S1 \xrightarrow{} \star &amp;&amp;
+[S1] \\
+\textrm{decay of $S2$} &amp;&amp;
+S2 \xrightarrow{} \star &amp;&amp;
+[S2]
+\end{align*}" /></p>
+</div><p>The initial copy counts are zero copies of both <img class="math" src="../_images/math/004115af1f40027ee7fabdd3ce2b9f650d642df5.png" alt="S1"/>
+and <img class="math" src="../_images/math/7e236ab181e3ea2c3b91aec62bb6fca116415239.png" alt="S2"/>.</p>
+<p>This system is Munsky &amp; Khammash&#8217;s formulation of Gardner&#8217;s gene toggle
+<a class="reference" href="#gcc00">[GCC00]</a>, <a class="reference" href="#mk08">[MK08]</a>.
+The two species <img class="math" src="../_images/math/004115af1f40027ee7fabdd3ce2b9f650d642df5.png" alt="S1"/> and <img class="math" src="../_images/math/7e236ab181e3ea2c3b91aec62bb6fca116415239.png" alt="S2"/> <em>compete</em>:
+copies of <img class="math" src="../_images/math/004115af1f40027ee7fabdd3ce2b9f650d642df5.png" alt="S1"/> inhibit the production of <img class="math" src="../_images/math/7e236ab181e3ea2c3b91aec62bb6fca116415239.png" alt="S2"/>, while conversely,
+copies of <img class="math" src="../_images/math/7e236ab181e3ea2c3b91aec62bb6fca116415239.png" alt="S2"/> inhibit the production of <img class="math" src="../_images/math/004115af1f40027ee7fabdd3ce2b9f650d642df5.png" alt="S1"/>. The solution of the
+chemical master equation for this system after <img class="math" src="../_images/math/3043580b17199244af1c8f0876ebf5dca9af9be3.png" alt="t = 100"/> seconds
+illustrates the result of these competetive dynamics:</p>
+<a class="reference image-reference" href="../_images/munk08_density_plot.png"><div align="center" class="align-center"><img alt="Joint distribution of S1 and S2 at t = 100" class="align-center" src="../_images/munk08_density_plot.png" style="width: 406.0px; height: 306.0px;" /></div>
+</a>
+<p>Since most of the probability is concentrated around the axes, we can
+still obtain a good approximation to the solution of the CME by only
+considering the states near each axis.
+We create a state space from the union of two rectangular regions
+about the axes as follows:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">cmepy</span> <span class="kn">import</span> <span class="n">domain</span>
+
+<span class="n">r_a</span> <span class="o">=</span> <span class="p">(</span><span class="mi">66</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+<span class="n">r_b</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">26</span><span class="p">)</span>
+<span class="n">states_a</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">domain</span><span class="o">.</span><span class="n">to_iter</span><span class="p">(</span><span class="n">domain</span><span class="o">.</span><span class="n">from_rect</span><span class="p">(</span><span class="n">r_a</span><span class="p">)))</span>
+<span class="n">states_b</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">domain</span><span class="o">.</span><span class="n">to_iter</span><span class="p">(</span><span class="n">domain</span><span class="o">.</span><span class="n">from_rect</span><span class="p">(</span><span class="n">r_b</span><span class="p">)))</span>
+<span class="n">states</span> <span class="o">=</span> <span class="n">domain</span><span class="o">.</span><span class="n">from_iter</span><span class="p">(</span><span class="n">states_a</span> <span class="o">|</span> <span class="n">states_b</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The function <tt class="xref docutils literal"><span class="pre">domain.from_rect()</span></tt> transforms the given shapes <tt class="docutils literal"><span class="pre">r_a</span></tt> and
+<tt class="docutils literal"><span class="pre">r_b</span></tt> to arrays containing all the states in the corresponding rectangular
+regions. We then contruct sets containing these states, using the
+function <tt class="xref docutils literal"><span class="pre">domain.to_iter()</span></tt> to create state iterators over the given
+state arrays. Finally, we union the two sets <tt class="docutils literal"><span class="pre">states_a</span></tt> and <tt class="docutils literal"><span class="pre">states_b</span></tt> via
+<tt class="docutils literal"><span class="pre">states_a</span> <span class="pre">|</span> <span class="pre">states_b</span></tt>, which is equivalent to <tt class="docutils literal"><span class="pre">states_a.union(states_b)</span></tt>,
+then transform the resulting set to a state array by applying the function
+<tt class="xref docutils literal"><span class="pre">domain.from_iter()</span></tt>.</p>
+<p class="rubric">References</p>
+<table class="docutils citation" frame="void" id="gcc00" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2" name="gcc00">[GCC00]</a></td><td><a class="reference" href="http://scholar.google.com/scholar?q=Gardner+Cantor+Collins+Construction+of+a+genetic+toggle+switch">Gardner, T.S. and Cantor, C.R. and Collins, J.J.,
+Construction of a genetic toggle switch in Escherichia coli,
+Nature (2000),
+volume 403, pp. 339 &#8211; 342.</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="mk08" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id3" name="mk08">[MK08]</a></td><td><a class="reference" href="http://scholar.google.com/scholar?q=munsky+khammash+08+%22Computation+of+switch+time+distributions+in+stochastic+gene+regulatory+networks%22">Munsky, B. and Khammash, M.,
+Computation of switch time distributions
+in stochastic gene regulatory networks,
+Proc. 2008 American Control Conference (June 2008),
+pp. 2761 &#8211; 2766.</a></td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="../index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference" href="#">Sparse state spaces</a><ul>
+<li><a class="reference" href="#example-sparse-state-space-for-a-mono-molecular-system">Example: sparse state space for a mono-molecular system</a></li>
+<li><a class="reference" href="#example-sparse-state-space-for-gardner-s-gene-toggle-model">Example: sparse state space for Gardner&#8217;s gene toggle model</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="finite_state_projection.html"
+                                  title="previous chapter">Finite state projection (FSP)</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="time_dependent_propensity_functions.html"
+                                  title="next chapter">Time-dependent propensity functions</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/recipes/sparse_state_spaces.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="time_dependent_propensity_functions.html" title="Time-dependent propensity functions"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="finite_state_projection.html" title="Finite state projection (FSP)"
+             >previous</a> |</li>
+        <li><a href="../index.html">CmePy v0.3 documentation</a> &raquo;</li>
+          <li><a href="../cookbook.html" >Advanced features</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, Markus Hegland &amp; Reuben Fletcher-Costin.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+    </div>
+  </body>
+</html>

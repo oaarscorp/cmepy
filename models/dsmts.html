@@ -1,0 +1,171 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dsmts : a birth-death model &mdash; CmePy v0.3 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.3',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="CmePy v0.3 documentation" href="../index.html" />
+    <link rel="up" title="Models included in cmepy.models" href="../models.html" />
+    <link rel="next" title="dual_enzymatic : coupled enzymatic reactions" href="dual_enzymatic.html" />
+    <link rel="prev" title="catalytic_reaction" href="catalytic_reaction.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="dual_enzymatic.html" title="dual_enzymatic : coupled enzymatic reactions"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="catalytic_reaction.html" title="catalytic_reaction"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">CmePy v0.3 documentation</a> &raquo;</li>
+          <li><a href="../models.html" accesskey="U">Models included in <tt class="docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">cmepy.models</span></tt></a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="dsmts-a-birth-death-model">
+<h1><tt class="xref docutils literal"><span class="pre">dsmts</span></tt> : a birth-death model<a class="headerlink" href="#dsmts-a-birth-death-model" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>The <tt class="xref docutils literal"><span class="pre">cmepy.models.dsmts</span></tt> module defines the model
+<tt class="docutils literal"><span class="pre">DSMTS_001_01</span></tt>. This model is adapted from the
+<a class="reference" href="http://code.google.com/p/dsmts/">Discrete Stochastic Models Test Suite</a> .</p>
+<p>This &#8216;birth-death&#8217; model is defined as the system of reactions:</p>
+<div class="math">
+<p><img src="../_images/math/c433ff2a8cb1f6c6ffe1b8dd35eef371cf72aca3.png" alt="X &amp; \xrightarrow{0.1} 2 X \; , \\
+X &amp; \xrightarrow{0.11} \star \; . \\" /></p>
+</div><p>The model is initialised with 100 copies of the species <img class="math" src="../_images/math/6a47ca0fe7cb276abc022af6ac88ddae1a9d6894.png" alt="X"/>.</p>
+</div>
+<div class="section" id="source-code">
+<h2>Source code<a class="headerlink" href="#source-code" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Some models adapted from the Discrete Stochastic Models Test Suite.</span>
+
+<span class="sd">See http://code.google.com/p/dsmts/</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">cmepy</span> <span class="kn">import</span> <span class="n">model</span>
+
+<span class="n">DSMTS_001_01</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s">&#39;Birth-death model (001), variant 01&#39;</span><span class="p">,</span>
+    <span class="n">propensities</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span><span class="p">:</span> <span class="mf">0.1</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+        <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span><span class="p">:</span> <span class="mf">0.11</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+    <span class="p">),</span>
+    <span class="n">reactions</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s">&#39;X -&gt; 2X&#39;</span><span class="p">,</span>
+        <span class="s">&#39;X -&gt; *&#39;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">transitions</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="p">),</span>
+        <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">),</span>
+    <span class="p">),</span>
+    <span class="n">species_counts</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+    <span class="p">),</span>
+    <span class="n">species</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s">&#39;X&#39;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="p">),</span>
+    <span class="n">initial_state</span> <span class="o">=</span> <span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="../index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference" href="#"><tt class="docutils literal"><span class="pre">dsmts</span></tt> : a birth-death model</a><ul>
+<li><a class="reference" href="#overview">Overview</a></li>
+<li><a class="reference" href="#source-code">Source code</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="catalytic_reaction.html"
+                                  title="previous chapter"><tt class="docutils literal docutils literal docutils literal"><span class="pre">catalytic_reaction</span></tt></a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="dual_enzymatic.html"
+                                  title="next chapter"><tt class="docutils literal"><span class="pre">dual_enzymatic</span></tt> : coupled enzymatic reactions</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/models/dsmts.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="dual_enzymatic.html" title="dual_enzymatic : coupled enzymatic reactions"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="catalytic_reaction.html" title="catalytic_reaction"
+             >previous</a> |</li>
+        <li><a href="../index.html">CmePy v0.3 documentation</a> &raquo;</li>
+          <li><a href="../models.html" >Models included in <tt class="docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">cmepy.models</span></tt></a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, Markus Hegland &amp; Reuben Fletcher-Costin.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+    </div>
+  </body>
+</html>

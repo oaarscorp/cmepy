@@ -1,0 +1,182 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>restorable_solver &mdash; CmePy v0.3 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.3',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="CmePy v0.3 documentation" href="../index.html" />
+    <link rel="up" title="api documentation" href="../api.html" />
+    <link rel="next" title="solver" href="solver.html" />
+    <link rel="prev" title="recorder" href="recorder.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="solver.html" title="solver"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="recorder.html" title="recorder"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">CmePy v0.3 documentation</a> &raquo;</li>
+          <li><a href="../api.html" accesskey="U">api documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-cmepy.restorable_solver">
+<h1><tt class="xref docutils literal"><span class="pre">restorable_solver</span></tt><a class="headerlink" href="#module-cmepy.restorable_solver" title="Permalink to this headline">¶</a></h1>
+<p>Creates restorable solvers for the Chemical Master Equation (CME).</p>
+<dl class="class">
+<dt id="cmepy.restorable_solver.RestorableSolver">
+<em class="property">class </em><tt class="descclassname">cmepy.restorable_solver.</tt><tt class="descname">RestorableSolver</tt><big>(</big><em>model</em>, <em>sink</em>, <em>**solver_args</em><big>)</big><a class="headerlink" href="#cmepy.restorable_solver.RestorableSolver" title="Permalink to this definition">¶</a></dt>
+<dd><p>CME solver with support for setting and restoring state.</p>
+<dl class="attribute">
+<dt id="cmepy.restorable_solver.RestorableSolver.dy_dt">
+<tt class="descname">dy_dt</tt><a class="headerlink" href="#cmepy.restorable_solver.RestorableSolver.dy_dt" title="Permalink to this definition">¶</a></dt>
+<dd>Read-only property, returning the differential equations dy_dt.</dd></dl>
+
+<dl class="method">
+<dt id="cmepy.restorable_solver.RestorableSolver.restore">
+<tt class="descname">restore</tt><big>(</big><em>**solver_args</em><big>)</big><a class="headerlink" href="#cmepy.restorable_solver.RestorableSolver.restore" title="Permalink to this definition">¶</a></dt>
+<dd><p>Restore from a previous restore point fixed via set_restore_point</p>
+<p>If set_restore_point was not previously called, restores the
+state of the solver from when it was initialised.</p>
+<p>Optionally, one or more keyword arguments may be supplied, which
+then override the arguments used to restore the solver, when
+recreating the solver via cmepy.solver.create .</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cmepy.restorable_solver.RestorableSolver.restore_point_error">
+<tt class="descname">restore_point_error</tt><a class="headerlink" href="#cmepy.restorable_solver.RestorableSolver.restore_point_error" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Read only</em> property returning error at restore point.</p>
+<p>Raises NotImplementedError if <tt class="docutils literal"><span class="pre">sink</span></tt> flag is not <tt class="xref docutils literal"><span class="pre">True</span></tt>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cmepy.restorable_solver.RestorableSolver.set_restore_point">
+<tt class="descname">set_restore_point</tt><big>(</big><em>solver=None</em><big>)</big><a class="headerlink" href="#cmepy.restorable_solver.RestorableSolver.set_restore_point" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets a restore point using the current solver state.</p>
+<p>Optionally, if the argument solver is given, set a restore
+point using the current state of that solver. This consists
+of the solver&#8217;s current solution, time, and sink probability,
+if available.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cmepy.restorable_solver.RestorableSolver.step">
+<tt class="descname">step</tt><big>(</big><em>t</em><big>)</big><a class="headerlink" href="#cmepy.restorable_solver.RestorableSolver.step" title="Permalink to this definition">¶</a></dt>
+<dd><p>Advances the current solution to the time t.</p>
+<p>Values of t less that the current solution time are illegal and will
+raise a ValueError.</p>
+<p>If internal ODE solver errors are detected, a RuntimeError will be
+raised, and additional information may be displayed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cmepy.restorable_solver.RestorableSolver.t">
+<tt class="descname">t</tt><a class="headerlink" href="#cmepy.restorable_solver.RestorableSolver.t" title="Permalink to this definition">¶</a></dt>
+<dd>Read-only property, returning the current solution time t.</dd></dl>
+
+<dl class="attribute">
+<dt id="cmepy.restorable_solver.RestorableSolver.y">
+<tt class="descname">y</tt><a class="headerlink" href="#cmepy.restorable_solver.RestorableSolver.y" title="Permalink to this definition">¶</a></dt>
+<dd>Read-only property, returning the current solution y.</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="cmepy.restorable_solver.create">
+<tt class="descclassname">cmepy.restorable_solver.</tt><tt class="descname">create</tt><big>(</big><em>model</em>, <em>sink</em>, <em>**solver_args</em><big>)</big><a class="headerlink" href="#cmepy.restorable_solver.create" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a restorable solver for the CME of the given model.</p>
+<p>The arguments are the same as for <tt class="docutils literal"><span class="pre">cmepy.solver.create</span></tt>.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="recorder.html"
+                                  title="previous chapter"><tt class="docutils literal docutils literal docutils literal"><span class="pre">recorder</span></tt></a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="solver.html"
+                                  title="next chapter"><tt class="docutils literal"><span class="pre">solver</span></tt></a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/api_modules/restorable_solver.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="solver.html" title="solver"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="recorder.html" title="recorder"
+             >previous</a> |</li>
+        <li><a href="../index.html">CmePy v0.3 documentation</a> &raquo;</li>
+          <li><a href="../api.html" >api documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, Markus Hegland &amp; Reuben Fletcher-Costin.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+    </div>
+  </body>
+</html>

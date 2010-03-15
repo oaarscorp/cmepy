@@ -1,0 +1,310 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>burr08 : two competing clonotypes &mdash; CmePy v0.3 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.3',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="CmePy v0.3 documentation" href="../index.html" />
+    <link rel="up" title="Models included in cmepy.models" href="../models.html" />
+    <link rel="next" title="catalytic_reaction" href="catalytic_reaction.html" />
+    <link rel="prev" title="Models included in cmepy.models" href="../models.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="catalytic_reaction.html" title="catalytic_reaction"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../models.html" title="Models included in cmepy.models"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">CmePy v0.3 documentation</a> &raquo;</li>
+          <li><a href="../models.html" accesskey="U">Models included in <tt class="docutils literal docutils literal docutils literal"><span class="pre">cmepy.models</span></tt></a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="burr08-two-competing-clonotypes">
+<h1><tt class="xref docutils literal"><span class="pre">burr08</span></tt> : two competing clonotypes<a class="headerlink" href="#burr08-two-competing-clonotypes" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>This model defines a system of reactions</p>
+<div class="math">
+<p><img src="../_images/math/d6b80d47ffe97bd5077d9031946c8d5754f6ce18.png" alt="\star \xrightarrow{} A \xrightarrow{} \; ,
+
+\star \xrightarrow{} B \xrightarrow{} \; ;" /></p>
+</div><p>where the initial copy counts of the species <img class="math" src="../_images/math/019e9892786e493964e145e7c5cf7b700314e53b.png" alt="A"/> and <img class="math" src="../_images/math/ff5fb3d775862e2123b007eb4373ff6cc1a34d4e.png" alt="B"/> are
+both zero. The reaction propensities used for the two &#8216;birth&#8217; reactions
+<img class="math" src="../_images/math/4c3514ed276fd1be4a6e3c27f927770028f15fbb.png" alt="\star \xrightarrow{} A"/> and <img class="math" src="../_images/math/5561957e5e72fa7e46026efaeb54640ac4e372eb.png" alt="\star \xrightarrow{} B"/> are
+non-standard. The propensity for the former reaction is time-dependent,
+and is defined as</p>
+<div class="math">
+<p><img src="../_images/math/467cd96859b1324df0a6215659687cbec5152860.png" alt="60 e^{-0.1 t} [A]
+\left( \frac{0.5}{[A] + [B]} + \frac{0.5}{[A] + 1000}\right)" /></p>
+</div><p>while the propensity for the latter reaction is the same, with the species
+counts <img class="math" src="../_images/math/5974998abb6495b7e7cb9c32143687050121fe86.png" alt="[A]"/> and <img class="math" src="../_images/math/7eceadf44d26e334cca20d8894b48d390e7076ac.png" alt="[B]"/> swapped. The two &#8216;death&#8217; reactions
+are elementary and occur with rate coefficients of <img class="math" src="../_images/math/dce34f4dfb2406144304ad0d6106c5382ddd1446.png" alt="1"/>.</p>
+</div>
+<div class="section" id="running-the-model">
+<h2>Running the model<a class="headerlink" href="#running-the-model" title="Permalink to this headline">¶</a></h2>
+<p>This model is defined by the module <tt class="xref docutils literal"><span class="pre">cmepy.model.burr08</span></tt>. The source
+code for this model is listed below.</p>
+<p>To see this model in action, fire up the Python interpreter, and enter:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cmepy.models</span> <span class="kn">import</span> <span class="n">burr08</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">burr08</span><span class="o">.</span><span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>This will produce a sequence of plots of the probability distributions
+<img class="math" src="../_images/math/d58e51de8c3edc81fc856d020cce0fa555825309.png" alt="P([A], [B]; t)"/> for <img class="math" src="../_images/math/96144105ca0bd71a6a8c2ab0019fc88c7af25e79.png" alt="t = 0, 1, \ldots, 15"/>. Some of these
+plots are show below.</p>
+</div>
+<div class="section" id="sample-results">
+<h2>Sample results<a class="headerlink" href="#sample-results" title="Permalink to this headline">¶</a></h2>
+<a class="reference image-reference" href="../_images/burr08_plot_t1.png"><img alt="../_images/burr08_plot_t1.png" src="../_images/burr08_plot_t1.png" style="width: 812.0px; height: 612.0px;" /></a>
+<a class="reference image-reference" href="../_images/burr08_plot_t7.png"><img alt="../_images/burr08_plot_t7.png" src="../_images/burr08_plot_t7.png" style="width: 812.0px; height: 612.0px;" /></a>
+<a class="reference image-reference" href="../_images/burr08_plot_t13.png"><img alt="../_images/burr08_plot_t13.png" src="../_images/burr08_plot_t13.png" style="width: 812.0px; height: 612.0px;" /></a>
+</div>
+<div class="section" id="source-code">
+<h2>Source code<a class="headerlink" href="#source-code" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">a model of T cell homeostasis for two competing clonotypes</span>
+
+<span class="sd">This model definition is based on S. Macnamara and K. Burrage&#39;s formulation of </span>
+<span class="sd">Stirk et al&#39;s model:</span>
+
+<span class="sd">    E. R. Stirk, C. Molina-Par and H. A. van den Berg.</span>
+<span class="sd">    Stochastic niche structure and diversity maintenance in the T cell</span>
+<span class="sd">    repertoire. Journal of Theoretical Biology, 255:237-249, 2008.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">numpy</span>
+<span class="kn">from</span> <span class="nn">cmepy</span> <span class="kn">import</span> <span class="n">model</span>
+
+<span class="k">def</span> <span class="nf">create_model</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    create species count state space version of the competing clonotypes model</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+     
+    <span class="c"># we first define the mappings from the state space to species counts</span>
+    <span class="c"># this is pretty easy since we choose species count state space</span>
+    <span class="n">species_count_a</span> <span class="o">=</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">species_count_b</span> <span class="o">=</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    
+    <span class="c"># we now define the reaction propensities using the species counts</span>
+    <span class="k">def</span> <span class="nf">reaction_a_birth</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        propensity of birth reaction for species a</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">s_a</span> <span class="o">=</span> <span class="n">species_count_a</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">s_b</span> <span class="o">=</span> <span class="n">species_count_b</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">s_a</span> <span class="o">+</span> <span class="n">s_b</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span>
+                           <span class="mf">60.0</span><span class="o">*</span><span class="n">s_a</span><span class="o">*</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">s_a</span> <span class="o">+</span> <span class="n">s_b</span><span class="p">)</span> <span class="o">+</span>
+                                   <span class="n">numpy</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="p">(</span><span class="n">s_a</span> <span class="o">+</span> <span class="mi">10</span><span class="o">*</span><span class="mi">100</span><span class="p">))),</span>
+                           <span class="mf">0.0</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">reaction_a_decay</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mf">1.0</span><span class="o">*</span><span class="n">species_count_a</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">reaction_b_birth</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        propensity of birth reaction for species b</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">s_a</span> <span class="o">=</span> <span class="n">species_count_a</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">s_b</span> <span class="o">=</span> <span class="n">species_count_b</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">s_a</span> <span class="o">+</span> <span class="n">s_b</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span>
+                           <span class="mf">60.0</span><span class="o">*</span><span class="n">s_b</span><span class="o">*</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">s_a</span> <span class="o">+</span> <span class="n">s_b</span><span class="p">)</span> <span class="o">+</span>
+                                   <span class="n">numpy</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="p">(</span><span class="n">s_b</span> <span class="o">+</span> <span class="mi">10</span><span class="o">*</span><span class="mi">100</span><span class="p">))),</span>
+                           <span class="mf">0.0</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">reaction_b_decay</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mf">1.0</span><span class="o">*</span><span class="n">species_count_b</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">model</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="s">&#39;T Cell clonoTypes&#39;</span><span class="p">,</span>
+        <span class="n">reactions</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s">&#39;*-&gt;A&#39;</span><span class="p">,</span>
+            <span class="s">&#39;A-&gt;*&#39;</span><span class="p">,</span>
+            <span class="s">&#39;*-&gt;B&#39;</span><span class="p">,</span>
+            <span class="s">&#39;B-&gt;*&#39;</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="n">propensities</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">reaction_a_birth</span><span class="p">,</span>
+            <span class="n">reaction_a_decay</span><span class="p">,</span>
+            <span class="n">reaction_b_birth</span><span class="p">,</span>
+            <span class="n">reaction_b_decay</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="n">transitions</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+            <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+            <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+            <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span>
+        <span class="p">),</span>
+        <span class="n">species</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s">&#39;A&#39;</span><span class="p">,</span>
+            <span class="s">&#39;B&#39;</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="n">species_counts</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">species_count_a</span><span class="p">,</span>
+            <span class="n">species_count_b</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="n">shape</span> <span class="o">=</span> <span class="n">shape</span><span class="p">,</span>
+        <span class="n">initial_state</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+    <span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">create_time_dependencies</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    create time dependencies for the competing clonotypes model</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c"># 0-th and 2-nd reactions are scaled by the following</span>
+    <span class="c"># time dependent factor</span>
+    <span class="k">return</span> <span class="p">{</span><span class="nb">frozenset</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span> <span class="p">:</span> <span class="k">lambda</span> <span class="n">t</span> <span class="p">:</span> <span class="n">math</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.1</span><span class="o">*</span><span class="n">t</span><span class="p">)}</span>
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Solves the competing clonotypes model and plots results</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="kn">import</span> <span class="nn">pylab</span>
+    
+    <span class="kn">from</span> <span class="nn">cmepy</span> <span class="kn">import</span> <span class="n">solver</span><span class="p">,</span> <span class="n">recorder</span>
+    
+    <span class="n">m</span> <span class="o">=</span> <span class="n">create_model</span><span class="p">()</span>
+    
+    <span class="n">s</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">m</span><span class="p">,</span>
+        <span class="n">sink</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span>
+        <span class="n">time_dependencies</span> <span class="o">=</span> <span class="n">create_time_dependencies</span><span class="p">()</span>
+    <span class="p">)</span>
+    
+    <span class="n">r</span> <span class="o">=</span> <span class="n">recorder</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+        <span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">species</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">species_counts</span><span class="p">)</span>
+    <span class="p">)</span>
+    
+    <span class="n">t_final</span> <span class="o">=</span> <span class="mf">15.0</span>
+    <span class="n">steps_per_time</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">time_steps</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">t_final</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">steps_per_time</span><span class="o">*</span><span class="n">t_final</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    
+    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">time_steps</span><span class="p">:</span>
+        <span class="n">s</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+        <span class="n">p</span><span class="p">,</span> <span class="n">p_sink</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">y</span>
+        <span class="k">print</span> <span class="s">&#39;t : </span><span class="si">%.2f</span><span class="s">, truncation error : </span><span class="si">%.2g</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">p_sink</span><span class="p">)</span>
+        <span class="n">r</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
+    
+    <span class="c"># display a series of contour plots of P(A, B; t) for varying t</span>
+    
+    <span class="n">measurement</span> <span class="o">=</span> <span class="n">r</span><span class="p">[(</span><span class="s">&#39;A&#39;</span><span class="p">,</span> <span class="s">&#39;B&#39;</span><span class="p">)]</span>
+    <span class="n">epsilon</span> <span class="o">=</span> <span class="mf">1.0e-5</span>
+    <span class="k">for</span> <span class="n">t</span><span class="p">,</span> <span class="n">marginal</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">measurement</span><span class="o">.</span><span class="n">times</span><span class="p">,</span> <span class="n">measurement</span><span class="o">.</span><span class="n">distributions</span><span class="p">):</span>
+        <span class="n">pylab</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+        <span class="n">pylab</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span>
+            <span class="n">marginal</span><span class="o">.</span><span class="n">compress</span><span class="p">(</span><span class="n">epsilon</span><span class="p">)</span><span class="o">.</span><span class="n">to_dense</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">pylab</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;P(A, B; t = %.f)&#39;</span> <span class="o">%</span> <span class="n">t</span><span class="p">)</span>
+        <span class="n">pylab</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;species A count&#39;</span><span class="p">)</span>
+        <span class="n">pylab</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;species B count&#39;</span><span class="p">)</span>
+    <span class="n">pylab</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="../index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference" href="#"><tt class="docutils literal"><span class="pre">burr08</span></tt> : two competing clonotypes</a><ul>
+<li><a class="reference" href="#overview">Overview</a></li>
+<li><a class="reference" href="#running-the-model">Running the model</a></li>
+<li><a class="reference" href="#sample-results">Sample results</a></li>
+<li><a class="reference" href="#source-code">Source code</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="../models.html"
+                                  title="previous chapter">Models included in <tt class="docutils literal docutils literal"><span class="pre">cmepy.models</span></tt></a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="catalytic_reaction.html"
+                                  title="next chapter"><tt class="docutils literal"><span class="pre">catalytic_reaction</span></tt></a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/models/burr08.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="catalytic_reaction.html" title="catalytic_reaction"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../models.html" title="Models included in cmepy.models"
+             >previous</a> |</li>
+        <li><a href="../index.html">CmePy v0.3 documentation</a> &raquo;</li>
+          <li><a href="../models.html" >Models included in <tt class="docutils literal docutils literal docutils literal"><span class="pre">cmepy.models</span></tt></a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, Markus Hegland &amp; Reuben Fletcher-Costin.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+    </div>
+  </body>
+</html>

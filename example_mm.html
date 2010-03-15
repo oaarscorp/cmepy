@@ -1,0 +1,501 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Example: enzyme kinetics &mdash; CmePy v0.3 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '#',
+        VERSION:     '0.3',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="CmePy v0.3 documentation" href="index.html" />
+    <link rel="next" title="Important cmepy modules" href="modules.html" />
+    <link rel="prev" title="Example: a single reaction" href="example_simple.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="modules.html" title="Important cmepy modules"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="example_simple.html" title="Example: a single reaction"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">CmePy v0.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="example-enzyme-kinetics">
+<span id="id1"></span><h1>Example: enzyme kinetics<a class="headerlink" href="#example-enzyme-kinetics" title="Permalink to this headline">¶</a></h1>
+<p>Consider the following simple enzymatic reaction:
+<img class="math" src="_images/math/c254b0b3260634cc2ce5e21e25ad8972fdb3fee9.png" alt="S + E \leftrightarrow{} C \rightarrow{} P + E"/>.</p>
+<p>In this system, the enzyme <img class="math" src="_images/math/fa2fa899f0afb05d6837885523503a2d4df434f9.png" alt="E"/> acts as a catalyst for the transformation
+of the substrate <img class="math" src="_images/math/ad28c83c99a8fd0dd2e2e594c9d02ee532765a0a.png" alt="S"/> into the product <img class="math" src="_images/math/4b4cade9ca8a2c8311fafcf040bc5b15ca507f52.png" alt="P"/>, via the complex
+<img class="math" src="_images/math/c3355896da590fc491a10150a50416687626d7cc.png" alt="C"/>.</p>
+<p>We can write this as a system of three reactions</p>
+<div class="math">
+<p><img src="_images/math/0f415e7d82f7a4d5cc5d8ea5dd894df765ea713e.png" alt="S + E \xrightarrow[]{k_1} C \; ,
+
+C \xrightarrow[]{k_2} S + E \; ,
+
+C \xrightarrow[]{k_3} P + E \; ;" /></p>
+</div><p>with kinetic parameters
+<img class="math" src="_images/math/0432630049cc79baaab10f4cf44eedbea48cc4fd.png" alt="k_1 = 0.01, k_2 = 35, k_3 = 30"/>
+and initial copy counts
+<img class="math" src="_images/math/3215312eadb24ebfa7bbd49bd54bbed1094d9442.png" alt="S_0 = 50, E_0 = 10, C_0 = 0, P_0 = 0"/>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This type of enzymatic reaction is commonly approximated by
+Michaelis-Menten kinetics. We will not employ the Michaelis-Menten
+approximation here, but instead solve the chemical master equation
+for the full system of reactions.</p>
+</div>
+<div class="section" id="defining-the-model">
+<h2>Defining the model<a class="headerlink" href="#defining-the-model" title="Permalink to this headline">¶</a></h2>
+<p>We shall use species counts as the state space for this model.</p>
+<div class="section" id="species-count-functions">
+<span id="id2"></span><h3>Species count functions<a class="headerlink" href="#species-count-functions" title="Permalink to this headline">¶</a></h3>
+<p>Let <img class="math" src="_images/math/f1861360ac97ae334105de6ba8cff3a2dbb1a31d.png" alt="[S], [E], [C], [P]"/> denote the copy counts of the species
+<img class="math" src="_images/math/af6289f6e66c713f0d8931bb2d221bed7201f6d8.png" alt="S, E, C, P"/>.</p>
+<p>By considering conservation laws,
+we obtain two constraints on the species counts:</p>
+<div class="math">
+<p><img src="_images/math/a585aa7389cbdecefd998d897ad5d4e1d9f886d7.png" alt="S_0 &amp; = [S] + [C] + [P] \; ,\\
+E_0 &amp; = [E] + [C] \; ." /></p>
+</div><p>It is sufficient to track the copy counts of two of the species. We shall
+track <img class="math" src="_images/math/600580b5de8084177c6fd276063e6f870b313abe.png" alt="[S]"/> and <img class="math" src="_images/math/8eb0d5cccb9df6a659750553ad358f3f7c446956.png" alt="[C]"/>.</p>
+<p>Define <img class="math" src="_images/math/53e79a005b4d27e78a62146c707f906a88fb65fa.png" alt="x = (x_0, x_1) := ([S], [C]) \in \mathbb{N}^2"/>.
+Then we can express the counts of all four species as functions of
+<img class="math" src="_images/math/26eeb5258ca5099acf8fe96b2a1049c48c89a5e6.png" alt="x"/>: and the initial counts of <img class="math" src="_images/math/ad28c83c99a8fd0dd2e2e594c9d02ee532765a0a.png" alt="S"/> and <img class="math" src="_images/math/fa2fa899f0afb05d6837885523503a2d4df434f9.png" alt="E"/>:</p>
+<div class="math">
+<p><img src="_images/math/2b12048d13c484860c262085f1deef3786038fc6.png" alt="[S] &amp; = x_0 \; , \\
+[E] &amp; = E_0 - x_1 \; , \\
+[C] &amp; = x_1 \; , \\
+[P] &amp; = S_0 - x_0 - x_1 \; ." /></p>
+</div><p>We can translate this formulation quite naturally into Python code.
+Let each state <tt class="docutils literal"><span class="pre">x</span></tt> in the state space be a tuple of length 2.
+We shall define
+<tt class="docutils literal"><span class="pre">x[0]</span></tt> as <img class="math" src="_images/math/600580b5de8084177c6fd276063e6f870b313abe.png" alt="[S]"/>, the copy count of the substrate, and
+<tt class="docutils literal"><span class="pre">x[1]</span></tt> as <img class="math" src="_images/math/8eb0d5cccb9df6a659750553ad358f3f7c446956.png" alt="[C]"/>, the copy count of the complex.
+We define four functions <tt class="docutils literal"><span class="pre">s</span></tt>, <tt class="docutils literal"><span class="pre">e</span></tt>, <tt class="docutils literal"><span class="pre">c</span></tt>, <tt class="docutils literal"><span class="pre">p</span></tt> that take a
+state <tt class="docutils literal"><span class="pre">x</span></tt> and return the corresponding species count:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">s_0</span> <span class="o">=</span> <span class="mi">50</span>
+<span class="n">e_0</span> <span class="o">=</span> <span class="mi">10</span>
+
+<span class="n">s</span> <span class="o">=</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">e</span> <span class="o">=</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="n">e_0</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">c</span> <span class="o">=</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">p</span> <span class="o">=</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="n">s_0</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>For example, to evaluate the copy count of the species <img class="math" src="_images/math/4b4cade9ca8a2c8311fafcf040bc5b15ca507f52.png" alt="P"/>, given
+that there are 2 copies of <img class="math" src="_images/math/ad28c83c99a8fd0dd2e2e594c9d02ee532765a0a.png" alt="S"/> and 3 copies of <img class="math" src="_images/math/c3355896da590fc491a10150a50416687626d7cc.png" alt="C"/>, we would
+call the function <tt class="docutils literal"><span class="pre">p</span></tt> with the arguments 2 and 3, that is, <tt class="docutils literal"><span class="pre">p(2,</span> <span class="pre">3)</span></tt>.
+This function call will return the integer <tt class="docutils literal"><span class="pre">45</span></tt>
+(recall <img class="math" src="_images/math/c60cd363418333c4e612f5cd0f0fde59c6c96492.png" alt="S_0 = 50"/>, so <img class="math" src="_images/math/6bbb33e3e9ddda5d8714bc53655e59f42fa5a4b3.png" alt="[P] = S_0 - [S] - [C] = 50 - 2 - 3"/>).</p>
+</div>
+<div class="section" id="propensity-functions">
+<h3>Propensity functions<a class="headerlink" href="#propensity-functions" title="Permalink to this headline">¶</a></h3>
+<p>We can express the propensity functions <img class="math" src="_images/math/f7d23d38784e44f768e6a4208909cda952254b02.png" alt="\nu_1, \nu_2, \nu_3"/> of the
+three reactions in terms of the state <img class="math" src="_images/math/3750127ee652e75e8ffcde02a9b1cb3efa4e0b2b.png" alt="([S], [C]) \in \mathbb{N}^2"/> :</p>
+<div class="math">
+<p><img src="_images/math/a74c2920d6023cdb2f56f0e17b42f918dfa92ca7.png" alt="\nu_1([S], [C]) := &amp; k_1[S][E] \; , \\
+\nu_2([S], [C]) := &amp; k_2[C] \; ,\\
+\nu_3([S], [C]) := &amp; k_3[C] \; ." /></p>
+</div><p>Equivalently, in Python we may define these propensity functions in terms
+of our existing species count functions <tt class="docutils literal"><span class="pre">s</span></tt>, <tt class="docutils literal"><span class="pre">e</span></tt>, <tt class="docutils literal"><span class="pre">c</span></tt> and <tt class="docutils literal"><span class="pre">p</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">propensities</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="mf">0.01</span><span class="o">*</span><span class="n">s</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">e</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">),</span>
+    <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="mf">35.0</span><span class="o">*</span><span class="n">c</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">),</span>
+    <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="mf">30.0</span><span class="o">*</span><span class="n">c</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">),</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="state-transitions">
+<h3>State transitions<a class="headerlink" href="#state-transitions" title="Permalink to this headline">¶</a></h3>
+<p>We must now define the state transitions associated with these three reactions.
+Recall our chosen state representation is
+<img class="math" src="_images/math/5788fa0a369ff8630363b6be81a1f9791e47e921.png" alt="(x_0, x_1) = ([S], [C]) \in \mathbb{N}^2"/>. The first
+reaction <img class="math" src="_images/math/c4b4ae5b9802d11a1435cd6c0ee749c188fc1881.png" alt="S + E \xrightarrow[]{k_1} C"/> reduces the copy count of
+<img class="math" src="_images/math/ad28c83c99a8fd0dd2e2e594c9d02ee532765a0a.png" alt="S"/> by one, but increases the copy count of <img class="math" src="_images/math/c3355896da590fc491a10150a50416687626d7cc.png" alt="C"/> by one.
+In <img class="math" src="_images/math/e3de1e60a9c3b5da195ea860254cb96b0660181c.png" alt="(x_0, x_1)"/> coordinates, this corresponds to the transition:</p>
+<div class="math">
+<p><img src="_images/math/8b8c028563fb429e8a799f793b36d1f8a5da5ad9.png" alt="(x_0, x_1) \mapsto &amp; (x_0 - 1, x_1 + 1) = (x_0, x_1) + (-1, 1) \; ." /></p>
+</div><p>We represent this transition in Python code as the tuple <tt class="docutils literal"><span class="pre">(-1,</span> <span class="pre">1)</span></tt>.</p>
+<p>Since the second reaction is the inverse of the first reaction, the transition
+for the second reaction <img class="math" src="_images/math/4f94b1a901ef8df29604e42eae508edad3047d8b.png" alt="C \xrightarrow[]{k_2} S + E"/>
+is the negation (i.e. the additive inverse)
+of the transition for the first reaction, that is, <tt class="docutils literal"><span class="pre">(1,</span> <span class="pre">-1)</span></tt>.</p>
+<p>The transition for the third reaction <img class="math" src="_images/math/29031222958cedd51aeccb7d8f2b5b334f608404.png" alt="C \xrightarrow[]{k_3} P + E"/>
+is <tt class="docutils literal"><span class="pre">(0,</span> <span class="pre">-1)</span></tt>, as this reaction consumes one copy of <img class="math" src="_images/math/c3355896da590fc491a10150a50416687626d7cc.png" alt="C"/>, and neither
+produces nor consumes <img class="math" src="_images/math/ad28c83c99a8fd0dd2e2e594c9d02ee532765a0a.png" alt="S"/>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Although the three reactions also modify the copy counts of the species
+<img class="math" src="_images/math/fa2fa899f0afb05d6837885523503a2d4df434f9.png" alt="E"/> and <img class="math" src="_images/math/4b4cade9ca8a2c8311fafcf040bc5b15ca507f52.png" alt="P"/>, these modifications do not need to be
+<em>explicitly</em> accounted for by the transitions. The transitions only need
+to contain the change in species counts for those species in the state space.</p>
+</div>
+<p>We define a tuple named <tt class="docutils literal"><span class="pre">transitions</span></tt> which contains the transitions for all
+three reactions, using the same ordering as the <tt class="docutils literal"><span class="pre">propensities</span></tt> tuple
+containing the propensity functions:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">transitions</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="creating-the-model">
+<h3>Creating the model<a class="headerlink" href="#creating-the-model" title="Permalink to this headline">¶</a></h3>
+<p>By combining the species count functions with the propensity functions
+and the transitions we may construct a model <tt class="docutils literal"><span class="pre">m</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">cmepy</span> <span class="kn">import</span> <span class="n">model</span>
+
+<span class="n">s_0</span> <span class="o">=</span> <span class="mi">50</span>
+<span class="n">e_0</span> <span class="o">=</span> <span class="mi">10</span>
+
+<span class="c"># species count function definitions</span>
+<span class="n">s</span> <span class="o">=</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">e</span> <span class="o">=</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="n">e_0</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">c</span> <span class="o">=</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">p</span> <span class="o">=</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="n">s_0</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="c"># model definition, in terms of species count functions</span>
+<span class="n">m</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="n">species_counts</span> <span class="o">=</span> <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="p">),</span>
+    <span class="n">propensities</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="mf">0.01</span><span class="o">*</span><span class="n">s</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">e</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">),</span>
+        <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="mf">35.0</span><span class="o">*</span><span class="n">c</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">),</span>
+        <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="mf">30.0</span><span class="o">*</span><span class="n">c</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">),</span>
+    <span class="p">),</span>
+    <span class="n">transitions</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+        <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span>
+        <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="p">),</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Observe that the propensity functions and state transitions for the reactions
+are passed as keyword arguments to <tt class="docutils literal"><span class="pre">model.create</span></tt>, using the keywords
+<tt class="docutils literal"><span class="pre">propensities</span></tt> and <tt class="docutils literal"><span class="pre">transitions</span></tt> respectively. Note also that we have
+also passed a tuple containing the species count functions <tt class="docutils literal"><span class="pre">s</span></tt>, <tt class="docutils literal"><span class="pre">e</span></tt>, <tt class="docutils literal"><span class="pre">c</span></tt>
+and <tt class="docutils literal"><span class="pre">p</span></tt> as the keyword argument <tt class="docutils literal"><span class="pre">species_count</span></tt>.</p>
+</div>
+<div class="section" id="finishing-touches">
+<h3>Finishing touches<a class="headerlink" href="#finishing-touches" title="Permalink to this headline">¶</a></h3>
+<p>To complete the model, we will add additional keyword arguments
+<tt class="docutils literal"><span class="pre">shape</span></tt>, <tt class="docutils literal"><span class="pre">initial_state</span></tt>, <tt class="docutils literal"><span class="pre">name</span></tt>, <tt class="docutils literal"><span class="pre">species</span></tt> and <tt class="docutils literal"><span class="pre">reactions</span></tt>.
+These first two initial arguments control the extent of the state space,
+and the initial state of the probability distribution, while the latter
+three arguments are used to define names (as strings) for the model,
+the species, and the reactions, respectively.</p>
+<p>We need to specify the shape of the state space for our model <tt class="docutils literal"><span class="pre">m</span></tt>.
+Recall states in our state space have the form
+<img class="math" src="_images/math/3833a7bd401d3be03f916bb1d1a5d7483c6b3b07.png" alt="x = ([S], [C]) \in \mathbb{N}^2"/>. Recall also the constraints mentioned
+earlier in the <a class="reference" href="#species-count-functions"><em>Species count functions</em></a> section. It follows that
+<img class="math" src="_images/math/93f3339efeadd778b13abc3a882cccec9e58823f.png" alt="0 \leq [S] \leq S_0"/>, while <img class="math" src="_images/math/aae67b1d0bcc239e06129000a2b54541d6ffcf00.png" alt="0 \leq [C] \leq \min{}\{E_0, S_0\}"/>.
+Therefore, the tuple of upper bounds for state space coordinates is
+<img class="math" src="_images/math/a82117debb795b23aad5cde9467d17f7c4e70a09.png" alt="(S_0, \min{}\{E_0, S_0\})"/>. In Python, the corresponding minimal
+<em>exclusive</em> upper bound is the tuple <tt class="docutils literal"><span class="pre">(s_0</span> <span class="pre">+</span> <span class="pre">1,</span> <span class="pre">min(e_0,</span> <span class="pre">s_0)</span> <span class="pre">+</span> <span class="pre">1)</span></tt>.
+This is the value we use for the shape of our state space.</p>
+<p>We also need to specify the initial state for our model. Recall that
+<img class="math" src="_images/math/c60cd363418333c4e612f5cd0f0fde59c6c96492.png" alt="S_0 = 50"/> and <img class="math" src="_images/math/02b4a705c03b28ffd22eb49d70f2bbbf8386fe02.png" alt="E_0 = 10"/>, while <img class="math" src="_images/math/5cd2dcc196cdf02fbb63c7e4b1673f281e37f3cf.png" alt="C_0 = P_0 = 0"/>.
+In <img class="math" src="_images/math/83c2b62cb0a43c8ccaee4988d80cd076cbdc99c9.png" alt="([S], [C])"/> coordinates, these initial values are the state
+<img class="math" src="_images/math/e3c5eda6246787319809033ec90186e8041787e4.png" alt="(S_0, E_0)"/>. Therefore we set <tt class="docutils literal"><span class="pre">initial_state</span> <span class="pre">=</span> <span class="pre">(s_0,</span> <span class="pre">e_0)</span></tt>.</p>
+<p>The values of the <tt class="docutils literal"><span class="pre">name</span></tt>, <tt class="docutils literal"><span class="pre">species</span></tt> and <tt class="docutils literal"><span class="pre">reactions</span></tt> arguments are all
+straight-forward.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">cmepy</span> <span class="kn">import</span> <span class="n">model</span>
+<span class="kn">from</span> <span class="nn">cmepy.util</span> <span class="kn">import</span> <span class="n">non_neg</span>
+
+<span class="n">s_0</span> <span class="o">=</span> <span class="mi">50</span>
+<span class="n">e_0</span> <span class="o">=</span> <span class="mi">10</span>
+
+<span class="c"># species count function definitions</span>
+<span class="n">s</span> <span class="o">=</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">e</span> <span class="o">=</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="n">non_neg</span><span class="p">(</span><span class="n">e_0</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">c</span> <span class="o">=</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">p</span> <span class="o">=</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="n">non_neg</span><span class="p">(</span><span class="n">s_0</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+<span class="c"># model definition, in terms of species count functions</span>
+<span class="n">m</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s">&#39;enzyme kinetics&#39;</span><span class="p">,</span>
+    <span class="n">species</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;S&#39;</span><span class="p">,</span> <span class="s">&#39;E&#39;</span><span class="p">,</span> <span class="s">&#39;C&#39;</span><span class="p">,</span> <span class="s">&#39;P&#39;</span><span class="p">,</span> <span class="p">),</span>
+    <span class="n">species_counts</span> <span class="o">=</span> <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="p">),</span>
+    <span class="n">reactions</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;E+S-&gt;C&#39;</span><span class="p">,</span> <span class="s">&#39;C-&gt;E+S&#39;</span><span class="p">,</span> <span class="s">&#39;C-&gt;E+P&#39;</span><span class="p">,</span> <span class="p">),</span>
+    <span class="n">propensities</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="mf">0.01</span><span class="o">*</span><span class="n">s</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">e</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">),</span>
+        <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="mf">35.0</span><span class="o">*</span><span class="n">c</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">),</span>
+        <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="mf">30.0</span><span class="o">*</span><span class="n">c</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">),</span>
+    <span class="p">),</span>
+    <span class="n">transitions</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+        <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span>
+        <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="p">),</span>
+    <span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">s_0</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">s_0</span><span class="p">,</span> <span class="n">e_0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
+    <span class="n">initial_state</span> <span class="o">=</span> <span class="p">(</span><span class="n">s_0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Now, the above model definition includes one unexplained touch :
+the use of the <tt class="docutils literal"><span class="pre">non_neg</span></tt> function from <tt class="docutils literal"><span class="pre">cmepy.util</span></tt>.</p>
+<p>Recall the definition of the species count function
+<tt class="docutils literal"><span class="pre">p</span> <span class="pre">=</span> <span class="pre">lambda</span> <span class="pre">*x</span> <span class="pre">:</span> <span class="pre">s_0</span> <span class="pre">-</span> <span class="pre">x[0]</span> <span class="pre">-</span> <span class="pre">x[1]</span></tt>.
+If <tt class="docutils literal"><span class="pre">a</span> <span class="pre">+</span> <span class="pre">b</span> <span class="pre">&gt;</span> <span class="pre">s_0</span></tt>, then <tt class="docutils literal"><span class="pre">p(a,</span> <span class="pre">b)</span> <span class="pre">&lt;</span> <span class="pre">0</span></tt>, that is, <tt class="docutils literal"><span class="pre">p</span></tt> returns a negative
+integer for the species count of <img class="math" src="_images/math/4b4cade9ca8a2c8311fafcf040bc5b15ca507f52.png" alt="P"/>. Yuck!
+Of course, this will only happen for nonsensical values of the copy count
+<tt class="docutils literal"><span class="pre">a</span></tt> of <img class="math" src="_images/math/ad28c83c99a8fd0dd2e2e594c9d02ee532765a0a.png" alt="S"/>, and the copy count <tt class="docutils literal"><span class="pre">b</span></tt> of <img class="math" src="_images/math/c3355896da590fc491a10150a50416687626d7cc.png" alt="C"/>.
+To avoid issues arising with negative species
+counts, we can simply ensure the species count function <tt class="docutils literal"><span class="pre">p</span></tt> is defined to be
+zero for nonsensical inputs. We achieve this by using the <tt class="docutils literal"><span class="pre">non_neg</span></tt> function,
+which acts more-or-less as follows:</p>
+<div class="math">
+<p><img src="_images/math/173c5f8930b1cf399bb8fa8f604a91c92a885e78.png" alt="\textrm{non\_neg}(x) :=
+\begin{cases} x : \textrm{if $x \geq 0$} \\
+0 : \textrm{otherwise}
+\end{cases}" /></p>
+</div><p>Using this <tt class="docutils literal"><span class="pre">non_neg</span></tt> function, we have modified our existing definitions of
+the species count functions <tt class="docutils literal"><span class="pre">e</span></tt> and <tt class="docutils literal"><span class="pre">p</span></tt> to read:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">e</span> <span class="o">=</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="n">non_neg</span><span class="p">(</span><span class="n">e_0</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">p</span> <span class="o">=</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="n">non_neg</span><span class="p">(</span><span class="n">s_0</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>The actual implementation of the <tt class="docutils literal"><span class="pre">non_neg</span></tt> function in Python is somewhat
+subtle. The &#8216;obvious&#8217; definition is to let:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">non_neg</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="nb">max</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Unfortunately, this is wrong!
+The reason why this definition is unsatisfactory is that it only works
+for scalar arguments <tt class="docutils literal"><span class="pre">x</span></tt>.</p>
+<p class="last">CmePy relies upon the species count and propensity functions also being
+well behaved for vectorised inputs, in order to make efficient use of
+the underlying <tt class="xref docutils literal"><span class="pre">numpy</span></tt> array operations. Because of this, <tt class="docutils literal"><span class="pre">non_neg</span></tt>
+is defined in terms of <tt class="docutils literal"><span class="pre">numpy.maximum</span></tt>, which acts exactly like
+the built-in Python <tt class="docutils literal"><span class="pre">max</span></tt> function, except it is well behaved if one or
+more of its arguments is a (multi-dimensional) array. In contrast,
+attempting to pass arrays as arguments to the built-in <tt class="docutils literal"><span class="pre">max</span></tt> function
+will raise an exception.</p>
+</div>
+</div>
+</div>
+<div class="section" id="solving-the-model-and-plotting-results">
+<h2>Solving the model and plotting results<a class="headerlink" href="#solving-the-model-and-plotting-results" title="Permalink to this headline">¶</a></h2>
+<p>Defining the model for this enzyme kinetics system is quite a lot of work.
+Thankfully, once we have the model correctly defined, it is easy to solve
+the model and obtain results using CmePy.</p>
+<p>First, create a solver instance to solve the enzymatic reaction model:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">cmepy</span> <span class="kn">import</span> <span class="n">solver</span>
+
+<span class="n">enzyme_solver</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">m</span><span class="p">,</span>
+    <span class="n">sink</span> <span class="o">=</span> <span class="bp">False</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>For this model, all reachable system states are included in the model&#8217;s
+state space, therefore we do not require a &#8216;sink&#8217; state to store
+probability that leaks from the state space.</p>
+<p>Second, create a recorder instance to record the solutions generated by the
+solver:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">cmepy</span> <span class="kn">import</span> <span class="n">recorder</span>
+
+<span class="n">species</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;S&#39;</span><span class="p">,</span> <span class="s">&#39;E&#39;</span><span class="p">,</span> <span class="s">&#39;C&#39;</span><span class="p">,</span> <span class="s">&#39;P&#39;</span><span class="p">]</span>
+
+<span class="n">r</span> <span class="o">=</span> <span class="n">recorder</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="p">(</span><span class="n">species</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">species_counts</span><span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>The arguments to <tt class="xref docutils literal"><span class="pre">recorder.create()</span></tt> are used to define a group of random
+variables for the species counts. The list of strings <tt class="docutils literal"><span class="pre">species</span></tt>
+defines the names of the variables, while <tt class="docutils literal"><span class="pre">m.species_counts</span></tt> defines the
+functions used to map states in the state space to states of these species
+count random variables. Recall <tt class="docutils literal"><span class="pre">m.species_counts</span></tt> is just the tuple of
+species count functions that we created earlier when defining the model <tt class="docutils literal"><span class="pre">m</span></tt>.</p>
+<p>Third, advance the solution by stepping the solver, while writing the solutions
+to the recorder:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">numpy</span>
+
+<span class="n">time_steps</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">30.0</span><span class="p">,</span> <span class="mi">101</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">time_steps</span><span class="p">:</span>
+    <span class="n">enzyme_solver</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+    <span class="n">r</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">enzyme_solver</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The fourth and final step is to do something with the results. One easy way to
+produce some graphs of the expected values and standard deviations is via the
+function <a title="cmepy.recorder.display_plots" class="reference" href="api_modules/recorder.html#cmepy.recorder.display_plots"><tt class="xref docutils literal"><span class="pre">cmepy.recorder.display_plots()</span></tt></a>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">recorder</span><span class="o">.</span><span class="n">display_plots</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This call displays the following two plots using the <tt class="xref docutils literal"><span class="pre">matplotlib</span></tt> package:</p>
+<a class="reference image-reference" href="_images/enzymatic_reaction_ev.png"><img alt="_images/enzymatic_reaction_ev.png" src="_images/enzymatic_reaction_ev.png" style="width: 406.0px; height: 306.0px;" /></a>
+<a class="reference image-reference" href="_images/enzymatic_reaction_std_dev.png"><img alt="_images/enzymatic_reaction_std_dev.png" src="_images/enzymatic_reaction_std_dev.png" style="width: 406.0px; height: 306.0px;" /></a>
+<p>On the other hand, we can use <tt class="xref docutils literal"><span class="pre">matplotlib</span></tt>&#8216;s <tt class="xref docutils literal"><span class="pre">pylab</span></tt> interface
+directly, to create some customised plots. To see an example of this,
+replace the <tt class="docutils literal"><span class="pre">recorder.display_plots(r)</span></tt> statement with the following code:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">pylab</span>
+
+<span class="n">species_colours</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">&#39;S&#39;</span> <span class="p">:</span> <span class="s">&#39;r&#39;</span><span class="p">,</span>
+    <span class="s">&#39;E&#39;</span> <span class="p">:</span> <span class="s">&#39;k&#39;</span><span class="p">,</span>
+    <span class="s">&#39;C&#39;</span> <span class="p">:</span> <span class="s">&#39;g&#39;</span><span class="p">,</span>
+    <span class="s">&#39;P&#39;</span> <span class="p">:</span> <span class="s">&#39;b&#39;</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="n">pylab</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">species</span><span class="p">:</span>
+    <span class="n">colour</span> <span class="o">=</span> <span class="n">species_colours</span><span class="p">[</span><span class="n">var</span><span class="p">]</span>
+    <span class="n">measurement</span> <span class="o">=</span> <span class="n">r</span><span class="p">[</span><span class="n">var</span><span class="p">]</span>
+
+    <span class="n">mu</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">measurement</span><span class="o">.</span><span class="n">expected_value</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">))</span>
+    <span class="n">sigma</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">measurement</span><span class="o">.</span><span class="n">standard_deviation</span><span class="p">)</span>
+
+    <span class="n">mu_style</span> <span class="o">=</span> <span class="s">&#39;-&#39;</span><span class="o">+</span><span class="n">colour</span>
+    <span class="n">mu_pm_sigma_style</span> <span class="o">=</span> <span class="s">&#39;--&#39;</span><span class="o">+</span><span class="n">colour</span>
+    <span class="n">pylab</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">measurement</span><span class="o">.</span><span class="n">times</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">mu_style</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="n">var</span><span class="p">)</span>
+    <span class="n">pylab</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">measurement</span><span class="o">.</span><span class="n">times</span><span class="p">,</span> <span class="n">mu</span> <span class="o">+</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">mu_pm_sigma_style</span><span class="p">)</span>
+    <span class="n">pylab</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">measurement</span><span class="o">.</span><span class="n">times</span><span class="p">,</span> <span class="n">mu</span> <span class="o">-</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">mu_pm_sigma_style</span><span class="p">)</span>
+
+<span class="n">title_lines</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s">&#39;Enzymatic Reaction Species Counts:&#39;</span><span class="p">,</span>
+    <span class="s">&#39;expected values $\pm$ 1 standard deviation&#39;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">pylab</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">title_lines</span><span class="p">))</span>
+<span class="n">pylab</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;time&#39;</span><span class="p">)</span>
+<span class="n">pylab</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;species count&#39;</span><span class="p">)</span>
+<span class="n">pylab</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">pylab</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Observe that we access the measurement for the random variable named <tt class="docutils literal"><span class="pre">var</span></tt>
+from the recorder <tt class="docutils literal"><span class="pre">r</span></tt> using <tt class="docutils literal"><span class="pre">measurement</span> <span class="pre">=</span> <span class="pre">r[var]</span></tt>, then access lists of
+the measurement times, expected values, and standard deviations, via
+<tt class="docutils literal"><span class="pre">measurement.times</span></tt>, <tt class="docutils literal"><span class="pre">measurement.expected_value</span></tt> and
+<tt class="docutils literal"><span class="pre">measurement.standard_deviation</span></tt>, respectively. In order to perform
+element-wise addition and subtraction operations between the expected value
+and standard deviation measurements, we transform them to arrays via
+<tt class="xref docutils literal"><span class="pre">numpy.array()</span></tt>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Each expected value measurement computed by the recorder is in fact a
+<em>tuple</em>.
+This means that <tt class="docutils literal"><span class="pre">numpy.array(measurement.expected_value)</span></tt> is an array of
+shape <tt class="docutils literal"><span class="pre">(101,</span> <span class="pre">1)</span></tt>, since <tt class="docutils literal"><span class="pre">101</span></tt> is the number of times we called
+the <tt class="docutils literal"><span class="pre">r.write(t,</span> <span class="pre">s.y)</span></tt>. We reshape this expected value array to have the
+shape <tt class="docutils literal"><span class="pre">(101,</span> <span class="pre">)</span></tt>, which is the shape of the standard deviation array
+<tt class="docutils literal"><span class="pre">numpy.array(measurement.standard_deviation)</span></tt>, <tt class="docutils literal"><span class="pre">(101,</span> <span class="pre">)</span></tt>.</p>
+</div>
+<p>When run, this code generates the following plot:</p>
+<a class="reference image-reference" href="_images/enzymatic_reaction_custom.png"><div align="center" class="align-center"><img alt="_images/enzymatic_reaction_custom.png" class="align-center" src="_images/enzymatic_reaction_custom.png" style="width: 609.0px; height: 459.0px;" /></div>
+</a>
+<p>Note that <tt class="xref docutils literal"><span class="pre">matplotlib</span></tt> renders the inline Latex math markup
+<tt class="docutils literal"><span class="pre">$\pm$</span></tt> included in the title as the symbol <img class="math" src="_images/math/91205e81c98c486418902c88d5c396f5355491f1.png" alt="\pm"/>.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference" href="#">Example: enzyme kinetics</a><ul>
+<li><a class="reference" href="#defining-the-model">Defining the model</a><ul>
+<li><a class="reference" href="#species-count-functions">Species count functions</a></li>
+<li><a class="reference" href="#propensity-functions">Propensity functions</a></li>
+<li><a class="reference" href="#state-transitions">State transitions</a></li>
+<li><a class="reference" href="#creating-the-model">Creating the model</a></li>
+<li><a class="reference" href="#finishing-touches">Finishing touches</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#solving-the-model-and-plotting-results">Solving the model and plotting results</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="example_simple.html"
+                                  title="previous chapter">Example: a single reaction</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="modules.html"
+                                  title="next chapter">Important <tt class="docutils literal"><span class="pre">cmepy</span></tt> modules</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/example_mm.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="modules.html" title="Important cmepy modules"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="example_simple.html" title="Example: a single reaction"
+             >previous</a> |</li>
+        <li><a href="index.html">CmePy v0.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, Markus Hegland &amp; Reuben Fletcher-Costin.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+    </div>
+  </body>
+</html>

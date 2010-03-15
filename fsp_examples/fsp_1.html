@@ -1,0 +1,267 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>FSP example 1 : simple expansion &mdash; CmePy v0.3 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.3',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="CmePy v0.3 documentation" href="../index.html" />
+    <link rel="up" title="fsp" href="../api_modules/fsp.html" />
+    <link rel="next" title="FSP example 2 : support expansion" href="fsp_2.html" />
+    <link rel="prev" title="fsp.util" href="../api_modules/fsp/util.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="fsp_2.html" title="FSP example 2 : support expansion"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../api_modules/fsp/util.html" title="fsp.util"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">CmePy v0.3 documentation</a> &raquo;</li>
+          <li><a href="../api.html" >api documentation</a> &raquo;</li>
+          <li><a href="../api_modules/fsp.html" accesskey="U"><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">fsp</span></tt></a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="fsp-example-1-simple-expansion">
+<h1>FSP example 1 : simple expansion<a class="headerlink" href="#fsp-example-1-simple-expansion" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>This example demonstrates an FSP solver with a very simple expansion strategy.
+In order to expand the domain, the domain is simply grown by adding all states
+reachable by making a sequence of state transitions, up to some maximum depth.
+This simple strategy leads to very large state spaces, but it works fine for
+the burr08 model, as it is a two-dimensional model with a limited number of
+states.</p>
+<p>This simple expansion strategy is implemented by the module
+<a title="" class="reference" href="../api_modules/fsp/simple_expander.html#module-cmepy.fsp.simple_expander"><tt class="xref docutils literal"><span class="pre">cmepy.fsp.simple_expander</span></tt></a> as follows:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">A simple domain expansion routine for the FSP algorithm.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">cmepy.fsp.util</span>
+
+<span class="k">class</span> <span class="nc">SimpleExpander</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Simple FSP expander that expands the entire domain.</span>
+<span class="sd">    </span>
+<span class="sd">    The domain is expanded along the given transitions, up to the specified</span>
+<span class="sd">    depth.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">transitions</span><span class="p">,</span> <span class="n">depth</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Simple FSP expander that expands the entire domain.</span>
+<span class="sd">    </span>
+<span class="sd">        The domain is expanded along the given transitions, up to the specified</span>
+<span class="sd">        depth.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">transitions</span> <span class="o">=</span> <span class="n">transitions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">depth</span> <span class="o">=</span> <span class="n">depth</span>
+    
+    <span class="k">def</span> <span class="nf">expand</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns expanded domain states</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">cmepy</span><span class="o">.</span><span class="n">fsp</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">grow_domain</span><span class="p">(</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;domain_states&#39;</span><span class="p">],</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">transitions</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">depth</span>
+        <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="output">
+<h2>Output<a class="headerlink" href="#output" title="Permalink to this headline">¶</a></h2>
+<a class="reference image-reference" href="../_images/fsp_1_p.png"><img alt="../_images/fsp_1_p.png" src="../_images/fsp_1_p.png" style="width: 406.0px; height: 306.0px;" /></a>
+<a class="reference image-reference" href="../_images/fsp_1_domain.png"><img alt="../_images/fsp_1_domain.png" src="../_images/fsp_1_domain.png" style="width: 406.0px; height: 306.0px;" /></a>
+</div>
+<div class="section" id="source">
+<h2>Source<a class="headerlink" href="#source" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">example: uses Finite State Projection to solve the burr08 model</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">cmepy.models</span> <span class="kn">import</span> <span class="n">burr08</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span>
+<span class="kn">import</span> <span class="nn">cmepy.recorder</span>
+<span class="kn">import</span> <span class="nn">cmepy.fsp.solver</span>
+<span class="kn">import</span> <span class="nn">cmepy.fsp.simple_expander</span>
+<span class="kn">import</span> <span class="nn">cmepy.domain</span>
+<span class="kn">import</span> <span class="nn">cmepy.statistics</span>
+
+<span class="c"># fsp_example_util a common plotting routine for the three fsp examples</span>
+<span class="kn">import</span> <span class="nn">fsp_example_util</span>
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    solve burr08 model using FSP with simple expansion approach</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="c"># create model and initial states for domain</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">burr08</span><span class="o">.</span><span class="n">create_model</span><span class="p">()</span>
+    <span class="n">initial_states</span> <span class="o">=</span> <span class="n">cmepy</span><span class="o">.</span><span class="n">domain</span><span class="o">.</span><span class="n">from_iter</span><span class="p">((</span><span class="n">model</span><span class="o">.</span><span class="n">initial_state</span><span class="p">,</span> <span class="p">))</span>
+    
+    <span class="c"># create simple expander for FSP expansion strategy</span>
+    <span class="c"># - this expands the ENTIRE domain by 3, along the</span>
+    <span class="c">#   state transitions</span>
+    <span class="n">expander</span> <span class="o">=</span> <span class="n">cmepy</span><span class="o">.</span><span class="n">fsp</span><span class="o">.</span><span class="n">simple_expander</span><span class="o">.</span><span class="n">SimpleExpander</span><span class="p">(</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">transitions</span><span class="p">,</span>
+        <span class="n">depth</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
+    <span class="p">)</span>
+    
+    <span class="c"># create fsp solver for model, initial states, expander</span>
+    <span class="c"># - time dependencies for the burr08 model are also supplied</span>
+    <span class="n">fsp_solver</span> <span class="o">=</span> <span class="n">cmepy</span><span class="o">.</span><span class="n">fsp</span><span class="o">.</span><span class="n">solver</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+        <span class="n">model</span><span class="p">,</span>
+        <span class="n">initial_states</span><span class="p">,</span>
+        <span class="n">expander</span><span class="p">,</span>
+        <span class="n">time_dependencies</span> <span class="o">=</span> <span class="n">burr08</span><span class="o">.</span><span class="n">create_time_dependencies</span><span class="p">()</span>
+    <span class="p">)</span>
+    
+    <span class="c"># define time steps:</span>
+    <span class="c"># this problem is initially stiff so</span>
+    <span class="c"># we begin with some finer time steps</span>
+    <span class="c"># before changing to coarser steps</span>
+    <span class="n">time_steps</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span>
+        <span class="n">numpy</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
+        <span class="n">numpy</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">16.0</span><span class="p">,</span> <span class="mi">15</span><span class="p">)</span>
+    <span class="p">))</span>
+    
+    <span class="c"># we want the error of the solution at the</span>
+    <span class="c"># final time to be bounded by epsilon</span>
+    <span class="n">epsilon</span> <span class="o">=</span> <span class="mf">1.0e-2</span>
+    <span class="n">num_steps</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">time_steps</span><span class="p">)</span>
+    <span class="c"># define how much error is tolerated per step</span>
+    <span class="n">max_error_per_step</span> <span class="o">=</span> <span class="n">epsilon</span> <span class="o">/</span> <span class="n">num_steps</span>
+    
+    <span class="c"># create recorder to record species counts</span>
+    <span class="n">recorder</span> <span class="o">=</span> <span class="n">cmepy</span><span class="o">.</span><span class="n">recorder</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+        <span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">species</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">species_counts</span><span class="p">)</span>
+    <span class="p">)</span>
+    
+    <span class="n">domains</span> <span class="o">=</span> <span class="p">[]</span>
+    
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">time_steps</span><span class="p">):</span>
+        <span class="k">print</span> <span class="s">&#39;STEP t = </span><span class="si">%g</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">t</span>
+        <span class="n">fsp_solver</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">max_error_per_step</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">3</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&#39;recording solution and domain&#39;</span>
+            <span class="c"># record the solution</span>
+            <span class="n">p</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">fsp_solver</span><span class="o">.</span><span class="n">y</span>
+            <span class="n">recorder</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
+            <span class="c"># store a copy of the domain so we can plot it later</span>
+            <span class="n">domains</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">fsp_solver</span><span class="o">.</span><span class="n">domain_states</span><span class="p">))</span>
+    <span class="k">print</span> <span class="s">&#39;OK&#39;</span>
+    
+    <span class="k">print</span> <span class="s">&#39;plotting solution and domain&#39;</span>    
+    <span class="n">fsp_example_util</span><span class="o">.</span><span class="n">plot_solution_and_domain</span><span class="p">(</span>
+        <span class="n">recorder</span><span class="p">[(</span><span class="s">&#39;A&#39;</span><span class="p">,</span> <span class="s">&#39;B&#39;</span><span class="p">)],</span>
+        <span class="n">domains</span>
+    <span class="p">)</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="../index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference" href="#">FSP example 1 : simple expansion</a><ul>
+<li><a class="reference" href="#overview">Overview</a></li>
+<li><a class="reference" href="#output">Output</a></li>
+<li><a class="reference" href="#source">Source</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="../api_modules/fsp/util.html"
+                                  title="previous chapter"><tt class="docutils literal docutils literal docutils literal"><span class="pre">fsp.util</span></tt></a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="fsp_2.html"
+                                  title="next chapter">FSP example 2 : support expansion</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/fsp_examples/fsp_1.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="fsp_2.html" title="FSP example 2 : support expansion"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../api_modules/fsp/util.html" title="fsp.util"
+             >previous</a> |</li>
+        <li><a href="../index.html">CmePy v0.3 documentation</a> &raquo;</li>
+          <li><a href="../api.html" >api documentation</a> &raquo;</li>
+          <li><a href="../api_modules/fsp.html" ><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">fsp</span></tt></a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, Markus Hegland &amp; Reuben Fletcher-Costin.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,359 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>catalytic_reaction &mdash; CmePy v0.3 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.3',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="CmePy v0.3 documentation" href="../index.html" />
+    <link rel="up" title="Models included in cmepy.models" href="../models.html" />
+    <link rel="next" title="dsmts : a birth-death model" href="dsmts.html" />
+    <link rel="prev" title="burr08 : two competing clonotypes" href="burr08.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="dsmts.html" title="dsmts : a birth-death model"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="burr08.html" title="burr08 : two competing clonotypes"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">CmePy v0.3 documentation</a> &raquo;</li>
+          <li><a href="../models.html" accesskey="U">Models included in <tt class="docutils literal docutils literal docutils literal docutils literal"><span class="pre">cmepy.models</span></tt></a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="catalytic-reaction">
+<h1><tt class="xref docutils literal"><span class="pre">catalytic_reaction</span></tt><a class="headerlink" href="#catalytic-reaction" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>This model defines the following &#8216;catalytic reaction&#8217; system:</p>
+<div class="math">
+<p><img src="../_images/math/28881253d689dc02ffdd3b63441681d12c2b4dcd.png" alt="A &amp; \xrightarrow{k_1} B \; , \\
+B &amp; \xrightarrow{k_2} C \; , \\
+B + D &amp; \xrightarrow{k_3} B + E \; ." /></p>
+</div><p>Here, the species <img class="math" src="../_images/math/ff5fb3d775862e2123b007eb4373ff6cc1a34d4e.png" alt="B"/> acts as a catalyst for the third
+reaction. The rate constants are
+<img class="math" src="../_images/math/b1a3abd064c6bd046ab9d1302069f9b4ccc0be6a.png" alt="k_1 = 1"/>, <img class="math" src="../_images/math/96e504650be14e46b9e37abb9c2600668b6e0a8c.png" alt="k_2 = 1000"/> and <img class="math" src="../_images/math/8b74f83638d68b5b9edf77583acd9c96aeaf4da8.png" alt="k_3 = 100"/>,
+while the initial species counts are
+<img class="math" src="../_images/math/71269927f16c10216364c3565bba03b1908fa806.png" alt="A = 50"/>, <img class="math" src="../_images/math/9fbd2c6cdcaecfed5035af5e2a5ea76d1c315fd4.png" alt="D = 80"/> and <img class="math" src="../_images/math/c6a04b8f938559163f6d50daf375f43d13238233.png" alt="B = C = E = 0"/>.</p>
+<p>This catalytic reaction system is taken from the paper by
+Mastny, Haseltine, Rawlings <a class="reference" href="#mhr07">[MHR07]</a> .</p>
+</div>
+<div class="section" id="running-the-model">
+<h2>Running the model<a class="headerlink" href="#running-the-model" title="Permalink to this headline">¶</a></h2>
+<p>This model is defined by the module <tt class="xref docutils literal"><span class="pre">cmepy.model.catalytic_reaction</span></tt>.
+The source code for this model is listed below.</p>
+<p>The model solves the distribution over a sparse, truncated state space.
+For more information, see <a class="reference" href="../recipes/sparse_state_spaces.html#sparse-state-spaces"><em>Sparse state spaces</em></a>.</p>
+<p>To run this model, open the Python interpreter, and enter:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cmepy.models</span> <span class="kn">import</span> <span class="n">catalytic_reaction</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">catalytic_reaction</span><span class="o">.</span><span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>This will solve the model and then produce the following plot, illustrating
+the marginal distribution of species count of <img class="math" src="../_images/math/fa2fa899f0afb05d6837885523503a2d4df434f9.png" alt="E"/> at the times
+<img class="math" src="../_images/math/8291aa224887224da0eb279b4221a079aa280f3d.png" alt="t = 0.05, 0.2, 0.5"/> .</p>
+</div>
+<div class="section" id="sample-results">
+<h2>Sample results<a class="headerlink" href="#sample-results" title="Permalink to this headline">¶</a></h2>
+<img alt="../_images/catalytic_reaction_plot.png" src="../_images/catalytic_reaction_plot.png" />
+</div>
+<div class="section" id="source">
+<h2>Source<a class="headerlink" href="#source" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">A simple catalytic reaction example.</span>
+
+<span class="sd">Consider the following &#39;catalytic&#39; reaction system:</span>
+
+<span class="sd">    A --k_1--&gt; B</span>
+<span class="sd">    B --k_2--&gt; C</span>
+<span class="sd">    B + D --k_3--&gt; B + E</span>
+
+<span class="sd">Here, the species B acts as a catalyst for the third</span>
+<span class="sd">reaction. The rate constants are</span>
+
+<span class="sd">    k_1 = 1, k_2 = 1000, k_3 = 100;</span>
+
+<span class="sd">while the initial species counts are</span>
+
+<span class="sd">    A = 50, D = 80, B = C = E = 0.</span>
+
+<span class="sd">This system is taken from the paper </span>
+
+<span class="sd">    Mastny, E.A., Haseltine, E.L. and Rawlings, J.B.</span>
+<span class="sd">    Two classes of quasi-steady-state model reductions for stochastic kinetics,</span>
+<span class="sd">    The Journal of Chemical Physics, 2007, Vol 127 .</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span>
+<span class="kn">import</span> <span class="nn">pylab</span>
+
+<span class="kn">import</span> <span class="nn">cmepy.domain</span>
+<span class="kn">import</span> <span class="nn">cmepy.model</span>
+<span class="kn">import</span> <span class="nn">cmepy.solver</span>
+<span class="kn">import</span> <span class="nn">cmepy.recorder</span>
+<span class="kn">from</span> <span class="nn">cmepy.util</span> <span class="kn">import</span> <span class="n">non_neg</span><span class="p">,</span> <span class="n">consecutive_pairs</span>
+
+<span class="k">def</span> <span class="nf">gen_states</span><span class="p">(</span><span class="o">**</span><span class="n">initial_counts</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    gen_states(**initial_counts) -&gt; first state, ..., last state</span>
+<span class="sd">    </span>
+<span class="sd">    Creates a generator over states in a *truncated* reaction count state</span>
+<span class="sd">    space, for the catalytic reaction example.</span>
+<span class="sd">    </span>
+<span class="sd">    If specified, the optional keyword arguments A (defaults to  50) and</span>
+<span class="sd">    D (defaults to 80) define the initial copy counts of species A and D</span>
+<span class="sd">    respectively.</span>
+<span class="sd">    </span>
+<span class="sd">    Each state yielded by this generator has the form state = (r_1, r_2, r_3),</span>
+<span class="sd">    where non-negative integers r_1, r_2 and r_3 denote the count of the</span>
+<span class="sd">    reactions 1, 2 and 3, respectively.</span>
+<span class="sd">    </span>
+<span class="sd">    Only states satisfying the following inequality are considered:</span>
+<span class="sd">    </span>
+<span class="sd">        (r_1, r_2, r_3) such that r_1 -3 &lt;= r_2 &lt;= r_1</span>
+<span class="sd">    </span>
+<span class="sd">    The upper bound on r_2 follows from the model, as reaction 2 may occur at</span>
+<span class="sd">    most once for each occurance of reaction 1. The lower bound on r_2 is an</span>
+<span class="sd">    *artificial restriction that truncates the state space*. This introduces</span>
+<span class="sd">    error, but because the rate constant of reaction 2 is 1000 times larger</span>
+<span class="sd">    than the rate constant of reaction 1, the count of reaction 2 shall be</span>
+<span class="sd">    close to the count of reaction 1 with high probability, and the</span>
+<span class="sd">    resulting truncation error shall be small. This results in a truncated</span>
+<span class="sd">    state space with roughly 4 * (A+1) * (D+1) states, compared to the</span>
+<span class="sd">    0.5 * (A+1)**2 * (D+1) states required for the full state space.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="n">initial_counts</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s">&#39;A&#39;</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+    <span class="n">initial_counts</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s">&#39;D&#39;</span><span class="p">,</span> <span class="mi">80</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">r_1</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">initial_counts</span><span class="p">[</span><span class="s">&#39;A&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">r_2_min</span> <span class="o">=</span> <span class="n">non_neg</span><span class="p">(</span><span class="n">r_1</span> <span class="o">-</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="n">r_2_max</span> <span class="o">=</span> <span class="n">r_1</span>
+        <span class="k">for</span> <span class="n">r_2</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">r_2_min</span><span class="p">,</span> <span class="n">r_2_max</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">r_3</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">initial_counts</span><span class="p">[</span><span class="s">&#39;D&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="k">yield</span> <span class="p">(</span><span class="n">r_1</span><span class="p">,</span> <span class="n">r_2</span><span class="p">,</span> <span class="n">r_3</span><span class="p">)</span>
+    <span class="k">return</span>
+
+<span class="k">def</span> <span class="nf">create_model</span><span class="p">(</span><span class="o">**</span><span class="n">initial_counts</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    create_model(**initial_counts) -&gt; model</span>
+<span class="sd">    </span>
+<span class="sd">    Creates a model for the catalytic reaction example.</span>
+<span class="sd">    </span>
+<span class="sd">    If specified, the optional keyword arguments A (defaults to  50) and</span>
+<span class="sd">    D (defaults to 80) define the initial copy counts of species A and D</span>
+<span class="sd">    respectively.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="n">initial_counts</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s">&#39;A&#39;</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+    <span class="n">initial_counts</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s">&#39;D&#39;</span><span class="p">,</span> <span class="mi">80</span><span class="p">)</span>
+    <span class="n">s_1</span> <span class="o">=</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="n">non_neg</span><span class="p">(</span><span class="n">initial_counts</span><span class="p">[</span><span class="s">&#39;A&#39;</span><span class="p">]</span><span class="o">-</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">s_2</span> <span class="o">=</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="n">non_neg</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">s_3</span> <span class="o">=</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">s_4</span> <span class="o">=</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="n">non_neg</span><span class="p">(</span><span class="n">initial_counts</span><span class="p">[</span><span class="s">&#39;D&#39;</span><span class="p">]</span><span class="o">-</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+    <span class="n">s_5</span> <span class="o">=</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    
+    <span class="k">return</span> <span class="n">cmepy</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="s">&#39;simple catalytic reaction&#39;</span><span class="p">,</span>
+        <span class="n">reactions</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s">&#39;A-&gt;B&#39;</span><span class="p">,</span>
+            <span class="s">&#39;B-&gt;C&#39;</span><span class="p">,</span>
+            <span class="s">&#39;B+D-&gt;B+E&#39;</span>
+        <span class="p">),</span>
+        <span class="n">propensities</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="mf">1.0</span> <span class="o">*</span> <span class="n">s_1</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">),</span>
+            <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="mf">1000.0</span> <span class="o">*</span> <span class="n">s_2</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">),</span>
+            <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="mf">100.0</span> <span class="o">*</span> <span class="n">s_4</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="n">s_2</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">)</span>
+        <span class="p">),</span>
+        <span class="n">transitions</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+            <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+            <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="p">),</span>
+        <span class="n">species</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s">&#39;A&#39;</span><span class="p">,</span>
+            <span class="s">&#39;B&#39;</span><span class="p">,</span>
+            <span class="s">&#39;C&#39;</span><span class="p">,</span>
+            <span class="s">&#39;D&#39;</span><span class="p">,</span>
+            <span class="s">&#39;E&#39;</span>
+        <span class="p">),</span>
+        <span class="n">species_counts</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">s_1</span><span class="p">,</span>
+            <span class="n">s_2</span><span class="p">,</span>
+            <span class="n">s_3</span><span class="p">,</span>
+            <span class="n">s_4</span><span class="p">,</span>
+            <span class="n">s_5</span>
+        <span class="p">),</span>
+        <span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">initial_counts</span><span class="p">[</span><span class="s">&#39;A&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="p">)</span><span class="o">*</span><span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">initial_counts</span><span class="p">[</span><span class="s">&#39;D&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,),</span>
+        <span class="n">initial_state</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="p">)</span><span class="o">*</span><span class="mi">3</span>
+    <span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Solves the CME for a simple catalytic reaction and plot results</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="n">initial_counts</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">&#39;A&#39;</span> <span class="p">:</span> <span class="mi">50</span><span class="p">,</span>
+        <span class="s">&#39;D&#39;</span> <span class="p">:</span> <span class="mi">80</span>
+    <span class="p">}</span>
+    <span class="c"># define the model</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">create_model</span><span class="p">(</span><span class="o">**</span><span class="n">initial_counts</span><span class="p">)</span>
+    
+    <span class="c"># create cme solver</span>
+    <span class="n">solver</span> <span class="o">=</span> <span class="n">cmepy</span><span class="o">.</span><span class="n">solver</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+        <span class="n">model</span><span class="p">,</span>
+        <span class="n">sink</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span>
+        <span class="n">domain_states</span> <span class="o">=</span> <span class="n">cmepy</span><span class="o">.</span><span class="n">domain</span><span class="o">.</span><span class="n">from_iter</span><span class="p">(</span><span class="n">gen_states</span><span class="p">(</span><span class="o">**</span><span class="n">initial_counts</span><span class="p">))</span>
+    <span class="p">)</span>
+    
+    <span class="c"># create cme recorder, specifying that we wish to measure the</span>
+    <span class="c"># species random variables, via the species_counts functions,</span>
+    <span class="c"># and also the reactions random variables, via the default</span>
+    <span class="c"># coordinate projections</span>
+    <span class="n">recorder</span> <span class="o">=</span> <span class="n">cmepy</span><span class="o">.</span><span class="n">recorder</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+        <span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">species</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">species_counts</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">reactions</span><span class="p">,</span> <span class="p">)</span>
+    <span class="p">)</span>
+    
+    <span class="n">step_size</span> <span class="o">=</span> <span class="mf">0.005</span>
+    <span class="n">times</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+    <span class="n">limits</span> <span class="o">=</span> <span class="n">consecutive_pairs</span><span class="p">(</span><span class="n">times</span><span class="p">)</span>
+    <span class="n">intervals</span> <span class="o">=</span> <span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="p">(</span><span class="n">b</span><span class="o">-</span><span class="n">a</span><span class="p">)</span><span class="o">/</span><span class="n">step_size</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span><span class="p">,</span><span class="n">b</span> <span class="ow">in</span> <span class="n">limits</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">interval</span> <span class="ow">in</span> <span class="n">intervals</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">interval</span><span class="p">:</span>
+            <span class="n">solver</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+            <span class="n">p</span><span class="p">,</span> <span class="n">p_sink</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">y</span>
+            <span class="k">print</span> <span class="s">&#39;time : </span><span class="si">%.3f</span><span class="s">, truncation error: </span><span class="si">%.1e</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">p_sink</span><span class="p">)</span>
+        <span class="k">print</span> <span class="s">&#39;recording results&#39;</span>
+        <span class="n">recorder</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">interval</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">p</span><span class="p">)</span>
+    
+    <span class="k">print</span> <span class="s">&#39;plotting results&#39;</span>
+    
+    <span class="n">marginal_shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">initial_counts</span><span class="p">[</span><span class="s">&#39;D&#39;</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="p">)</span>
+    <span class="n">measurement</span> <span class="o">=</span> <span class="n">recorder</span><span class="p">[</span><span class="s">&#39;E&#39;</span><span class="p">]</span>
+    <span class="n">pylab</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">time</span><span class="p">,</span> <span class="n">marginal</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">measurement</span><span class="o">.</span><span class="n">times</span><span class="p">,</span> <span class="n">measurement</span><span class="o">.</span><span class="n">distributions</span><span class="p">):</span>
+        <span class="n">pylab</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+            <span class="n">marginal</span><span class="o">.</span><span class="n">to_dense</span><span class="p">(</span><span class="n">marginal_shape</span><span class="p">),</span>
+            <span class="n">label</span> <span class="o">=</span> <span class="s">&#39;t = </span><span class="si">%.2f</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">time</span>
+        <span class="p">)</span>
+    <span class="n">pylab</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+    <span class="n">pylab</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;probability distribution of E&#39;</span><span class="p">)</span>
+    <span class="n">pylab</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;P(E)&#39;</span><span class="p">)</span>
+    <span class="n">pylab</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;E (copy count)&#39;</span><span class="p">)</span>
+    <span class="n">pylab</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p class="rubric">References</p>
+<table class="docutils citation" frame="void" id="mhr07" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1" name="mhr07">[MHR07]</a></td><td><a class="reference" href="http://scholar.google.com/scholar?q=Mastny+Haseltine+Rawlings+two+classes+of+quasi-steady-state+model+reductions+for+stochastic+kinetics">Mastny, E.A., Haseltine, E.L. and Rawlings, J.B.,
+Two classes of quasi-steady-state model reductions for stochastic kinetics,
+Journal of Chemical Physics (2007),
+Vol 127.</a></td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="../index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference" href="#"><tt class="docutils literal"><span class="pre">catalytic_reaction</span></tt></a><ul>
+<li><a class="reference" href="#overview">Overview</a></li>
+<li><a class="reference" href="#running-the-model">Running the model</a></li>
+<li><a class="reference" href="#sample-results">Sample results</a></li>
+<li><a class="reference" href="#source">Source</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="burr08.html"
+                                  title="previous chapter"><tt class="docutils literal docutils literal docutils literal"><span class="pre">burr08</span></tt> : two competing clonotypes</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="dsmts.html"
+                                  title="next chapter"><tt class="docutils literal"><span class="pre">dsmts</span></tt> : a birth-death model</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/models/catalytic_reaction.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="dsmts.html" title="dsmts : a birth-death model"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="burr08.html" title="burr08 : two competing clonotypes"
+             >previous</a> |</li>
+        <li><a href="../index.html">CmePy v0.3 documentation</a> &raquo;</li>
+          <li><a href="../models.html" >Models included in <tt class="docutils literal docutils literal docutils literal docutils literal"><span class="pre">cmepy.models</span></tt></a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, Markus Hegland &amp; Reuben Fletcher-Costin.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+    </div>
+  </body>
+</html>

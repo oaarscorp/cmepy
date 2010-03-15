@@ -1,0 +1,232 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>munk08 : gene toggle &mdash; CmePy v0.3 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.3',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="CmePy v0.3 documentation" href="../index.html" />
+    <link rel="up" title="Models included in cmepy.models" href="../models.html" />
+    <link rel="next" title="pap_pili : pap-pili epigenetic switch" href="pap_pili.html" />
+    <link rel="prev" title="mono_molecular : mono molecular systems" href="mono_molecular.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="pap_pili.html" title="pap_pili : pap-pili epigenetic switch"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="mono_molecular.html" title="mono_molecular : mono molecular systems"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">CmePy v0.3 documentation</a> &raquo;</li>
+          <li><a href="../models.html" accesskey="U">Models included in <tt class="docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">cmepy.models</span></tt></a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="munk08-gene-toggle">
+<h1><tt class="xref docutils literal"><span class="pre">munk08</span></tt> : gene toggle<a class="headerlink" href="#munk08-gene-toggle" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>This module provides a model of Gardner&#8217;s gene toggle system, according to
+Munsky and Khammash. This gene toggle model is used as the second example
+illustrating CmePy&#8217;s sparse state space support.</p>
+<p>See <a class="reference" href="../recipes/sparse_state_spaces.html#sparse-state-space-gene-toggle-example"><em>Example: sparse state space for Gardner&#8217;s gene toggle model</em></a> for an introduction to this
+model.</p>
+</div>
+<div class="section" id="running-the-model">
+<h2>Running the model<a class="headerlink" href="#running-the-model" title="Permalink to this headline">¶</a></h2>
+<p>This model is defined by the module <tt class="xref docutils literal"><span class="pre">cmepy.model.munk08</span></tt>.</p>
+<p>To solve the model and display results, simply run the <tt class="xref docutils literal"><span class="pre">main()</span></tt> function
+inside this model. Explicitly, open the Python interpreter and type:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cmepy.models</span> <span class="kn">import</span> <span class="n">munk08</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">munk08</span><span class="o">.</span><span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="source">
+<h2>Source<a class="headerlink" href="#source" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Munsky &amp; Khammash&#39;s stochastic version of Gardner&#39;s gene toggle model.</span>
+
+<span class="sd">@conference{munsky2008computation,</span>
+<span class="sd">  title={{Computation of switch time distributions</span>
+<span class="sd">          in stochastic gene regulatory networks}},</span>
+<span class="sd">  author={Munsky, B. and Khammash, M.},</span>
+<span class="sd">  booktitle={Proc. 2008 American Control Conference.(June 2008)},</span>
+<span class="sd">  pages={2761--2766}</span>
+<span class="sd">}</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">cmepy</span> <span class="kn">import</span> <span class="n">model</span>
+
+<span class="k">def</span> <span class="nf">create_model_gene_toggle</span><span class="p">(</span><span class="n">max_s1_copies</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">max_s2_copies</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    creates stochastic version of Gardner&#39;s gene toggle model</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">s1_count</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">s1</span><span class="p">,</span> <span class="n">s2</span> <span class="p">:</span> <span class="n">s1</span>
+    <span class="n">s2_count</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">s1</span><span class="p">,</span> <span class="n">s2</span> <span class="p">:</span> <span class="n">s2</span>
+    
+    <span class="n">s1_birth</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">s1</span><span class="p">,</span> <span class="n">s2</span> <span class="p">:</span> <span class="mf">16.0</span><span class="o">/</span><span class="p">(</span><span class="mf">1.0</span><span class="o">+</span><span class="n">s2</span><span class="p">)</span>
+    <span class="n">s1_death</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">s1</span><span class="p">,</span> <span class="n">s2</span> <span class="p">:</span> <span class="mf">1.0</span><span class="o">*</span><span class="n">s1</span>
+    
+    <span class="n">s2_birth</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">s1</span><span class="p">,</span> <span class="n">s2</span> <span class="p">:</span> <span class="mf">50.0</span><span class="o">/</span><span class="p">(</span><span class="mf">1.0</span><span class="o">+</span><span class="p">(</span><span class="n">s1</span><span class="o">**</span><span class="mf">2.5</span><span class="p">))</span>
+    <span class="n">s2_death</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">s1</span><span class="p">,</span> <span class="n">s2</span> <span class="p">:</span> <span class="mf">1.0</span><span class="o">*</span><span class="n">s2</span>
+    
+    <span class="n">propensities</span> <span class="o">=</span> <span class="p">(</span><span class="n">s1_birth</span><span class="p">,</span> <span class="n">s1_death</span><span class="p">,</span> <span class="n">s2_birth</span><span class="p">,</span> <span class="n">s2_death</span><span class="p">)</span>
+    
+    <span class="n">transitions</span> <span class="o">=</span> <span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+    
+    <span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">max_s1_copies</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_s2_copies</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">initial_state</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="p">)</span><span class="o">*</span><span class="mi">2</span>
+     
+    <span class="k">return</span> <span class="n">model</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="s">&#39;Gardner</span><span class="se">\&#39;</span><span class="s">s gene toggle according to Munsky &amp; Khammash&#39;</span><span class="p">,</span>
+        <span class="n">species</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;S1&#39;</span><span class="p">,</span> <span class="s">&#39;S2&#39;</span><span class="p">),</span>
+        <span class="n">species_counts</span> <span class="o">=</span> <span class="p">(</span><span class="n">s1_count</span><span class="p">,</span> <span class="n">s2_count</span><span class="p">),</span>
+        <span class="n">reactions</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;*-&gt;S1&#39;</span><span class="p">,</span> <span class="s">&#39;S1-&gt;*&#39;</span><span class="p">,</span> <span class="s">&#39;*-&gt;S2&#39;</span><span class="p">,</span> <span class="s">&#39;S2-&gt;*&#39;</span><span class="p">),</span>
+        <span class="n">propensities</span> <span class="o">=</span> <span class="n">propensities</span><span class="p">,</span>
+        <span class="n">transitions</span> <span class="o">=</span> <span class="n">transitions</span><span class="p">,</span>
+        <span class="n">shape</span> <span class="o">=</span> <span class="n">shape</span><span class="p">,</span>
+        <span class="n">initial_state</span> <span class="o">=</span> <span class="n">initial_state</span>
+    <span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    
+    <span class="kn">import</span> <span class="nn">numpy</span>
+    <span class="kn">from</span> <span class="nn">cmepy</span> <span class="kn">import</span> <span class="n">domain</span>
+    <span class="kn">import</span> <span class="nn">cmepy.solver</span>
+    <span class="kn">import</span> <span class="nn">cmepy.recorder</span>
+
+    <span class="n">max_s1_copies</span> <span class="o">=</span> <span class="mi">40</span>
+    <span class="n">max_s2_copies</span> <span class="o">=</span> <span class="mi">100</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">create_model_gene_toggle</span><span class="p">(</span><span class="n">max_s1_copies</span><span class="p">,</span> <span class="n">max_s2_copies</span><span class="p">)</span>
+    
+    <span class="c"># define domain states as union of two rectangular regions along the axes</span>
+    <span class="n">a_shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">max_s1_copies</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+    <span class="n">b_shape</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">max_s2_copies</span><span class="p">)</span>
+    <span class="n">domain_states_a</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">domain</span><span class="o">.</span><span class="n">to_iter</span><span class="p">(</span><span class="n">domain</span><span class="o">.</span><span class="n">from_rect</span><span class="p">(</span><span class="n">a_shape</span><span class="p">)))</span>
+    <span class="n">domain_states_b</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">domain</span><span class="o">.</span><span class="n">to_iter</span><span class="p">(</span><span class="n">domain</span><span class="o">.</span><span class="n">from_rect</span><span class="p">(</span><span class="n">b_shape</span><span class="p">)))</span>
+    <span class="n">states</span> <span class="o">=</span> <span class="n">domain</span><span class="o">.</span><span class="n">from_iter</span><span class="p">(</span><span class="n">domain_states_a</span> <span class="o">|</span> <span class="n">domain_states_b</span><span class="p">)</span>
+    
+    <span class="n">solver</span> <span class="o">=</span> <span class="n">cmepy</span><span class="o">.</span><span class="n">solver</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+        <span class="n">m</span><span class="p">,</span>
+        <span class="n">sink</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span>
+        <span class="n">domain_states</span> <span class="o">=</span> <span class="n">states</span>
+    <span class="p">)</span>
+    
+    <span class="n">recorder</span> <span class="o">=</span> <span class="n">cmepy</span><span class="o">.</span><span class="n">recorder</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+        <span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">species</span><span class="p">,</span>
+         <span class="n">m</span><span class="o">.</span><span class="n">species_counts</span><span class="p">)</span>
+    <span class="p">)</span>
+    
+    <span class="n">time_steps</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">100.0</span><span class="p">,</span> <span class="mi">101</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">time_steps</span><span class="p">:</span>
+        <span class="n">solver</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+        <span class="n">p</span><span class="p">,</span> <span class="n">p_sink</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">y</span>
+        <span class="k">print</span> <span class="s">&#39;t = </span><span class="si">%g</span><span class="s">; p_sink = </span><span class="si">%g</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">p_sink</span><span class="p">)</span>
+        <span class="n">recorder</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
+    
+    <span class="n">cmepy</span><span class="o">.</span><span class="n">recorder</span><span class="o">.</span><span class="n">display_plots</span><span class="p">(</span><span class="n">recorder</span><span class="p">,</span>
+                                 <span class="n">title</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+	
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="../index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference" href="#"><tt class="docutils literal"><span class="pre">munk08</span></tt> : gene toggle</a><ul>
+<li><a class="reference" href="#overview">Overview</a></li>
+<li><a class="reference" href="#running-the-model">Running the model</a></li>
+<li><a class="reference" href="#source">Source</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="mono_molecular.html"
+                                  title="previous chapter"><tt class="docutils literal docutils literal docutils literal"><span class="pre">mono_molecular</span></tt> : mono molecular systems</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="pap_pili.html"
+                                  title="next chapter"><tt class="docutils literal"><span class="pre">pap_pili</span></tt> : pap-pili epigenetic switch</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/models/munk08.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pap_pili.html" title="pap_pili : pap-pili epigenetic switch"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="mono_molecular.html" title="mono_molecular : mono molecular systems"
+             >previous</a> |</li>
+        <li><a href="../index.html">CmePy v0.3 documentation</a> &raquo;</li>
+          <li><a href="../models.html" >Models included in <tt class="docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">cmepy.models</span></tt></a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, Markus Hegland &amp; Reuben Fletcher-Costin.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+    </div>
+  </body>
+</html>

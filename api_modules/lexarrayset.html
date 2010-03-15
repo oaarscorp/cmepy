@@ -1,0 +1,250 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>lexarrayset &mdash; CmePy v0.3 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.3',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="CmePy v0.3 documentation" href="../index.html" />
+    <link rel="up" title="api documentation" href="../api.html" />
+    <link rel="next" title="measurement" href="measurement.html" />
+    <link rel="prev" title="lazy_dict" href="lazy_dict.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="measurement.html" title="measurement"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="lazy_dict.html" title="lazy_dict"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">CmePy v0.3 documentation</a> &raquo;</li>
+          <li><a href="../api.html" accesskey="U">api documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-cmepy.lexarrayset">
+<h1><tt class="xref docutils literal"><span class="pre">lexarrayset</span></tt><a class="headerlink" href="#module-cmepy.lexarrayset" title="Permalink to this headline">¶</a></h1>
+<p>lexical array set operations</p>
+<p>these operations are based upon the one dimensional array set operations
+from numpy.lib.arraysetops, but generalised to work for sets of m-tuples,
+where each element is stored as a row of a 2d m by n array, using numpy&#8217;s
+&#8216;lexsort&#8217; lexical sorting function.</p>
+<dl class="class">
+<dt id="cmepy.lexarrayset.LexArraySet">
+<em class="property">class </em><tt class="descclassname">cmepy.lexarrayset.</tt><tt class="descname">LexArraySet</tt><big>(</big><em>data</em>, <em>unique_data=False</em><big>)</big><a class="headerlink" href="#cmepy.lexarrayset.LexArraySet" title="Permalink to this definition">¶</a></dt>
+<dd><p>LexArraySet is an implementation of a set as a 2d array, where
+the members of the set are the rows of the array. The rows
+are ordered using lexical ordering.</p>
+<dl class="method">
+<dt id="cmepy.lexarrayset.LexArraySet.difference">
+<tt class="descname">difference</tt><big>(</big><em>rhs</em><big>)</big><a class="headerlink" href="#cmepy.lexarrayset.LexArraySet.difference" title="Permalink to this definition">¶</a></dt>
+<dd>las1.difference(las2) -&gt; diff; diff&#8217;s rows are those of las1 not in las2</dd></dl>
+
+<dl class="method">
+<dt id="cmepy.lexarrayset.LexArraySet.difference_update">
+<tt class="descname">difference_update</tt><big>(</big><em>rhs</em><big>)</big><a class="headerlink" href="#cmepy.lexarrayset.LexArraySet.difference_update" title="Permalink to this definition">¶</a></dt>
+<dd>in place difference</dd></dl>
+
+<dl class="method">
+<dt id="cmepy.lexarrayset.LexArraySet.intersection">
+<tt class="descname">intersection</tt><big>(</big><em>rhs</em><big>)</big><a class="headerlink" href="#cmepy.lexarrayset.LexArraySet.intersection" title="Permalink to this definition">¶</a></dt>
+<dd>las1.intersection(las2) -&gt; isect; isect&#8217;s rows common to las1, las2</dd></dl>
+
+<dl class="method">
+<dt id="cmepy.lexarrayset.LexArraySet.intersection_update">
+<tt class="descname">intersection_update</tt><big>(</big><em>rhs</em><big>)</big><a class="headerlink" href="#cmepy.lexarrayset.LexArraySet.intersection_update" title="Permalink to this definition">¶</a></dt>
+<dd>in place intersection</dd></dl>
+
+<dl class="method">
+<dt id="cmepy.lexarrayset.LexArraySet.member">
+<tt class="descname">member</tt><big>(</big><em>rhs</em><big>)</big><a class="headerlink" href="#cmepy.lexarrayset.LexArraySet.member" title="Permalink to this definition">¶</a></dt>
+<dd>las1.member(las2) -&gt; mask; mask[i] True iff row i of las1 is in las2</dd></dl>
+
+<dl class="method">
+<dt id="cmepy.lexarrayset.LexArraySet.shift">
+<tt class="descname">shift</tt><big>(</big><em>offset</em><big>)</big><a class="headerlink" href="#cmepy.lexarrayset.LexArraySet.shift" title="Permalink to this definition">¶</a></dt>
+<dd><p>las.shift(offset) -&gt; slas; where rows of slas are rows of las + offset</p>
+<p>offset must be of compatible shape to the rows of las.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cmepy.lexarrayset.LexArraySet.shift_update">
+<tt class="descname">shift_update</tt><big>(</big><em>shift</em><big>)</big><a class="headerlink" href="#cmepy.lexarrayset.LexArraySet.shift_update" title="Permalink to this definition">¶</a></dt>
+<dd>in place shift</dd></dl>
+
+<dl class="attribute">
+<dt id="cmepy.lexarrayset.LexArraySet.size">
+<tt class="descname">size</tt><a class="headerlink" href="#cmepy.lexarrayset.LexArraySet.size" title="Permalink to this definition">¶</a></dt>
+<dd>number of elements in set (equal to number of rows of the lexical array)</dd></dl>
+
+<dl class="method">
+<dt id="cmepy.lexarrayset.LexArraySet.split">
+<tt class="descname">split</tt><big>(</big><em>rhs</em><big>)</big><a class="headerlink" href="#cmepy.lexarrayset.LexArraySet.split" title="Permalink to this definition">¶</a></dt>
+<dd>las1.split(las2) -&gt; (las1.intersect(las2), las1.difference(las2))</dd></dl>
+
+<dl class="method">
+<dt id="cmepy.lexarrayset.LexArraySet.union">
+<tt class="descname">union</tt><big>(</big><em>rhs</em><big>)</big><a class="headerlink" href="#cmepy.lexarrayset.LexArraySet.union" title="Permalink to this definition">¶</a></dt>
+<dd>las1.union(las2) -&gt; u; u&#8217;s rows are union of rows in las1, las2</dd></dl>
+
+<dl class="method">
+<dt id="cmepy.lexarrayset.LexArraySet.union_update">
+<tt class="descname">union_update</tt><big>(</big><em>rhs</em><big>)</big><a class="headerlink" href="#cmepy.lexarrayset.LexArraySet.union_update" title="Permalink to this definition">¶</a></dt>
+<dd>in place union</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="cmepy.lexarrayset.create">
+<tt class="descclassname">cmepy.lexarrayset.</tt><tt class="descname">create</tt><big>(</big><em>data</em>, <em>unique_data=False</em><big>)</big><a class="headerlink" href="#cmepy.lexarrayset.create" title="Permalink to this definition">¶</a></dt>
+<dd>returns a new LexArraySet for the given data</dd></dl>
+
+<dl class="function">
+<dt id="cmepy.lexarrayset.difference">
+<tt class="descclassname">cmepy.lexarrayset.</tt><tt class="descname">difference</tt><big>(</big><em>las1</em>, <em>las2</em><big>)</big><a class="headerlink" href="#cmepy.lexarrayset.difference" title="Permalink to this definition">¶</a></dt>
+<dd>returns las1 difference las2</dd></dl>
+
+<dl class="function">
+<dt id="cmepy.lexarrayset.empty">
+<tt class="descclassname">cmepy.lexarrayset.</tt><tt class="descname">empty</tt><big>(</big><em>dim</em><big>)</big><a class="headerlink" href="#cmepy.lexarrayset.empty" title="Permalink to this definition">¶</a></dt>
+<dd>returns an empty LexArraySet of dimension dim.</dd></dl>
+
+<dl class="function">
+<dt id="cmepy.lexarrayset.intersection">
+<tt class="descclassname">cmepy.lexarrayset.</tt><tt class="descname">intersection</tt><big>(</big><em>las1</em>, <em>las2</em><big>)</big><a class="headerlink" href="#cmepy.lexarrayset.intersection" title="Permalink to this definition">¶</a></dt>
+<dd>intersection of las1 with las2</dd></dl>
+
+<dl class="function">
+<dt id="cmepy.lexarrayset.member">
+<tt class="descclassname">cmepy.lexarrayset.</tt><tt class="descname">member</tt><big>(</big><em>las1</em>, <em>las2</em><big>)</big><a class="headerlink" href="#cmepy.lexarrayset.member" title="Permalink to this definition">¶</a></dt>
+<dd><p>vectorised set membership operation for lexical array sets las1, las2</p>
+<p>returns a boolean array &#8216;mask&#8217; such that</p>
+<p>las1[:, mask] is the subset of rows of las1 that
+are also rows of las2</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cmepy.lexarrayset.nonunique_member">
+<tt class="descclassname">cmepy.lexarrayset.</tt><tt class="descname">nonunique_member</tt><big>(</big><em>arr1</em>, <em>las2</em><big>)</big><a class="headerlink" href="#cmepy.lexarrayset.nonunique_member" title="Permalink to this definition">¶</a></dt>
+<dd><p>vectorised set membership operation for lexical array arr1 and
+lexical array set las2</p>
+<p>in general, the rows of array arr1 can be non-unique</p>
+<p>returns a boolean array &#8216;mask&#8217; such that
+arr1[:, mask] is the subset of rows of arr1 that are also
+rows of las2</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cmepy.lexarrayset.shift">
+<tt class="descclassname">cmepy.lexarrayset.</tt><tt class="descname">shift</tt><big>(</big><em>las</em>, <em>offset</em><big>)</big><a class="headerlink" href="#cmepy.lexarrayset.shift" title="Permalink to this definition">¶</a></dt>
+<dd>shifts all states in las by offset</dd></dl>
+
+<dl class="function">
+<dt id="cmepy.lexarrayset.split">
+<tt class="descclassname">cmepy.lexarrayset.</tt><tt class="descname">split</tt><big>(</big><em>las1</em>, <em>las2</em><big>)</big><a class="headerlink" href="#cmepy.lexarrayset.split" title="Permalink to this definition">¶</a></dt>
+<dd>returns (las1 intersect las2, las1 difference las2)</dd></dl>
+
+<dl class="function">
+<dt id="cmepy.lexarrayset.union">
+<tt class="descclassname">cmepy.lexarrayset.</tt><tt class="descname">union</tt><big>(</big><em>las1</em>, <em>las2</em><big>)</big><a class="headerlink" href="#cmepy.lexarrayset.union" title="Permalink to this definition">¶</a></dt>
+<dd>union of las1 with las2</dd></dl>
+
+<dl class="function">
+<dt id="cmepy.lexarrayset.unique">
+<tt class="descclassname">cmepy.lexarrayset.</tt><tt class="descname">unique</tt><big>(</big><em>las</em>, <em>return_inverse=False</em><big>)</big><a class="headerlink" href="#cmepy.lexarrayset.unique" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns a sorted vector of unique states</p>
+<p>if the optional flag return_inverse is set to True,
+additionally returns an index vector used to
+inverse the unique operation and recover the
+original vector</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="lazy_dict.html"
+                                  title="previous chapter"><tt class="docutils literal docutils literal"><span class="pre">lazy_dict</span></tt></a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="measurement.html"
+                                  title="next chapter"><tt class="docutils literal"><span class="pre">measurement</span></tt></a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/api_modules/lexarrayset.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="measurement.html" title="measurement"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="lazy_dict.html" title="lazy_dict"
+             >previous</a> |</li>
+        <li><a href="../index.html">CmePy v0.3 documentation</a> &raquo;</li>
+          <li><a href="../api.html" >api documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, Markus Hegland &amp; Reuben Fletcher-Costin.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+    </div>
+  </body>
+</html>

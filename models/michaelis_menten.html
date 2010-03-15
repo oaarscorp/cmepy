@@ -1,0 +1,203 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>michaelis_menten : an enzymatic reaction &mdash; CmePy v0.3 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.3',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="CmePy v0.3 documentation" href="../index.html" />
+    <link rel="up" title="Models included in cmepy.models" href="../models.html" />
+    <link rel="next" title="mono_molecular : mono molecular systems" href="mono_molecular.html" />
+    <link rel="prev" title="gou07 : unidirection dimerisation and quadratic autocatalator" href="gou07.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="mono_molecular.html" title="mono_molecular : mono molecular systems"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="gou07.html" title="gou07 : unidirection dimerisation and quadratic autocatalator"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">CmePy v0.3 documentation</a> &raquo;</li>
+          <li><a href="../models.html" accesskey="U">Models included in <tt class="docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">cmepy.models</span></tt></a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="michaelis-menten-an-enzymatic-reaction">
+<h1><tt class="xref docutils literal"><span class="pre">michaelis_menten</span></tt> : an enzymatic reaction<a class="headerlink" href="#michaelis-menten-an-enzymatic-reaction" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>The <tt class="xref docutils literal"><span class="pre">cmepy.models.michaelis_menten</span></tt> module defines a model for the
+following simple enzymatic reaction system:</p>
+<div class="math">
+<p><img src="../_images/math/6ef81ce7ef23306166274876ba0a3a53291b4f5d.png" alt="E + S \xrightarrow{k_1} C \; ,
+C \xrightarrow{k_2} E + S \; ,
+C \xrightarrow{k_3} E + D \; ." /></p>
+</div><p>The rate coefficients are defined to be
+<img class="math" src="../_images/math/473fcb11f5e16f002d439588bb17b5d4b4de83c5.png" alt="k_1 = 0.01"/>,
+<img class="math" src="../_images/math/c79e5baa4c19c4f4da0045c6086a757b763ed588.png" alt="k_1 = 35.0"/>
+and
+<img class="math" src="../_images/math/7c6f6712e108936692bb496500e67f052ea2176b.png" alt="k_1 = 30.0"/>,
+while the default initial counts are 50 copies of the species <img class="math" src="../_images/math/ad28c83c99a8fd0dd2e2e594c9d02ee532765a0a.png" alt="S"/> and
+10 copies of the species <img class="math" src="../_images/math/fa2fa899f0afb05d6837885523503a2d4df434f9.png" alt="E"/>, with all other initial species counts set to
+zero.</p>
+<p>This model can be used in CmePy as follows:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">cmepy.models</span> <span class="kn">import</span> <span class="n">michaelis_menten</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">michaelis_menten</span><span class="o">.</span><span class="n">create_model_michaelis_menten</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>This is roughly the same model used in the enzyme kinetics example.
+See <a class="reference" href="../example_mm.html#example-enzyme-kinetics"><em>Example: enzyme kinetics</em></a> for a detailed example explaining how this
+similar model can be defined and solved.</p>
+</div>
+<div class="section" id="source">
+<h2>Source<a class="headerlink" href="#source" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Model for Michaelis-Menten type enzymatic reaction systems</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">cmepy</span> <span class="kn">import</span> <span class="n">model</span>
+<span class="kn">from</span> <span class="nn">cmepy.util</span> <span class="kn">import</span> <span class="n">non_neg</span>
+
+<span class="k">def</span> <span class="nf">create_model_michaelis_menten</span><span class="p">(</span><span class="n">s_0</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span> <span class="n">e_0</span> <span class="o">=</span> <span class="mi">10</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates a model for a simple michaelis-menten enzymatic reaction system:</span>
+<span class="sd">    </span>
+<span class="sd">    E+S &lt;-&gt; C -&gt; E + D</span>
+<span class="sd">    </span>
+<span class="sd">    The reaction propensities are</span>
+<span class="sd">    </span>
+<span class="sd">    E+S -&gt; C : 0.01</span>
+<span class="sd">    C -&gt; E+S : 35.0</span>
+<span class="sd">    C -&gt; E+D : 30.0</span>
+<span class="sd">    </span>
+<span class="sd">    while the initial counts are s_0 copies of S, e_0 copies of E, </span>
+<span class="sd">    and zero copies of both C and D.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="c"># first, define functions mapping states to species copy counts</span>
+    <span class="n">species_c</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+        <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="n">non_neg</span><span class="p">(</span><span class="n">e_0</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
+        <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+        <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="n">non_neg</span><span class="p">(</span><span class="n">s_0</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
+    <span class="p">)</span>
+    <span class="c"># second, define reaction propensities via species counts</span>
+    <span class="n">props</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="mf">0.01</span><span class="o">*</span><span class="n">species_c</span><span class="p">[</span><span class="mi">0</span><span class="p">](</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">species_c</span><span class="p">[</span><span class="mi">1</span><span class="p">](</span><span class="o">*</span><span class="n">x</span><span class="p">),</span>
+        <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="mf">35.0</span><span class="o">*</span><span class="n">species_c</span><span class="p">[</span><span class="mi">2</span><span class="p">](</span><span class="o">*</span><span class="n">x</span><span class="p">),</span>
+        <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="mf">30.0</span><span class="o">*</span><span class="n">species_c</span><span class="p">[</span><span class="mi">2</span><span class="p">](</span><span class="o">*</span><span class="n">x</span><span class="p">),</span>
+    <span class="p">)</span>
+    
+    <span class="c"># construct the model</span>
+    <span class="k">return</span> <span class="n">model</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="s">&#39;simple Michaelis-Menten system&#39;</span><span class="p">,</span>
+        <span class="n">species</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;S&#39;</span><span class="p">,</span> <span class="s">&#39;E&#39;</span><span class="p">,</span> <span class="s">&#39;C&#39;</span><span class="p">,</span> <span class="s">&#39;D&#39;</span><span class="p">,</span> <span class="p">),</span>
+        <span class="n">species_counts</span> <span class="o">=</span> <span class="n">species_c</span><span class="p">,</span>
+        <span class="n">reactions</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;E+S-&gt;C&#39;</span><span class="p">,</span> <span class="s">&#39;C-&gt;E+S&#39;</span><span class="p">,</span> <span class="s">&#39;C-&gt;E+D&#39;</span><span class="p">,</span> <span class="p">),</span>
+        <span class="n">propensities</span> <span class="o">=</span> <span class="n">props</span><span class="p">,</span>
+        <span class="n">transitions</span> <span class="o">=</span> <span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)),</span>
+        <span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">s_0</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">max</span><span class="p">(</span><span class="n">s_0</span><span class="p">,</span> <span class="n">e_0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
+        <span class="n">initial_state</span> <span class="o">=</span> <span class="p">(</span><span class="n">s_0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="../index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference" href="#"><tt class="docutils literal"><span class="pre">michaelis_menten</span></tt> : an enzymatic reaction</a><ul>
+<li><a class="reference" href="#overview">Overview</a></li>
+<li><a class="reference" href="#source">Source</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="gou07.html"
+                                  title="previous chapter"><tt class="docutils literal docutils literal docutils literal"><span class="pre">gou07</span></tt> : unidirection dimerisation and quadratic autocatalator</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="mono_molecular.html"
+                                  title="next chapter"><tt class="docutils literal"><span class="pre">mono_molecular</span></tt> : mono molecular systems</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/models/michaelis_menten.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="mono_molecular.html" title="mono_molecular : mono molecular systems"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="gou07.html" title="gou07 : unidirection dimerisation and quadratic autocatalator"
+             >previous</a> |</li>
+        <li><a href="../index.html">CmePy v0.3 documentation</a> &raquo;</li>
+          <li><a href="../models.html" >Models included in <tt class="docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">cmepy.models</span></tt></a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, Markus Hegland &amp; Reuben Fletcher-Costin.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+    </div>
+  </body>
+</html>

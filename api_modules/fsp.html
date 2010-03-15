@@ -1,0 +1,187 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>fsp &mdash; CmePy v0.3 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.3',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="CmePy v0.3 documentation" href="../index.html" />
+    <link rel="up" title="api documentation" href="../api.html" />
+    <link rel="next" title="fsp.simple_expander" href="fsp/simple_expander.html" />
+    <link rel="prev" title="domain" href="domain.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="fsp/simple_expander.html" title="fsp.simple_expander"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="domain.html" title="domain"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">CmePy v0.3 documentation</a> &raquo;</li>
+          <li><a href="../api.html" accesskey="U">api documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="fsp">
+<span id="fsp-api-documentation"></span><h1><tt class="xref docutils literal"><span class="pre">fsp</span></tt><a class="headerlink" href="#fsp" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>The sub-package <tt class="xref docutils literal"><span class="pre">cmepy.fsp</span></tt> contains CmePy&#8217;s
+implementation of the Finite State Projection (FSP) algorithm.
+This sub-package contains the following modules:</p>
+<ul>
+<li class="toctree-l1"><a class="reference" href="fsp/simple_expander.html"><tt class="docutils literal"><span class="pre">fsp.simple_expander</span></tt></a></li>
+<li class="toctree-l1"><a class="reference" href="fsp/solver.html"><tt class="docutils literal"><span class="pre">fsp.solver</span></tt></a></li>
+<li class="toctree-l1"><a class="reference" href="fsp/support_expander.html"><tt class="docutils literal"><span class="pre">fsp.support_expander</span></tt></a></li>
+<li class="toctree-l1"><a class="reference" href="fsp/util.html"><tt class="docutils literal"><span class="pre">fsp.util</span></tt></a></li>
+</ul>
+</div>
+<div class="section" id="example-scripts">
+<h2>Example scripts<a class="headerlink" href="#example-scripts" title="Permalink to this headline">¶</a></h2>
+<p>Some scripts containing examples of using CmePy&#8217;s FSP
+implementation to solve the burr08 model are included in
+the examples directory.</p>
+<p>The example scripts are named:</p>
+<ul class="simple">
+<li>examples/fsp_example_1_simple_expansion.py</li>
+<li>examples/fsp_example_2_support_exansion.py</li>
+</ul>
+<p>These scripts all use a common function to plot output,
+which is defined by the file:</p>
+<blockquote>
+<ul class="simple">
+<li>fsp_example_util.py</li>
+</ul>
+</blockquote>
+<p>To run the scripts, simply execute them using the Python interpreter. For example:</p>
+<div class="highlight-python"><pre>python fsp_example_1_simple_expansion.py</pre>
+</div>
+<p>Each script will display two plots via matplotlib when complete. The first
+plot shows the solution of the CME at a number of times. The second plot
+shows the domain used by the FSP solver for these times.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If these example scripts are unable to locate CmePy,
+check that CmePy is correctly installed.</p>
+</div>
+</div>
+<div class="section" id="example-script-documentation">
+<h2>Example script documentation<a class="headerlink" href="#example-script-documentation" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li class="toctree-l1"><a class="reference" href="../fsp_examples/fsp_1.html">FSP example 1 : simple expansion</a><ul>
+<li class="toctree-l2"><a class="reference" href="../fsp_examples/fsp_1.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference" href="../fsp_examples/fsp_1.html#output">Output</a></li>
+<li class="toctree-l2"><a class="reference" href="../fsp_examples/fsp_1.html#source">Source</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference" href="../fsp_examples/fsp_2.html">FSP example 2 : support expansion</a><ul>
+<li class="toctree-l2"><a class="reference" href="../fsp_examples/fsp_2.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference" href="../fsp_examples/fsp_2.html#output">Output</a></li>
+<li class="toctree-l2"><a class="reference" href="../fsp_examples/fsp_2.html#source">Source</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="../index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference" href="#"><tt class="docutils literal"><span class="pre">fsp</span></tt></a><ul>
+<li><a class="reference" href="#overview">Overview</a><ul>
+</ul>
+</li>
+<li><a class="reference" href="#example-scripts">Example scripts</a></li>
+<li><a class="reference" href="#example-script-documentation">Example script documentation</a><ul>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="domain.html"
+                                  title="previous chapter"><tt class="docutils literal docutils literal docutils literal"><span class="pre">domain</span></tt></a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="fsp/simple_expander.html"
+                                  title="next chapter"><tt class="docutils literal"><span class="pre">fsp.simple_expander</span></tt></a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/api_modules/fsp.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="fsp/simple_expander.html" title="fsp.simple_expander"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="domain.html" title="domain"
+             >previous</a> |</li>
+        <li><a href="../index.html">CmePy v0.3 documentation</a> &raquo;</li>
+          <li><a href="../api.html" >api documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, Markus Hegland &amp; Reuben Fletcher-Costin.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,325 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pap_pili : pap-pili epigenetic switch &mdash; CmePy v0.3 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.3',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="CmePy v0.3 documentation" href="../index.html" />
+    <link rel="up" title="Models included in cmepy.models" href="../models.html" />
+    <link rel="next" title="transcription_regulation : time dependent transcription regulation" href="transcription_regulation.html" />
+    <link rel="prev" title="munk08 : gene toggle" href="munk08.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="transcription_regulation.html" title="transcription_regulation : time dependent transcription regulation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="munk08.html" title="munk08 : gene toggle"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">CmePy v0.3 documentation</a> &raquo;</li>
+          <li><a href="../models.html" accesskey="U">Models included in <tt class="docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">cmepy.models</span></tt></a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="pap-pili-pap-pili-epigenetic-switch">
+<h1><tt class="xref docutils literal"><span class="pre">pap_pili</span></tt> : pap-pili epigenetic switch<a class="headerlink" href="#pap-pili-pap-pili-epigenetic-switch" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>The module <tt class="xref docutils literal"><span class="pre">cmepy.models.pap_pili</span></tt> defines a model of the
+pap-pili epigenetic switch system from Munksy and Khammash <a class="reference" href="#mk06">[MK06]</a>.</p>
+<p>This system consists of 10 reactions:</p>
+<div class="math">
+<p><img src="../_images/math/28e900a248e18d68bab1e0f60f046b4f30168475.png" alt="\textrm{LRP} + \textrm{DNA} &amp; \xrightarrow{} \textrm{LRP-DNA} \; , \\
+\textrm{LRP-DNA} &amp; \xrightarrow{} \textrm{LRP} + \textrm{DNA} \; , \\
+\textrm{DNA} + \textrm{LRP} &amp; \xrightarrow{} \textrm{DNA-LRP} \; , \\
+\textrm{DNA-LRP} &amp; \xrightarrow{} \textrm{DNA} + \textrm{LRP} \; , \\
+\textrm{LRP-DNA} + \textrm{LRP} &amp; \xrightarrow{} \textrm{LRP-DNA-LRP} \; , \\
+\textrm{LRP-DNA-LRP} &amp; \xrightarrow{} \textrm{LRP-DNA} + \textrm{LRP} \; , \\
+\textrm{LRP} + \textrm{DNA-LRP} &amp; \xrightarrow{} \textrm{LRP-DNA-LRP} \; , \\
+\textrm{LRP-DNA-LRP} &amp; \xrightarrow{} \textrm{LRP} + \textrm{DNA-LRP} \; , \\
+\star &amp; \xrightarrow{} \textrm{PapI} \; , \\
+\textrm{PapI} &amp; \xrightarrow{} \star \; ." /></p>
+</div><p>The propensities of many of these reactions are non-elementary: the production
+of PapI is catalysed by LRP-DNA, while the propensities of the four reactions</p>
+<div class="math">
+<p><img src="../_images/math/f073839b9ccc2ffab7badfea17fb46eb4fe2d772.png" alt="\textrm{LRP-DNA} &amp; \xrightarrow{} \textrm{LRP} + \textrm{DNA} \; , \\
+\textrm{DNA-LRP} &amp; \xrightarrow{} \textrm{DNA} + \textrm{LRP} \; , \\
+\textrm{LRP-DNA-LRP} &amp; \xrightarrow{} \textrm{LRP-DNA} + \textrm{LRP} \; , \\
+\textrm{LRP-DNA-LRP} &amp; \xrightarrow{} \textrm{LRP} + \textrm{DNA-LRP} \; ," /></p>
+</div><p>that is, the reactions where LRP unbinds from DNA,
+are all multiplied by the factor <img class="math" src="../_images/math/61adeba44a803ac9b13ab67924dc422b76da8ceb.png" alt="\frac{r}{1+r}"/>, where <img class="math" src="../_images/math/b55ca7a0aa88ab7d58f4fc035317fdac39b17861.png" alt="r"/> denotes
+the copy count of the PapI species.</p>
+<p>For the grim details of the reaction propensity functions and rate
+constants, either inspect the source code (see below) or refer to Munksy and
+Khammash  <a class="reference" href="#mk06">[MK06]</a>.</p>
+</div>
+<div class="section" id="running-the-model">
+<h2>Running the model<a class="headerlink" href="#running-the-model" title="Permalink to this headline">¶</a></h2>
+<p>To solve this model in CmePy and plot some results, simply open the Python
+interpreter and type:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cmepy.models</span> <span class="kn">import</span> <span class="n">pap_pili</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pap_pili</span><span class="o">.</span><span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>This creates the pap-pili epigentic switch model with 5 initial copies of DNA,
+5 initial copies of PapI, 100 initial copies of LRP, and zero initial copies
+of all other species. The model is solved from <img class="math" src="../_images/math/288e2a39b58d673182c57dc6214b702a448341ea.png" alt="t = 0"/> to <img class="math" src="../_images/math/6ba4ef452fa3f3441119f851e0fa3fb94248408d.png" alt="t = 10"/>
+using 100 equally-spaced time steps.</p>
+<p>After solving the model, this script will display the following plots:</p>
+</div>
+<div class="section" id="sample-results">
+<h2>Sample results<a class="headerlink" href="#sample-results" title="Permalink to this headline">¶</a></h2>
+<img alt="../_images/pap_pili_ev_plot.png" src="../_images/pap_pili_ev_plot.png" />
+<img alt="../_images/pap_pili_std_dev_plot.png" src="../_images/pap_pili_std_dev_plot.png" />
+</div>
+<div class="section" id="source">
+<h2>Source<a class="headerlink" href="#source" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Example implementation of the pap-pili epigenetic switch model.</span>
+
+<span class="sd">This is the second example from Munsky &amp; Khammash :</span>
+
+<span class="sd">    @article{munsky2006finite,</span>
+<span class="sd">      title={{The finite state projection algorithm for the</span>
+<span class="sd">              solution of the chemical master equation}},</span>
+<span class="sd">      author={Munsky, B. and Khammash, M.},</span>
+<span class="sd">      journal={The Journal of chemical physics},</span>
+<span class="sd">      volume={124},</span>
+<span class="sd">      pages={044104},</span>
+<span class="sd">      year={2006}</span>
+<span class="sd">    }</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">cmepy.model</span>
+<span class="kn">from</span> <span class="nn">cmepy.util</span> <span class="kn">import</span> <span class="n">non_neg</span>
+
+<span class="k">def</span> <span class="nf">gen_states</span><span class="p">(</span><span class="n">max_papi</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">dna_count</span> <span class="o">=</span> <span class="mi">1</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    generates reachable states for pap-pili epigenetic switch model.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+
+    <span class="k">for</span> <span class="n">dna</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">dna_count</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">dna_lrp</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">dna_count</span> <span class="o">-</span> <span class="n">dna</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">lrp_dna</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">dna_count</span> <span class="o">-</span> <span class="n">dna</span> <span class="o">-</span> <span class="n">dna_lrp</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">papi</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">max_papi</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+                    <span class="k">yield</span> <span class="p">(</span><span class="n">dna</span><span class="p">,</span> <span class="n">dna_lrp</span><span class="p">,</span> <span class="n">lrp_dna</span><span class="p">,</span> <span class="n">papi</span><span class="p">)</span> 
+    <span class="k">return</span>
+
+<span class="k">def</span> <span class="nf">create_model</span><span class="p">(</span><span class="n">max_papi</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span>
+                 <span class="n">papi_count</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
+                 <span class="n">dna_count</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+                 <span class="n">lrp_count</span> <span class="o">=</span> <span class="mi">100</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    creates pap-pili epigenetic switch model.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="c"># define mappings from state space to species counts</span>
+    <span class="n">dna</span> <span class="o">=</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">dna_lrp</span> <span class="o">=</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">lrp_dna</span> <span class="o">=</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">lrp_dna_lrp</span> <span class="o">=</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="n">non_neg</span><span class="p">(</span><span class="n">dna_count</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+    <span class="n">lrp</span> <span class="o">=</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span><span class="n">non_neg</span><span class="p">(</span>
+        <span class="n">lrp_count</span> <span class="o">-</span> <span class="mi">2</span><span class="o">*</span><span class="n">lrp_dna_lrp</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">)</span> <span class="o">-</span> <span class="n">dna_lrp</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">)</span> <span class="o">-</span> <span class="n">lrp_dna</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">papi</span> <span class="o">=</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+    
+    <span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">r</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">r</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">r</span><span class="p">)</span>
+    
+    <span class="c"># define reaction propensities</span>
+    <span class="n">props</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="mf">1.0</span> <span class="o">*</span> <span class="n">dna</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="n">lrp</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">),</span>
+        <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="p">(</span><span class="mf">2.5</span> <span class="o">-</span> <span class="mf">2.25</span><span class="o">*</span><span class="n">f</span><span class="p">(</span><span class="n">papi</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">)))</span> <span class="o">*</span> <span class="n">lrp_dna</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">),</span>
+        <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="mf">1.0</span> <span class="o">*</span> <span class="n">dna</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="n">lrp</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">),</span>
+        <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="p">(</span><span class="mf">1.2</span> <span class="o">-</span> <span class="mf">0.20</span> <span class="o">*</span> <span class="n">f</span><span class="p">(</span><span class="n">papi</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">)))</span> <span class="o">*</span> <span class="n">dna_lrp</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">),</span>
+        <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="mf">0.01</span> <span class="o">*</span> <span class="n">lrp_dna</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="n">lrp</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">),</span>
+        <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="p">(</span><span class="mf">1.2</span> <span class="o">-</span> <span class="mf">0.20</span> <span class="o">*</span> <span class="n">f</span><span class="p">(</span><span class="n">papi</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">)))</span> <span class="o">*</span> <span class="n">lrp_dna_lrp</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">),</span>
+        <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="mf">0.01</span> <span class="o">*</span> <span class="n">dna_lrp</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="n">lrp</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">),</span>
+        <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="p">(</span><span class="mf">2.5</span> <span class="o">-</span> <span class="mf">2.25</span> <span class="o">*</span> <span class="n">f</span><span class="p">(</span><span class="n">papi</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">)))</span> <span class="o">*</span> <span class="n">lrp_dna_lrp</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">),</span>
+        <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="mf">10.0</span> <span class="o">*</span> <span class="n">lrp_dna</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">),</span>
+        <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span> <span class="p">:</span> <span class="mf">1.0</span> <span class="o">*</span> <span class="n">papi</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">),</span>
+    <span class="p">)</span>
+    <span class="c"># define corresponding reaction state space offsets</span>
+    <span class="n">transitions</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="c"># LRP + DNA -&gt; LRP-DNA</span>
+        <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="c"># LRP-DNA -&gt; LRP + DNA</span>
+        <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="c"># DNA + LRP -&gt; DNA-LRP</span>
+        <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="c"># DNA-LRP -&gt; DNA + LRP</span>
+        <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="c"># LRP-DNA + LRP -&gt; LRP-DNA-LRP</span>
+        <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="c"># LRP-DNA-LRP -&gt; LRP-DNA + LRP</span>
+        <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="c"># LRP + DNA-LRP -&gt; LRP-DNA-LRP</span>
+        <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="c"># LRP-DNA-LRP -&gt; LRP + DNA-LRP</span>
+        <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="c"># * -&gt; PapI</span>
+        <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="c"># PapI -&gt; *</span>
+    <span class="p">)</span>
+    
+    <span class="n">species_names</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s">&#39;DNA&#39;</span><span class="p">,</span>
+        <span class="s">&#39;DNA-LRP&#39;</span><span class="p">,</span>
+        <span class="s">&#39;LRP-DNA&#39;</span><span class="p">,</span>
+        <span class="s">&#39;LRP-DNA-LRP&#39;</span><span class="p">,</span>
+        <span class="s">&#39;LRP&#39;</span><span class="p">,</span>
+        <span class="s">&#39;PapI&#39;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">species_counts</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">dna</span><span class="p">,</span>
+        <span class="n">dna_lrp</span><span class="p">,</span>
+        <span class="n">lrp_dna</span><span class="p">,</span>
+        <span class="n">lrp_dna_lrp</span><span class="p">,</span>
+        <span class="n">lrp</span><span class="p">,</span>
+        <span class="n">papi</span><span class="p">,</span>
+    <span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">cmepy</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="s">&#39;pap-pili epigenetic switch&#39;</span><span class="p">,</span>
+        <span class="n">species</span> <span class="o">=</span> <span class="n">species_names</span><span class="p">,</span>
+        <span class="n">species_counts</span> <span class="o">=</span> <span class="n">species_counts</span><span class="p">,</span>
+        <span class="n">propensities</span> <span class="o">=</span> <span class="n">props</span><span class="p">,</span>
+        <span class="n">transitions</span> <span class="o">=</span> <span class="n">transitions</span><span class="p">,</span>
+        <span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">dna_count</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="p">)</span><span class="o">*</span><span class="mi">3</span> <span class="o">+</span> <span class="p">(</span><span class="n">max_papi</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="p">),</span>
+        <span class="n">initial_state</span> <span class="o">=</span> <span class="p">(</span><span class="n">dna_count</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">papi_count</span><span class="p">)</span>
+    <span class="p">)</span>
+    
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="kn">import</span> <span class="nn">numpy</span>
+    <span class="kn">import</span> <span class="nn">cmepy.solver</span>
+    <span class="kn">import</span> <span class="nn">cmepy.recorder</span>
+    <span class="kn">import</span> <span class="nn">cmepy.domain</span>
+    
+    <span class="n">dna_count</span> <span class="o">=</span> <span class="mi">5</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">create_model</span><span class="p">(</span><span class="n">dna_count</span> <span class="o">=</span> <span class="n">dna_count</span><span class="p">)</span>
+    <span class="n">domain_states</span> <span class="o">=</span> <span class="n">cmepy</span><span class="o">.</span><span class="n">domain</span><span class="o">.</span><span class="n">from_iter</span><span class="p">(</span><span class="n">gen_states</span><span class="p">(</span><span class="n">dna_count</span> <span class="o">=</span> <span class="n">dna_count</span><span class="p">))</span>
+    <span class="n">solver</span> <span class="o">=</span> <span class="n">cmepy</span><span class="o">.</span><span class="n">solver</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+        <span class="n">m</span><span class="p">,</span>
+        <span class="n">sink</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span>
+        <span class="n">domain_states</span> <span class="o">=</span> <span class="n">domain_states</span>
+    <span class="p">)</span>
+    <span class="n">recorder</span> <span class="o">=</span> <span class="n">cmepy</span><span class="o">.</span><span class="n">recorder</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+        <span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">species</span><span class="p">,</span>
+         <span class="n">m</span><span class="o">.</span><span class="n">species_counts</span><span class="p">)</span>
+    <span class="p">)</span>
+    
+    <span class="n">time_steps</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="mi">101</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">time_steps</span><span class="p">:</span>
+        <span class="n">solver</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+        <span class="n">p</span><span class="p">,</span> <span class="n">p_sink</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">y</span>
+        <span class="k">print</span> <span class="s">&#39;t = </span><span class="si">%g</span><span class="s">; p_sink = </span><span class="si">%g</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">p_sink</span><span class="p">)</span>
+        <span class="n">recorder</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
+    
+    <span class="n">cmepy</span><span class="o">.</span><span class="n">recorder</span><span class="o">.</span><span class="n">display_plots</span><span class="p">(</span><span class="n">recorder</span><span class="p">,</span> <span class="n">title</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">References</p>
+<table class="docutils citation" frame="void" id="mk06" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a name="mk06">[MK06]</a></td><td><em>(<a class="fn-backref" href="#id1">1</a>, <a class="fn-backref" href="#id2">2</a>)</em> <a class="reference" href="http://scholar.google.com/scholar?q=Munsky+Khammash+the+finite+state+projection+algorithm+for+the+solution+of+the+chemical+master+equation">Munsky, B. and Khammash, M.,
+The finite state projection algorithm for the solution of the
+chemical master equation,
+Journal of Chemical Physics (2006),
+Vol 124.</a></td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="../index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference" href="#"><tt class="docutils literal"><span class="pre">pap_pili</span></tt> : pap-pili epigenetic switch</a><ul>
+<li><a class="reference" href="#overview">Overview</a></li>
+<li><a class="reference" href="#running-the-model">Running the model</a></li>
+<li><a class="reference" href="#sample-results">Sample results</a></li>
+<li><a class="reference" href="#source">Source</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="munk08.html"
+                                  title="previous chapter"><tt class="docutils literal docutils literal docutils literal"><span class="pre">munk08</span></tt> : gene toggle</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="transcription_regulation.html"
+                                  title="next chapter"><tt class="docutils literal docutils literal"><span class="pre">transcription_regulation</span></tt> : time dependent transcription regulation</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/models/pap_pili.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="transcription_regulation.html" title="transcription_regulation : time dependent transcription regulation"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="munk08.html" title="munk08 : gene toggle"
+             >previous</a> |</li>
+        <li><a href="../index.html">CmePy v0.3 documentation</a> &raquo;</li>
+          <li><a href="../models.html" >Models included in <tt class="docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">cmepy.models</span></tt></a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, Markus Hegland &amp; Reuben Fletcher-Costin.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+    </div>
+  </body>
+</html>

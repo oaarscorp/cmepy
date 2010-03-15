@@ -1,0 +1,215 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>mono_molecular : mono molecular systems &mdash; CmePy v0.3 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.3',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="CmePy v0.3 documentation" href="../index.html" />
+    <link rel="up" title="Models included in cmepy.models" href="../models.html" />
+    <link rel="next" title="munk08 : gene toggle" href="munk08.html" />
+    <link rel="prev" title="michaelis_menten : an enzymatic reaction" href="michaelis_menten.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="munk08.html" title="munk08 : gene toggle"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="michaelis_menten.html" title="michaelis_menten : an enzymatic reaction"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">CmePy v0.3 documentation</a> &raquo;</li>
+          <li><a href="../models.html" accesskey="U">Models included in <tt class="docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">cmepy.models</span></tt></a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="mono-molecular-mono-molecular-systems">
+<h1><tt class="xref docutils literal"><span class="pre">mono_molecular</span></tt> : mono molecular systems<a class="headerlink" href="#mono-molecular-mono-molecular-systems" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>The module <tt class="xref docutils literal"><span class="pre">cmepy.models.mono_molecular</span></tt> defines models for two
+mono-molecular systems of reactions. These systems are useful for testing,
+as analytic solutions can be derived. The systems are:</p>
+<div class="math">
+<p><img src="../_images/math/a4d900cc6023ce0ca2ce450820c8d4abacb64420.png" alt="A \xrightarrow{} B \xrightarrow{} C" /></p>
+</div><p>and</p>
+<div class="math">
+<p><img src="../_images/math/d2d8619e858657af52f6297bee1b941193e6e36c.png" alt="A \xrightarrow{} B \; ,
+
+B \xrightarrow{} A \; ." /></p>
+</div><p>Both systems are initialised with 31 copies of the species
+<img class="math" src="../_images/math/019e9892786e493964e145e7c5cf7b700314e53b.png" alt="A"/> and zero copies of all other species. All reactions have
+the rate coefficients equal to 1.</p>
+<p>The model for the former system is named <tt class="docutils literal"><span class="pre">A2B2C</span></tt> while the model
+for the latter system is named <tt class="docutils literal"><span class="pre">A2B2A</span></tt>.</p>
+<p>For example, the latter model can be imported via:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">cmepy.models</span> <span class="kn">import</span> <span class="n">mono_molecular</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">michaelis_menten</span><span class="o">.</span><span class="n">A2B2C</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="source">
+<h2>Source<a class="headerlink" href="#source" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">some mono-molecular models</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">cmepy.util</span> <span class="kn">import</span> <span class="n">non_neg</span>
+<span class="kn">from</span> <span class="nn">cmepy</span> <span class="kn">import</span> <span class="n">model</span>
+
+<span class="n">A2B2C</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s">&#39;simplest nontrivial mono-molecular reaction&#39;</span><span class="p">,</span>
+    <span class="n">propensities</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span><span class="p">:</span> <span class="n">non_neg</span><span class="p">(</span><span class="mf">31.0</span><span class="o">-</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
+        <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span><span class="p">:</span> <span class="n">non_neg</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
+    <span class="p">),</span>
+    <span class="n">transitions</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+        <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+    <span class="p">),</span>
+    <span class="n">reactions</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s">&#39;A-&gt;B&#39;</span><span class="p">,</span>
+        <span class="s">&#39;B-&gt;C&#39;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">species_counts</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span><span class="p">:</span> <span class="n">non_neg</span><span class="p">(</span><span class="mi">31</span><span class="o">-</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
+        <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span><span class="p">:</span> <span class="n">non_neg</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
+        <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+    <span class="p">),</span>
+    <span class="n">species</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s">&#39;A&#39;</span><span class="p">,</span>
+        <span class="s">&#39;B&#39;</span><span class="p">,</span>
+        <span class="s">&#39;C&#39;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">),</span>
+    <span class="n">initial_state</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="n">A2B2A</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s">&#39;simplest reversible mono-molecular reaction&#39;</span><span class="p">,</span>
+    <span class="n">propensities</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span><span class="p">:</span> <span class="n">non_neg</span><span class="p">(</span><span class="mf">31.0</span><span class="o">-</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
+        <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span><span class="p">:</span> <span class="n">non_neg</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
+    <span class="p">),</span>
+    <span class="n">transitions</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+        <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+    <span class="p">),</span>
+    <span class="n">reactions</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s">&#39;A-&gt;B&#39;</span><span class="p">,</span>
+        <span class="s">&#39;B-&gt;A&#39;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">species_counts</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span><span class="p">:</span> <span class="n">non_neg</span><span class="p">(</span><span class="mi">31</span><span class="o">-</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
+        <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span><span class="p">:</span> <span class="n">non_neg</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
+        <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+    <span class="p">),</span>
+    <span class="n">species</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s">&#39;A&#39;</span><span class="p">,</span>
+        <span class="s">&#39;B&#39;</span><span class="p">,</span>
+        <span class="s">&#39;C&#39;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">60</span><span class="p">),</span>
+    <span class="n">initial_state</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="../index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference" href="#"><tt class="docutils literal"><span class="pre">mono_molecular</span></tt> : mono molecular systems</a><ul>
+<li><a class="reference" href="#overview">Overview</a></li>
+<li><a class="reference" href="#source">Source</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="michaelis_menten.html"
+                                  title="previous chapter"><tt class="docutils literal docutils literal docutils literal"><span class="pre">michaelis_menten</span></tt> : an enzymatic reaction</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="munk08.html"
+                                  title="next chapter"><tt class="docutils literal"><span class="pre">munk08</span></tt> : gene toggle</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/models/mono_molecular.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="munk08.html" title="munk08 : gene toggle"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="michaelis_menten.html" title="michaelis_menten : an enzymatic reaction"
+             >previous</a> |</li>
+        <li><a href="../index.html">CmePy v0.3 documentation</a> &raquo;</li>
+          <li><a href="../models.html" >Models included in <tt class="docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">cmepy.models</span></tt></a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, Markus Hegland &amp; Reuben Fletcher-Costin.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+    </div>
+  </body>
+</html>

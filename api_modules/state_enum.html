@@ -1,0 +1,184 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>state_enum &mdash; CmePy v0.3 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.3',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="CmePy v0.3 documentation" href="../index.html" />
+    <link rel="up" title="api documentation" href="../api.html" />
+    <link rel="next" title="statistics" href="statistics.html" />
+    <link rel="prev" title="solver" href="solver.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="statistics.html" title="statistics"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="solver.html" title="solver"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">CmePy v0.3 documentation</a> &raquo;</li>
+          <li><a href="../api.html" accesskey="U">api documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-cmepy.state_enum">
+<h1><tt class="xref docutils literal"><span class="pre">state_enum</span></tt><a class="headerlink" href="#module-cmepy.state_enum" title="Permalink to this headline">¶</a></h1>
+<p>maintains enumerations of states in order to define indexing schemes</p>
+<dl class="class">
+<dt id="cmepy.state_enum.StateEnum">
+<em class="property">class </em><tt class="descclassname">cmepy.state_enum.</tt><tt class="descname">StateEnum</tt><big>(</big><em>initial_states</em><big>)</big><a class="headerlink" href="#cmepy.state_enum.StateEnum" title="Permalink to this definition">¶</a></dt>
+<dd><p>Maintains bijection between set of n unique states and range(n)</p>
+<dl class="method">
+<dt id="cmepy.state_enum.StateEnum.contains">
+<tt class="descname">contains</tt><big>(</big><em>states</em><big>)</big><a class="headerlink" href="#cmepy.state_enum.StateEnum.contains" title="Permalink to this definition">¶</a></dt>
+<dd><p>contains(states) -&gt; bool_array</p>
+<p>returns a boolean array of flags indicates which of the
+states stored in the array &#8216;states&#8217; are contained in the
+state enumeration.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cmepy.state_enum.StateEnum.extend">
+<tt class="descname">extend</tt><big>(</big><em>sigma</em><big>)</big><a class="headerlink" href="#cmepy.state_enum.StateEnum.extend" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds the states in the array &#8216;sigma&#8217; to the state enumeration.</p>
+<p>These states must be disjoint to the existing states in this
+enumeration.</p>
+<p>The indexing of existing states in this enumeration will be
+unchanged.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cmepy.state_enum.StateEnum.indices">
+<tt class="descname">indices</tt><big>(</big><em>states</em><big>)</big><a class="headerlink" href="#cmepy.state_enum.StateEnum.indices" title="Permalink to this definition">¶</a></dt>
+<dd><p>indices(states) -&gt; index_array</p>
+<p>returns an array of the enumeration indices for the
+states stored in the array &#8216;states&#8217;.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cmepy.state_enum.StateEnum.pack_distribution">
+<tt class="descname">pack_distribution</tt><big>(</big><em>p_sparse</em>, <em>p_dense=None</em><big>)</big><a class="headerlink" href="#cmepy.state_enum.StateEnum.pack_distribution" title="Permalink to this definition">¶</a></dt>
+<dd>convenience routine to translate a distribution from a dictionary to
+a dense array, using this state enumeration</dd></dl>
+
+<dl class="method">
+<dt id="cmepy.state_enum.StateEnum.reinitialise">
+<tt class="descname">reinitialise</tt><big>(</big><em>initial_states</em><big>)</big><a class="headerlink" href="#cmepy.state_enum.StateEnum.reinitialise" title="Permalink to this definition">¶</a></dt>
+<dd>reinitialise the StateEnumeration with the given &#8216;initial_states&#8217;</dd></dl>
+
+<dl class="method">
+<dt id="cmepy.state_enum.StateEnum.states">
+<tt class="descname">states</tt><big>(</big><em>index</em><big>)</big><a class="headerlink" href="#cmepy.state_enum.StateEnum.states" title="Permalink to this definition">¶</a></dt>
+<dd>returns an array of the states corresponding to the
+provided enumeration index array.</dd></dl>
+
+<dl class="method">
+<dt id="cmepy.state_enum.StateEnum.unpack_distribution">
+<tt class="descname">unpack_distribution</tt><big>(</big><em>p_dense</em>, <em>p_sparse=None</em><big>)</big><a class="headerlink" href="#cmepy.state_enum.StateEnum.unpack_distribution" title="Permalink to this definition">¶</a></dt>
+<dd>convenience routine to translate a distribution from a dense array
+to a dictionary, using this state enumeration</dd></dl>
+
+<dl class="method">
+<dt id="cmepy.state_enum.StateEnum.update_ordering">
+<tt class="descname">update_ordering</tt><big>(</big><big>)</big><a class="headerlink" href="#cmepy.state_enum.StateEnum.update_ordering" title="Permalink to this definition">¶</a></dt>
+<dd>Used to maintain the ordering invariants.</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="cmepy.state_enum.create">
+<tt class="descclassname">cmepy.state_enum.</tt><tt class="descname">create</tt><big>(</big><em>initial_states</em><big>)</big><a class="headerlink" href="#cmepy.state_enum.create" title="Permalink to this definition">¶</a></dt>
+<dd><p>create(initial_states) -&gt; StateEnum instance</p>
+<p>instantiates a StateEnum instance using the provided &#8216;initial_states&#8217;.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="solver.html"
+                                  title="previous chapter"><tt class="docutils literal docutils literal docutils literal"><span class="pre">solver</span></tt></a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="statistics.html"
+                                  title="next chapter"><tt class="docutils literal"><span class="pre">statistics</span></tt></a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/api_modules/state_enum.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="statistics.html" title="statistics"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="solver.html" title="solver"
+             >previous</a> |</li>
+        <li><a href="../index.html">CmePy v0.3 documentation</a> &raquo;</li>
+          <li><a href="../api.html" >api documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, Markus Hegland &amp; Reuben Fletcher-Costin.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,222 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>model &mdash; CmePy v0.3 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.3',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="CmePy v0.3 documentation" href="../index.html" />
+    <link rel="up" title="api documentation" href="../api.html" />
+    <link rel="next" title="models" href="models.html" />
+    <link rel="prev" title="measurement" href="measurement.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="models.html" title="models"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="measurement.html" title="measurement"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">CmePy v0.3 documentation</a> &raquo;</li>
+          <li><a href="../api.html" accesskey="U">api documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-cmepy.model">
+<h1><tt class="xref docutils literal"><span class="pre">model</span></tt><a class="headerlink" href="#module-cmepy.model" title="Permalink to this headline">¶</a></h1>
+<p>Model definition constants and validation functions</p>
+<dl class="class">
+<dt id="cmepy.model.Model">
+<em class="property">class </em><tt class="descclassname">cmepy.model.</tt><tt class="descname">Model</tt><big>(</big><em>**entries</em><big>)</big><a class="headerlink" href="#cmepy.model.Model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simple CME Model structure. Data can be accessed via key or attribute.</p>
+<dl class="method">
+<dt id="cmepy.model.Model.validate">
+<tt class="descname">validate</tt><big>(</big><big>)</big><a class="headerlink" href="#cmepy.model.Model.validate" title="Permalink to this definition">¶</a></dt>
+<dd>raise exception if model is not valid</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="cmepy.model.create">
+<tt class="descclassname">cmepy.model.</tt><tt class="descname">create</tt><big>(</big><em>**entries</em><big>)</big><a class="headerlink" href="#cmepy.model.create" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a model instance, using the specified entries.</p>
+<p>Entries should be model parameters as keyword arguments.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cmepy.model.must_be_callable">
+<tt class="descclassname">cmepy.model.</tt><tt class="descname">must_be_callable</tt><big>(</big><em>value</em>, <em>descr=None</em><big>)</big><a class="headerlink" href="#cmepy.model.must_be_callable" title="Permalink to this definition">¶</a></dt>
+<dd>raises TypeError if value is not callable</dd></dl>
+
+<dl class="function">
+<dt id="cmepy.model.must_be_int_like">
+<tt class="descclassname">cmepy.model.</tt><tt class="descname">must_be_int_like</tt><big>(</big><em>value</em>, <em>descr=None</em>, <em>min_value=None</em>, <em>max_value=None</em><big>)</big><a class="headerlink" href="#cmepy.model.must_be_int_like" title="Permalink to this definition">¶</a></dt>
+<dd>raises TypeError if value isn&#8217;t int-like</dd></dl>
+
+<dl class="function">
+<dt id="cmepy.model.must_be_mapping">
+<tt class="descclassname">cmepy.model.</tt><tt class="descname">must_be_mapping</tt><big>(</big><em>value</em>, <em>descr=None</em><big>)</big><a class="headerlink" href="#cmepy.model.must_be_mapping" title="Permalink to this definition">¶</a></dt>
+<dd><p>raises TypeError if value isn&#8217;t a mapping</p>
+<p>this is a very loose definition of a mapping.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cmepy.model.must_be_string_like">
+<tt class="descclassname">cmepy.model.</tt><tt class="descname">must_be_string_like</tt><big>(</big><em>value</em>, <em>descr=None</em><big>)</big><a class="headerlink" href="#cmepy.model.must_be_string_like" title="Permalink to this definition">¶</a></dt>
+<dd>raises TypeError if value isn&#8217;t string-like</dd></dl>
+
+<dl class="function">
+<dt id="cmepy.model.must_be_within_range">
+<tt class="descclassname">cmepy.model.</tt><tt class="descname">must_be_within_range</tt><big>(</big><em>value</em>, <em>descr=None</em>, <em>min_value=None</em>, <em>max_value=None</em><big>)</big><a class="headerlink" href="#cmepy.model.must_be_within_range" title="Permalink to this definition">¶</a></dt>
+<dd>raises ValueError if value is not within specified range</dd></dl>
+
+<dl class="function">
+<dt id="cmepy.model.must_contain_item">
+<tt class="descclassname">cmepy.model.</tt><tt class="descname">must_contain_item</tt><big>(</big><em>value</em>, <em>descr</em>, <em>item</em><big>)</big><a class="headerlink" href="#cmepy.model.must_contain_item" title="Permalink to this definition">¶</a></dt>
+<dd>raises KeyError if value doesn&#8217;t contain item</dd></dl>
+
+<dl class="function">
+<dt id="cmepy.model.must_have_length">
+<tt class="descclassname">cmepy.model.</tt><tt class="descname">must_have_length</tt><big>(</big><em>value</em>, <em>descr=None</em>, <em>min_len=None</em>, <em>max_len=None</em><big>)</big><a class="headerlink" href="#cmepy.model.must_have_length" title="Permalink to this definition">¶</a></dt>
+<dd><p>raises TypeError if value has no len()</p>
+<p>optionally checks to see if len(value) is inside specified range</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cmepy.model.raise_error">
+<tt class="descclassname">cmepy.model.</tt><tt class="descname">raise_error</tt><big>(</big><em>error_type</em>, <em>descr</em>, <em>value</em>, <em>message</em><big>)</big><a class="headerlink" href="#cmepy.model.raise_error" title="Permalink to this definition">¶</a></dt>
+<dd>raise_error(error_type, descr, value, message) -&gt; raise error_type(...)</dd></dl>
+
+<dl class="function">
+<dt id="cmepy.model.validate_initial_state">
+<tt class="descclassname">cmepy.model.</tt><tt class="descname">validate_initial_state</tt><big>(</big><em>value</em><big>)</big><a class="headerlink" href="#cmepy.model.validate_initial_state" title="Permalink to this definition">¶</a></dt>
+<dd>raises exception if value is not a valid model initial_state entry</dd></dl>
+
+<dl class="function">
+<dt id="cmepy.model.validate_model">
+<tt class="descclassname">cmepy.model.</tt><tt class="descname">validate_model</tt><big>(</big><em>m</em><big>)</big><a class="headerlink" href="#cmepy.model.validate_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>raises exceptions if there&#8217;s anything suspect about the model m</p>
+<p>this is not intended to be exhaustive or foolproof, it is intended merely
+to raise exceptions with more detailed and explanatory messages for the
+more obvious kinds of mistakes.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cmepy.model.validate_name">
+<tt class="descclassname">cmepy.model.</tt><tt class="descname">validate_name</tt><big>(</big><em>value</em><big>)</big><a class="headerlink" href="#cmepy.model.validate_name" title="Permalink to this definition">¶</a></dt>
+<dd>raises exception if value is not a valid model name entry</dd></dl>
+
+<dl class="function">
+<dt id="cmepy.model.validate_propensities">
+<tt class="descclassname">cmepy.model.</tt><tt class="descname">validate_propensities</tt><big>(</big><em>value</em><big>)</big><a class="headerlink" href="#cmepy.model.validate_propensities" title="Permalink to this definition">¶</a></dt>
+<dd>raises exception if value is not a valid model propensities entry</dd></dl>
+
+<dl class="function">
+<dt id="cmepy.model.validate_shape">
+<tt class="descclassname">cmepy.model.</tt><tt class="descname">validate_shape</tt><big>(</big><em>value</em><big>)</big><a class="headerlink" href="#cmepy.model.validate_shape" title="Permalink to this definition">¶</a></dt>
+<dd>raises exception if value is not a valid model shape entry</dd></dl>
+
+<dl class="function">
+<dt id="cmepy.model.validate_species_counts">
+<tt class="descclassname">cmepy.model.</tt><tt class="descname">validate_species_counts</tt><big>(</big><em>value</em><big>)</big><a class="headerlink" href="#cmepy.model.validate_species_counts" title="Permalink to this definition">¶</a></dt>
+<dd>raises exception if value is not a valid model species_counts entry</dd></dl>
+
+<dl class="function">
+<dt id="cmepy.model.validate_species_names">
+<tt class="descclassname">cmepy.model.</tt><tt class="descname">validate_species_names</tt><big>(</big><em>value</em><big>)</big><a class="headerlink" href="#cmepy.model.validate_species_names" title="Permalink to this definition">¶</a></dt>
+<dd>raises exception if value is not a valid model species entry</dd></dl>
+
+<dl class="function">
+<dt id="cmepy.model.validate_transitions">
+<tt class="descclassname">cmepy.model.</tt><tt class="descname">validate_transitions</tt><big>(</big><em>value</em><big>)</big><a class="headerlink" href="#cmepy.model.validate_transitions" title="Permalink to this definition">¶</a></dt>
+<dd>raises exception if value is not a valid model transitions entry</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="measurement.html"
+                                  title="previous chapter"><tt class="docutils literal docutils literal docutils literal"><span class="pre">measurement</span></tt></a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="models.html"
+                                  title="next chapter"><tt class="docutils literal"><span class="pre">models</span></tt></a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/api_modules/model.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="models.html" title="models"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="measurement.html" title="measurement"
+             >previous</a> |</li>
+        <li><a href="../index.html">CmePy v0.3 documentation</a> &raquo;</li>
+          <li><a href="../api.html" >api documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, Markus Hegland &amp; Reuben Fletcher-Costin.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+    </div>
+  </body>
+</html>

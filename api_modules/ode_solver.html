@@ -1,0 +1,166 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>ode_solver &mdash; CmePy v0.3 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.3',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="CmePy v0.3 documentation" href="../index.html" />
+    <link rel="up" title="api documentation" href="../api.html" />
+    <link rel="next" title="recorder" href="recorder.html" />
+    <link rel="prev" title="models" href="models.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="recorder.html" title="recorder"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="models.html" title="models"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">CmePy v0.3 documentation</a> &raquo;</li>
+          <li><a href="../api.html" accesskey="U">api documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-cmepy.ode_solver">
+<h1><tt class="xref docutils literal"><span class="pre">ode_solver</span></tt><a class="headerlink" href="#module-cmepy.ode_solver" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="cmepy.ode_solver.Solver">
+<em class="property">class </em><tt class="descclassname">cmepy.ode_solver.</tt><tt class="descname">Solver</tt><big>(</big><em>dy_dt</em>, <em>y_0</em>, <em>t_0=0.0</em>, <em>ode_config_callback=None</em><big>)</big><a class="headerlink" href="#cmepy.ode_solver.Solver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Solver is a wrapper of scipy&#8217;s VODE solver.</p>
+<dl class="attribute">
+<dt id="cmepy.ode_solver.Solver.dy_dt">
+<tt class="descname">dy_dt</tt><a class="headerlink" href="#cmepy.ode_solver.Solver.dy_dt" title="Permalink to this definition">¶</a></dt>
+<dd>Read-only property, returning the differential equations dy_dt.</dd></dl>
+
+<dl class="method">
+<dt id="cmepy.ode_solver.Solver.set_packing">
+<tt class="descname">set_packing</tt><big>(</big><em>pack</em>, <em>unpack</em>, <em>transform_dy_dt=True</em><big>)</big><a class="headerlink" href="#cmepy.ode_solver.Solver.set_packing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convenience routine allowing automatic change of variables.</p>
+<p>pack : map from y variables to x variables
+unpack : map from x variables to y variables</p>
+<p>x must be a one-dimensional array or scalar, while y is arbitrary</p>
+<p>If transform_dy_dt is set to True (the default), the solver will then
+internally solve the IVP of (dx_dt, x_0), defined by</p>
+<blockquote>
+dx_dt(t, x) := pack(dy_dt(t, unpack(x))
+x_0         := pack(y_0)</blockquote>
+<p>Conversely, if transform_dy_dt is set to False, dx_dt will be defined
+directly as dy_dt without packing / unpacking, that is,</p>
+<blockquote>
+dx_dy(t, x) := dy_dt(t, x)</blockquote>
+<p>Accessing the y attribute of the solver will return the current solution
+x transformed via unpack, that is, y = unpack(x).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cmepy.ode_solver.Solver.step">
+<tt class="descname">step</tt><big>(</big><em>t</em><big>)</big><a class="headerlink" href="#cmepy.ode_solver.Solver.step" title="Permalink to this definition">¶</a></dt>
+<dd><p>Advances the current solution to the time t.</p>
+<p>Values of t less that the current solution time are illegal and will
+raise a ValueError.</p>
+<p>If internal ODE solver errors are detected, a RuntimeError will be
+raised, and additional information may be displayed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cmepy.ode_solver.Solver.t">
+<tt class="descname">t</tt><a class="headerlink" href="#cmepy.ode_solver.Solver.t" title="Permalink to this definition">¶</a></dt>
+<dd>Read-only property, returning the current solution time t.</dd></dl>
+
+<dl class="attribute">
+<dt id="cmepy.ode_solver.Solver.y">
+<tt class="descname">y</tt><a class="headerlink" href="#cmepy.ode_solver.Solver.y" title="Permalink to this definition">¶</a></dt>
+<dd>Read-only property, returning the current solution y.</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="models.html"
+                                  title="previous chapter"><tt class="docutils literal docutils literal docutils literal"><span class="pre">models</span></tt></a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="recorder.html"
+                                  title="next chapter"><tt class="docutils literal"><span class="pre">recorder</span></tt></a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/api_modules/ode_solver.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="recorder.html" title="recorder"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="models.html" title="models"
+             >previous</a> |</li>
+        <li><a href="../index.html">CmePy v0.3 documentation</a> &raquo;</li>
+          <li><a href="../api.html" >api documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, Markus Hegland &amp; Reuben Fletcher-Costin.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+    </div>
+  </body>
+</html>
