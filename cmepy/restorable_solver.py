@@ -27,6 +27,7 @@ class RestorableSolver(object):
         self.restore_args = dict(solver_args)
         self.restore()
         self.set_restore_point()
+        self._last_p_0 = self.restore_args['p_0']
     
     def set_restore_point(self, solver = None):
         """
@@ -37,19 +38,19 @@ class RestorableSolver(object):
         of the solver's current solution, time, and sink probability,
         if available.
         """
-        
+
         if solver is None:
             solver = self
-        
         self.restore_args['t_0'] = solver.t
+        self.restore_args['domain_enum'] = solver.solver.domain_enum
+        self.restore_args['domain_states'] = solver.solver.domain_states
         if self.sink:
             p, p_sink = solver.y
             self.restore_args['sink_0'] = p_sink
             self.restore_args['p_0'] = p
         else:
             self.restore_args['p_0'] = solver.y
-        
-    
+
     def restore(self, **solver_args):
         """
         Restore from a previous restore point fixed via set_restore_point
@@ -63,7 +64,8 @@ class RestorableSolver(object):
         """
         restore_args = dict(self.restore_args)
         restore_args.update(solver_args)
-        
+       
+        self._last_p_0 = restore_args['p_0']
         self.solver = cmepy.solver.create(
             self.model,
             self.sink,
